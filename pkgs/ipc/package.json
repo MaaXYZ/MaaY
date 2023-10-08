@@ -1,0 +1,7 @@
+{
+  "name": "@maa/ipc",
+  "main": "./src/index.ts",
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  }
+}

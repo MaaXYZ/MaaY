@@ -3,6 +3,7 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.4.0",
     "@vue/tsconfig": "^0.4.0",
+    "electron": "^26.3.0",
     "typescript": "^5.2.2",
     "vite": "^4.4.11",
     "vue": "^3.3.4"

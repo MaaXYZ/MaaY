@@ -1,0 +1,14 @@
+<script setup lang="ts">
+import { RouterView } from 'vue-router'
+</script>
+
+<template>
+  <div class="w-screen h-screen flex">
+    <div class="w-64">
+      <RouterView name="Side"></RouterView>
+    </div>
+    <div class="flex-1">
+      <RouterView name="Main"></RouterView>
+    </div>
+  </div>
+</template>
