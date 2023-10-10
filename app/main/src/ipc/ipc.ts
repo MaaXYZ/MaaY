@@ -12,6 +12,7 @@ export function ipcMainHandle<Key extends keyof ServerSideInterface>(
 ): void {
   ipcMain.removeHandler(eventName)
   ipcMain.handle(eventName, (event, ...args) => {
+    console.log(eventName, ...args)
     return listener(event, ...(args as Parameters<ServerSideInterface[Key]>))
   })
 }
@@ -24,5 +25,6 @@ export function ipcMainSend<Key extends keyof ClientSideInterface>(
   eventName: Key,
   ...args: Parameters<ClientSideInterface[Key]>
 ): void {
+  console.log(eventName, ...args)
   mainWindow.webContents.send(eventName, ...args)
 }
