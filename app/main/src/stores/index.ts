@@ -1,25 +1,35 @@
-import { deinit } from '@maa/loader'
-import { watch } from '@vue-reactivity/watch'
-import { effect, reactive } from '@vue/reactivity'
+import { deinit, init } from '@maa/loader'
 
-import { rpcConnect } from './loader'
 import { Config, Status } from './types'
 
-export const config = reactive<Config>({
-  MaaRpcHost: '0.0.0.0:8080'
-})
+export const config: Config = {
+  RpcHost: '0.0.0.0:8080'
+}
 
-export const status = reactive<Status>({
-  MaaRpcActive: false
-})
+export const status: Status = {
+  RpcActive: false
+}
 
-watch(
-  () => config.MaaRpcHost,
-  () => {
-    if (status.MaaRpcActive) {
-      deinit()
-      status.MaaRpcActive = false
-      rpcConnect()
-    }
+export async function updateRpcHost(host: string) {
+  if (host === config.RpcHost) {
+    return true
   }
-)
+  if (status.RpcActive) {
+    await deinit()
+    status.RpcActive = false
+    return await connectRpc()
+  }
+}
+
+export async function connectRpc() {
+  if (status.RpcActive) {
+    deinit()
+    status.RpcActive = false
+  }
+  if (await init(config.RpcHost)) {
+    status.RpcActive = true
+    return true
+  } else {
+    return false
+  }
+}

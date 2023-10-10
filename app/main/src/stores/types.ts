@@ -1,7 +1,7 @@
 export interface Config {
-  MaaRpcHost: string
+  RpcHost: string
 }
 
 export interface Status {
-  MaaRpcActive: boolean
+  RpcActive: boolean
 }
