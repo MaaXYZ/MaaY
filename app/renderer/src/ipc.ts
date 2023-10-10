@@ -16,6 +16,7 @@ export interface IpcRenderer {
       ...args: Parameters<ClientSideInterface[Key]>
     ) => void
   ) => Electron.IpcRenderer
+
   off: <Key extends keyof ClientSideInterface>(
     channel: Key,
     listener: (

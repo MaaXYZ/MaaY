@@ -11,7 +11,6 @@ export function registerPush<Var extends SyncVarName_R2M>(name: Var, init: SyncV
   watch(
     value,
     nv => {
-      console.log(nv)
       // @ts-ignore
       window.ipcRenderer.invoke(`main.var.${name}`, dup(nv))
     },
@@ -28,7 +27,6 @@ export function registerRecv<Var extends SyncVarName_M2R>(name: Var, init: SyncV
   let value = ref(init)
 
   window.ipcRenderer.on(`renderer.var.${name}`, (_, nv) => {
-    console.log(nv)
     // @ts-ignore
     value.value = nv
   })

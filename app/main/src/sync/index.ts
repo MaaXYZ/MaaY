@@ -14,9 +14,8 @@ export function registerPush<Var extends SyncVarName_M2R>(name: Var, init: SyncV
   watch(
     value,
     nv => {
-      console.log(nv)
       // @ts-ignore
-      ipcMainSend(`main.var.${name}`, dup(nv))
+      ipcMainSend(`renderer.var.${name}`, dup(nv))
     },
     {
       deep: true,
@@ -32,7 +31,6 @@ export function registerRecv<Var extends SyncVarName_R2M>(name: Var, init: SyncV
 
   // @ts-ignore
   ipcMainHandle(`main.var.${name}`, (_, nv) => {
-    console.log(nv)
     // @ts-ignore
     value.value = nv
   })
