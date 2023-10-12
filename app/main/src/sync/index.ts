@@ -1,6 +1,6 @@
 import type { SyncVarMap_M2R, SyncVarMap_R2M, SyncVarName_M2R, SyncVarName_R2M } from '@maa/ipc'
 import { watch } from '@vue-reactivity/watch'
-import { type ComputedRef, type Ref, type UnwrapRef, ref } from '@vue/reactivity'
+import { type UnwrapRef, ref } from '@vue/reactivity'
 
 import { ipcMainHandle, ipcMainSend } from '../ipc'
 
@@ -32,11 +32,13 @@ function pull(name: string) {
   ipcMainSend(`renderer.var.${name}.pull`)
 }
 
-type Watch<T> = Ref<T> | ComputedRef<T> | Ref<UnwrapRef<T>> | ComputedRef<UnwrapRef<T>>
+type SimpleRef<T> = {
+  value: T | UnwrapRef<T>
+}
 
 export function registerSendFor<Var extends SyncVarName_M2R>(
   name: Var,
-  val: Watch<SyncVarMap_M2R[Var]>
+  val: SimpleRef<SyncVarMap_M2R[Var]>
 ) {
   watch(
     val,
@@ -48,24 +50,25 @@ export function registerSendFor<Var extends SyncVarName_M2R>(
       immediate: true
     }
   )
-
   push(name, val)
 }
 
 export function registerSend<Var extends SyncVarName_M2R>(name: Var, init: SyncVarMap_M2R[Var]) {
-  let value = ref(init)
-
+  const value = ref(init)
   registerSendFor(name, value)
-
   return value
 }
 
-export function registerRecv<Var extends SyncVarName_R2M>(name: Var, init: SyncVarMap_R2M[Var]) {
-  let value = ref(init)
-
-  recv(name, value)
-
+export function registerRecvFor<Var extends SyncVarName_R2M>(
+  name: Var,
+  val: SimpleRef<SyncVarMap_R2M[Var]>
+) {
+  recv(name, val)
   pull(name)
+}
 
+export function registerRecv<Var extends SyncVarName_R2M>(name: Var, init: SyncVarMap_R2M[Var]) {
+  const value = ref(init)
+  registerRecvFor(name, value)
   return value
 }
