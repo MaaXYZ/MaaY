@@ -1,12 +1,13 @@
 import { BrowserWindow } from 'electron'
-import installExtension from 'electron-devtools-installer'
+
+// import installExtension from 'electron-devtools-installer'
 
 function useDebug(window: BrowserWindow): void {
-  installExtension('nhdogjmejiglipccpnnnanhbledajbpd')
-    .then(name => console.info(`Added Extension: ${name}`))
-    .catch((err: Error) =>
-      console.error(`An error occurred while install extension: ${err.message}`)
-    )
+  // installExtension('nhdogjmejiglipccpnnnanhbledajbpd')
+  //   .then(name => console.info(`Added Extension: ${name}`))
+  //   .catch((err: Error) =>
+  //     console.error(`An error occurred while install extension: ${err.message}`)
+  //   )
 
   window.webContents.openDevTools({ mode: 'detach' })
 

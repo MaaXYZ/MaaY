@@ -2,6 +2,10 @@ export type SyncVarInterface<Name extends string, Type, Cate extends 'main' | 'r
   [key in `${Cate}.var.${Name}`]: (nv: Type) => void
 }
 
+export type SyncVarPullInterface<Name extends string, Cate extends 'main' | 'renderer'> = {
+  [key in `${Cate}.var.${Name}.pull`]: () => void
+}
+
 export type SyncVarInfo_M2R = [
   ['test', string],
   [
@@ -12,15 +16,7 @@ export type SyncVarInfo_M2R = [
   ]
 ]
 
-export type SyncVarInfo_R2M = [
-  ['test', string],
-  [
-    'deep',
-    {
-      value: string
-    }
-  ]
-]
+export type SyncVarInfo_R2M = []
 
 export type SyncVarNameList<I, KS extends unknown[] = []> = I extends [infer X, ...infer Y]
   ? X extends [infer N, ...infer R]
@@ -68,6 +64,28 @@ export type SyncVarInterfaceList_R2M<
   ? R extends string[]
     ? N extends SyncVarName_R2M
       ? SyncVarInterfaceList_R2M<R, T & SyncVarInterface<N, SyncVarMap_R2M[N], 'main'>>
+      : never
+    : never
+  : T
+
+export type SyncVarPullInterfaceList_M2R<
+  KS extends string[] = SyncVarNameList_M2R,
+  T extends unknown = {}
+> = KS extends [infer N, ...infer R]
+  ? R extends string[]
+    ? N extends SyncVarName_M2R
+      ? SyncVarPullInterfaceList_M2R<R, T & SyncVarPullInterface<N, 'main'>>
+      : never
+    : never
+  : T
+
+export type SyncVarPullInterfaceList_R2M<
+  KS extends string[] = SyncVarNameList_R2M,
+  T extends unknown = {}
+> = KS extends [infer N, ...infer R]
+  ? R extends string[]
+    ? N extends SyncVarName_R2M
+      ? SyncVarPullInterfaceList_R2M<R, T & SyncVarPullInterface<N, 'renderer'>>
       : never
     : never
   : T

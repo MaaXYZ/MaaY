@@ -1,11 +1,11 @@
 import { WritableComputedRef } from '@vue/reactivity'
 
-import { registerPush } from '../sync'
+import { registerSend } from '../sync'
 import { ipcMainHandle, ipcMainSend } from './ipc'
 
 export function setupCore() {
-  const test = registerPush('test', '')
-  const deep = registerPush('deep', { value: '' })
+  const test = registerSend('test', 'aaa')
+  const deep = registerSend('deep', { value: 'bbb' })
   ipcMainHandle('main.core.log', (_, str) => {
     console.log(str)
 
