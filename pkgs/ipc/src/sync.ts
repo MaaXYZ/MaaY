@@ -1,3 +1,5 @@
+import type { DeviceInfo } from '@maa/loader'
+
 export type SyncVarInterface<Name extends string, Type, Cate extends 'main' | 'renderer'> = {
   [key in `${Cate}.var.${Name}`]: (nv: Type) => void
 }
@@ -13,7 +15,8 @@ export type SyncVarInfo_M2R = [
     {
       value: string
     }
-  ]
+  ],
+  ['device', DeviceInfo[]]
 ]
 
 export type SyncVarInfo_R2M = []

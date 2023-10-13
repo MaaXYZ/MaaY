@@ -1,18 +1,19 @@
-import SettingsMain from '@/views/Settings/SettingsMain.vue'
-import SettingsSide from '@/views/Settings/SettingsSide.vue'
+import Devices from '@/views/Devices'
+import Settings from '@/views/Settings'
 import { type RouteRecordRaw, createMemoryHistory, createRouter } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: '/settings'
+    redirect: '/devices'
   },
   {
     path: '/settings',
-    components: {
-      Main: SettingsMain,
-      Side: SettingsSide
-    }
+    components: Settings
+  },
+  {
+    path: '/devices',
+    components: Devices
   }
 ]
 
