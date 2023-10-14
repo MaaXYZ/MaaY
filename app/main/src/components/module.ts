@@ -1,7 +1,6 @@
 export interface ModuleUpgradeChannel {
   name: string
   desc: string
-  data?: unknown
 }
 
 export abstract class Module {
@@ -9,10 +8,10 @@ export abstract class Module {
   abstract readonly channels: ModuleUpgradeChannel[]
 
   loaded = false
-  channel: string | null = null
-  version: string | null = null
-  update_version: string | null = null
-  update_data: unknown | null = null
+  channel?: string
+  channel_config?: unknown
+  version?: string
+  update_version?: string
 
   abstract load(): Promise<boolean>
   abstract unload(): Promise<void>

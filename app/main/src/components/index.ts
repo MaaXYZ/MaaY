@@ -1,4 +1,11 @@
+import { computed, reactive } from '@vue/reactivity'
+
 import { MaaFrameworkModule } from './maafw'
 import { Module } from './module'
 
-export const modules: Module[] = [new MaaFrameworkModule()]
+export * from './persis'
+
+export const moduleIndexs = {
+  MaaFramework: new MaaFrameworkModule()
+}
+export const modules: Module[] = reactive(Object.values(moduleIndexs))

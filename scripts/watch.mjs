@@ -2,20 +2,20 @@ import { spawn } from 'child_process'
 import electron from 'electron'
 import { build, createServer } from 'vite'
 
-let quitTimer = null
+// let quitTimer = null
 
-function startQuit() {
-  quitTimer = setTimeout(() => {
-    process.exit(0)
-  }, 1000)
-}
+// function startQuit() {
+//   quitTimer = setTimeout(() => {
+//     process.exit(0)
+//   }, 1000)
+// }
 
-function stopQuit() {
-  if (quitTimer) {
-    clearTimeout(quitTimer)
-    quitTimer = null
-  }
-}
+// function stopQuit() {
+//   if (quitTimer) {
+//     clearTimeout(quitTimer)
+//     quitTimer = null
+//   }
+// }
 
 /**
  * @type {(server: import('vite').ViteDevServer) => Promise<import('rollup').RollupWatcher>}
@@ -38,7 +38,7 @@ function watchMain(server) {
       {
         name: 'electron-main-watcher',
         writeBundle() {
-          stopQuit()
+          // stopQuit()
 
           if (electronProcess) {
             electronProcess.kill()
@@ -49,9 +49,9 @@ function watchMain(server) {
             env
           })
 
-          electronProcess.on('exit', () => {
-            startQuit()
-          })
+          // electronProcess.on('exit', () => {
+          //   startQuit()
+          // })
         }
       }
     ],

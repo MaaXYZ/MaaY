@@ -2,12 +2,19 @@ import { init, version } from '@maa/loader'
 import { BrowserWindow, app } from 'electron'
 import * as sms from 'source-map-support'
 
-import { connectRpc } from './stores'
+import { loadConfig, modules, setupAutoSaving } from './components'
 import { createWindow } from './window'
 
 sms.install()
 
-connectRpc()
+async function main() {
+  await loadConfig()
+  for (const m of modules) {
+    const state = await m.load()
+    console.log(m.name, state)
+  }
+  setupAutoSaving()
+}
 
 app.on('ready', createWindow)
 
@@ -22,3 +29,5 @@ app.on('activate', () => {
     createWindow()
   }
 })
+
+main()
