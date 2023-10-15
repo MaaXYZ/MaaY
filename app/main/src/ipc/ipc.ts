@@ -3,12 +3,14 @@ import { type IpcMainInvokeEvent, ipcMain } from 'electron'
 
 import { mainWindow } from '../window'
 
+type WithPromise<T> = Awaited<T> | Promise<Awaited<T>>
+
 export function ipcMainHandle<Key extends keyof ServerSideInterface>(
   eventName: Key,
   listener: (
     event: IpcMainInvokeEvent,
     ...args: Parameters<ServerSideInterface[Key]>
-  ) => ReturnType<ServerSideInterface[Key]>
+  ) => WithPromise<ReturnType<ServerSideInterface[Key]>>
 ): void {
   console.log('main register: ', eventName)
   ipcMain.removeHandler(eventName)

@@ -2,22 +2,17 @@
 import { contextBridge, ipcRenderer } from 'electron'
 
 const ipc = {
-  on: (
-    channel: string,
-    listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void
-  ): Electron.IpcRenderer => {
+  on: (channel: string, listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void) => {
     console.log('preload register: ', channel)
-    return ipcRenderer.on(channel, (event, ...args) => {
+    ipcRenderer.on(channel, (event, ...args) => {
       console.log('preload on: ', channel, ...args)
       listener(event, ...args)
     })
+    return listener
   },
-  off: (
-    channel: string,
-    listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void
-  ): Electron.IpcRenderer => {
+  off: (channel: string, listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void) => {
     console.log('preload off: ', channel)
-    return ipcRenderer.off(channel, listener)
+    ipcRenderer.off(channel, listener)
   },
   invoke: (channel: string, ...args: any[]): Promise<any> => {
     console.log('preload invoke: ', channel, ...args)

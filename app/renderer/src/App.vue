@@ -3,5 +3,5 @@ import MainSideLayout from '@/layouts/MainSideLayout.vue'
 </script>
 
 <template>
-  <MainSideLayout></MainSideLayout>
+  <MainSideLayout class="p-2"></MainSideLayout>
 </template>

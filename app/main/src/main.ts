@@ -1,4 +1,3 @@
-import { init, version } from '@maa/loader'
 import { BrowserWindow, app } from 'electron'
 import * as sms from 'source-map-support'
 

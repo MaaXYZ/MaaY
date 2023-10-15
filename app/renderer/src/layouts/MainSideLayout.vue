@@ -3,7 +3,7 @@ import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <div class="w-screen h-screen flex">
+  <div class="w-screen h-screen flex gap-2">
     <div class="w-64">
       <RouterView name="Side"></RouterView>
     </div>

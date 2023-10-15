@@ -29,6 +29,15 @@ export class MaaFrameworkModule extends Module {
 
   active = false
 
+  get cfg(): Required<MaaFrameworkChannelConfig> {
+    return {
+      host: '0.0.0.0',
+      port: 8080,
+      path: 'MaaRpcCli',
+      ...(this.channel_config ?? {})
+    }
+  }
+
   async load() {
     await this.unload()
     this.loaded = false
@@ -41,12 +50,9 @@ export class MaaFrameworkModule extends Module {
           return false
         }
       case 'external': {
-        this.proc = spawn(
-          (this.channel_config as MaaFrameworkChannelConfig | undefined)?.path ?? 'MaaRpcCli',
-          {
-            stdio: 'inherit'
-          }
-        )
+        this.proc = spawn(this.cfg.path, {
+          stdio: 'inherit'
+        })
         if (await this.connect()) {
           this.loaded = true
           return true
@@ -80,8 +86,7 @@ export class MaaFrameworkModule extends Module {
     if (this.active) {
       await this.disconnect()
     }
-    const cfg = this.channel_config as MaaFrameworkChannelConfig | undefined
-    if (await init(`${cfg?.host ?? '0.0.0.0'}:${cfg?.port ?? 8080}`)) {
+    if (await init(`${this.cfg.host}:${this.cfg.port}`)) {
       this.active = true
       await set_logging(path.join(process.cwd(), 'debug'))
       return true

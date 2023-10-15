@@ -1,4 +1,5 @@
 import type { DeviceInfo } from '@maa/loader'
+import type { ControllerHandle } from '@maa/loader'
 
 export type SyncVarInterface<Name extends string, Type, Cate extends 'main' | 'renderer'> = {
   [key in `${Cate}.var.${Name}`]: (nv: Type) => void
@@ -9,14 +10,9 @@ export type SyncVarPullInterface<Name extends string, Cate extends 'main' | 'ren
 }
 
 export type SyncVarInfo_M2R = [
-  ['test', string],
-  [
-    'deep',
-    {
-      value: string
-    }
-  ],
-  ['device', DeviceInfo[]]
+  ['device', DeviceInfo[]],
+  ['loader_info', { active: boolean; address: string }],
+  ['controller_set', Record<string, ControllerHandle>]
 ]
 
 export type SyncVarInfo_R2M = []

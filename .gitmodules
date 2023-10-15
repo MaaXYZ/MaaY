@@ -1,3 +1,4 @@
 [submodule "pkgs/loader"]
 	path = pkgs/loader
 	url = https://github.com/neko-para/MaaJSLoader
+	branch = grpc
