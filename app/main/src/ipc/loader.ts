@@ -1,4 +1,4 @@
-import { Controller, Device, Status } from '@maa/loader'
+import { Controller, Device, Instance, Resource, Status } from '@maa/loader'
 import { computed } from '@vue/reactivity'
 
 import { ipcMainHandle, ipcMainSend } from '.'
@@ -8,6 +8,7 @@ import { registerSend, registerSendFor } from '../sync'
 export function setupLoader() {
   const deviceInfo = registerSend('device', [])
   const controllerSet = registerSend('controller_set', {})
+  const instanceSet = registerSend('instance_set', {})
 
   ipcMainHandle('main.loader.device.update', async () => {
     if (moduleIndexs.MaaFramework.active) {
@@ -23,7 +24,7 @@ export function setupLoader() {
       ipcMainSend('renderer.loader.controller.callback', msg, detail)
     }, cfg)
     const status = await ctrl.post_connection().wait()
-    if (status === Status.Success) {
+    if (status === Status.Success && (await ctrl.connected)) {
       controllerSet.value[cfg.serial] = ctrl.handle
       return true
     } else {
@@ -41,4 +42,13 @@ export function setupLoader() {
       }
     })
   )
+
+  // ipcMainHandle('main.loader.instance.load', async (_, pack) => {
+  //   const inst = await Instance.init((msg, detail) => {
+  //     ipcMainSend('renderer.loader.instance.callback', msg, detail)
+  //   })
+  //   const resource = await Resource.init((msg, detail) => {
+  //     ipcMainSend('renderer.loader.instance.callback', msg, detail)
+  //   })
+  // })
 }

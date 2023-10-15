@@ -1,0 +1,16 @@
+{
+  "option": {
+    "close": {
+      "name": "关闭森空岛",
+      "type": "checkbox",
+      "provide": ["CloseSkland.enabled"]
+    }
+  },
+  "entry": [
+    {
+      "name": "森空岛签到",
+      "task": "Skland",
+      "option": ["close"]
+    }
+  ]
+}

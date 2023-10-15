@@ -12,7 +12,8 @@ export type SyncVarPullInterface<Name extends string, Cate extends 'main' | 'ren
 export type SyncVarInfo_M2R = [
   ['device', DeviceInfo[]],
   ['loader_info', { active: boolean; address: string }],
-  ['controller_set', Record<string, ControllerHandle>]
+  ['controller_set', Record<string, ControllerHandle>],
+  ['instance_set', Record<string, { pack: string; ctrl: ControllerHandle }>]
 ]
 
 export type SyncVarInfo_R2M = []
