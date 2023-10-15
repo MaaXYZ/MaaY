@@ -5,6 +5,7 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   root: __dirname,
   build: {
+    ssr: true, // make it pick main instead of browser
     lib: {
       entry: 'src/main.ts',
       name: 'main',

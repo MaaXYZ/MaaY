@@ -9,12 +9,7 @@ export type SyncVarPullInterface<Name extends string, Cate extends 'main' | 'ren
   [key in `${Cate}.var.${Name}.pull`]: () => void
 }
 
-export type SyncVarInfo_M2R = [
-  ['device', DeviceInfo[]],
-  ['loader_info', { active: boolean; address: string }],
-  ['controller_set', Record<string, ControllerHandle>],
-  ['instance_set', Record<string, { pack: string; ctrl: ControllerHandle }>]
-]
+export type SyncVarInfo_M2R = [['loader_info', { active: boolean; address: string }]]
 
 export type SyncVarInfo_R2M = []
 

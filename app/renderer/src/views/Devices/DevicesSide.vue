@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import LoaderInfo from '@/components/LoaderInfo.vue'
-import { deviceInfo, selectedDeviceInfo } from '@/stores/device'
+import { useDevice } from '@/stores/device'
 import { NButton } from 'naive-ui'
 
-function refresh() {
-  window.ipcRenderer.invoke('main.loader.device.update')
-}
+const { device, refresh, selected } = useDevice
 </script>
 
 <template>
@@ -14,7 +12,7 @@ function refresh() {
     <div class="flex justify-center">
       <NButton @click="refresh">refresh</NButton>
     </div>
-    <NButton v-for="(item, idx) of deviceInfo" :key="idx" @click="selectedDeviceInfo = idx">
+    <NButton v-for="(item, idx) of device" :key="idx" @click="selected = idx">
       <div class="flex gap-2">
         <span> {{ item.name }} </span>
 

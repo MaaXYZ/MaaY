@@ -7,6 +7,8 @@ export type ServerSideInterface = {
 
   'main.loader.utility.version': () => string
 
+  'main.loader.stream': (cmd: string, args: any[]) => Promise<any>
+
   'main.loader.device.update': () => void
   'main.loader.controller.connect': (cfg: Required<AdbControllerConfig>) => boolean
 

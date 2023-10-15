@@ -1,7 +1,8 @@
-import { deinit, init, set_debug_mode, set_logging } from '@maa/loader'
+import { FlatToStream, context, deinit, init, set_debug_mode, set_logging } from '@maa/loader'
 import { ChildProcess, spawn } from 'child_process'
 import path from 'path'
 
+import { ipcMainHandle, ipcMainRemove, ipcMainSend } from '../../ipc'
 import { Module } from '../module'
 
 interface MaaFrameworkChannelConfig {
@@ -87,6 +88,10 @@ export class MaaFrameworkModule extends Module {
       await this.disconnect()
     }
     if (await init(`${this.cfg.host}:${this.cfg.port}`)) {
+      const stream = FlatToStream(context, (id, msg, detail) => {
+        ipcMainSend('renderer.loader.callback', id, msg, detail)
+      })
+      ipcMainHandle('main.loader.stream', (_, cmd, args) => stream(cmd, args))
       this.active = true
       await set_logging(path.join(process.cwd(), 'debug'))
       return true
@@ -96,6 +101,7 @@ export class MaaFrameworkModule extends Module {
   }
 
   async disconnect() {
+    ipcMainRemove('main.loader.stream')
     this.active = false
     await deinit()
   }
