@@ -1,9 +1,6 @@
-export interface ModuleUpgradeChannel {
-  name: string
-  desc: string
-}
+import { ModuleInfo, ModuleUpgradeChannel } from '@maa/ipc'
 
-export abstract class Module {
+export abstract class Module implements ModuleInfo {
   abstract readonly name: string
   abstract readonly channels: ModuleUpgradeChannel[]
 

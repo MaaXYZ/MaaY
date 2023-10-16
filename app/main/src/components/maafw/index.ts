@@ -54,6 +54,10 @@ export class MaaFrameworkModule extends Module {
         this.proc = spawn(this.cfg.path, {
           stdio: 'inherit'
         })
+        await new Promise((resolve, reject) => {
+          this.proc!.on('spawn', resolve)
+          this.proc!.on('error', reject)
+        })
         if (await this.connect()) {
           this.loaded = true
           return true
@@ -67,6 +71,11 @@ export class MaaFrameworkModule extends Module {
   }
 
   async unload() {
+    await this.disconnect()
+    if (this.proc) {
+      this.proc.kill('SIGINT')
+      this.proc = null
+    }
     this.loaded = false
   }
 

@@ -1,9 +1,9 @@
 import { setupCore } from './core'
-import { setupLoader } from './loader'
+import { setupModules } from './module'
 
 export * from './ipc'
 
 export function setupIpc() {
   setupCore()
-  setupLoader()
+  setupModules()
 }
