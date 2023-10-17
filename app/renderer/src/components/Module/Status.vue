@@ -18,6 +18,10 @@ function unload(m: string) {
 function load(m: string) {
   window.ipcRenderer.invoke('main.module.load', m)
 }
+
+function setChannel(m: string, c: string) {
+  window.ipcRenderer.invoke('main.module.set_channel', m, c)
+}
 </script>
 
 <template>
@@ -31,6 +35,7 @@ function load(m: string) {
         </div>
         <NSelect
           :value="cfg.channel"
+          @update:value="v => setChannel(name, v)"
           :options="cfg.channels.map(({ name, desc }) => ({ label: desc, value: name }))"
         ></NSelect>
 

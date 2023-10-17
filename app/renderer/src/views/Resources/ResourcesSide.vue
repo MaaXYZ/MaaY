@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import { useDevice } from '@/stores/device'
+import { useResPack } from '@/stores/respack'
 import { NButton } from 'naive-ui'
 
-const { device, refresh, selected } = useDevice
+const { info, selected } = useResPack
+
+function refresh() {
+  window.ipcRenderer.invoke('main.resource.refresh')
+}
 </script>
 
 <template>
@@ -10,11 +14,9 @@ const { device, refresh, selected } = useDevice
     <div class="flex justify-center">
       <NButton @click="refresh">refresh</NButton>
     </div>
-    <NButton v-for="(item, idx) of device" :key="idx" @click="selected = idx">
+    <NButton v-for="(item, key) in info" :key="key" @click="selected = key">
       <div class="flex gap-2">
         <span> {{ item.name }} </span>
-
-        <span> {{ item.adb_serial }} </span>
       </div>
     </NButton>
   </div>

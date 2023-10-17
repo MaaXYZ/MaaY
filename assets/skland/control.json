@@ -3,7 +3,7 @@
     "close": {
       "name": "关闭森空岛",
       "type": "checkbox",
-      "provide": ["CloseSkland.enabled"]
+      "inject": ["CloseSkland.enabled"]
     }
   },
   "entry": [

@@ -5,6 +5,9 @@ export type ServerSideInterface = {
 
   'main.module.load': (name: string) => boolean
   'main.module.unload': (name: string) => void
+  'main.module.set_channel': (name: string, ch: string) => boolean
+
+  'main.resource.refresh': () => void
 
   'main.loader.stream': (cmd: string, args: any[]) => Promise<any>
 } & SyncVarInterfaceList_R2M &

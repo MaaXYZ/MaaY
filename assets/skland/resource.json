@@ -9,7 +9,9 @@
   "app": {
     "start": "com.hypergryph.skland/com.hypergryph.skland.SplashActivity",
     "stop": "com.hypergryph.skland",
-    "orientation": "vertical",
-    "size": "short/720"
+    "orientation": "portait",
+    "size": {
+      "short": 720
+    }
   }
 }

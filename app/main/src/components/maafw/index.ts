@@ -6,6 +6,10 @@ import path from 'path'
 import { ipcMainHandle, ipcMainRemove, ipcMainSend } from '../../ipc'
 import { Module } from '../module'
 
+function unpackedShallowRef<T>(t: T) {
+  return shallowRef(t) as unknown as T
+}
+
 interface MaaFrameworkChannelConfig {
   host?: string
   port?: number
@@ -27,9 +31,7 @@ export class MaaFrameworkModule extends Module {
 
   channel = 'running'
   version = 'N/A'
-  proc: ChildProcess | null = shallowRef<ChildProcess | null>(
-    null
-  ) as unknown as ChildProcess | null
+  proc = unpackedShallowRef<ChildProcess | null>(null)
 
   active = false
 
@@ -60,6 +62,10 @@ export class MaaFrameworkModule extends Module {
         await new Promise((resolve, reject) => {
           this.proc!.on('spawn', resolve)
           this.proc!.on('error', reject)
+        })
+        // TODO: 想办法通个信而不是直接等
+        await new Promise(resolve => {
+          setTimeout(resolve, 500)
         })
         if (await this.connect()) {
           this.loaded = true

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PhoneAndroidOutlined, SettingsOutlined } from '@vicons/material'
+import { Database24Regular, Grid24Regular, Phone24Regular, Settings24Regular } from '@vicons/fluent'
 import { NButton, NIcon } from 'naive-ui'
 import { useRouter } from 'vue-router'
 
@@ -8,17 +8,31 @@ const router = useRouter()
 
 <template>
   <div class="flex gap-2">
+    <NButton text @click="router.push('/instances')">
+      <template #icon>
+        <NIcon>
+          <Grid24Regular></Grid24Regular>
+        </NIcon>
+      </template>
+    </NButton>
+    <NButton text @click="router.push('/resources')">
+      <template #icon>
+        <NIcon>
+          <Database24Regular></Database24Regular>
+        </NIcon>
+      </template>
+    </NButton>
     <NButton text @click="router.push('/devices')">
       <template #icon>
         <NIcon>
-          <PhoneAndroidOutlined></PhoneAndroidOutlined>
+          <Phone24Regular></Phone24Regular>
         </NIcon>
       </template>
     </NButton>
     <NButton text @click="router.push('/settings')">
       <template #icon>
         <NIcon>
-          <SettingsOutlined></SettingsOutlined>
+          <Settings24Regular></Settings24Regular>
         </NIcon>
       </template>
     </NButton>

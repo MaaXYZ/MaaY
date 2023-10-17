@@ -1,4 +1,4 @@
-import { StreamToFlat, setContext, version } from '@maa/loader'
+import { StreamToFlat, setContext } from '@maa/loader'
 
 export function setupMaa() {
   const [ctx, recv] = StreamToFlat((cmd, args) => {
@@ -7,8 +7,5 @@ export function setupMaa() {
   setContext(ctx)
   window.ipcRenderer.on('renderer.loader.callback', (_, id, msg, detail) => {
     recv(id, msg, detail)
-  })
-  version().then(ver => {
-    console.log(ver)
   })
 }

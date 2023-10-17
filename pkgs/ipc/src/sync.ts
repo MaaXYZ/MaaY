@@ -1,4 +1,4 @@
-import type { ModuleInfo } from './types'
+import type { ModuleInfo, ResourceInfo } from './types'
 
 export type SyncVarInterface<Name extends string, Type, Cate extends 'main' | 'renderer'> = {
   [key in `${Cate}.var.${Name}`]: (nv: Type) => void
@@ -8,7 +8,10 @@ export type SyncVarPullInterface<Name extends string, Cate extends 'main' | 'ren
   [key in `${Cate}.var.${Name}.pull`]: () => void
 }
 
-export type SyncVarInfo_M2R = [['module_info', Record<string, ModuleInfo>]]
+export type SyncVarInfo_M2R = [
+  ['module_info', Record<string, ModuleInfo>],
+  ['resource_info', Record<string, ResourceInfo>]
+]
 
 export type SyncVarInfo_R2M = []
 

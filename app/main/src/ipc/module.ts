@@ -24,13 +24,19 @@ export function setupModules() {
   registerSendFor('module_info', status)
 
   ipcMainHandle('main.module.load', async (_, name) => {
-    if (name in moduleIndexs) {
-      return await moduleIndexs[name as keyof typeof moduleIndexs].load()
-    } else {
-      return false
-    }
+    return (await moduleIndexs[name as keyof typeof moduleIndexs]?.load()) ?? false
   })
   ipcMainHandle('main.module.unload', async (_, name) => {
     await moduleIndexs[name as keyof typeof moduleIndexs]?.unload()
+  })
+  ipcMainHandle('main.module.set_channel', async (_, name, ch) => {
+    if (name in moduleIndexs) {
+      const m = moduleIndexs[name as keyof typeof moduleIndexs]
+      if (m.channels.find(x => x.name === ch)) {
+        m.channel = ch
+        return true
+      }
+    }
+    return false
   })
 }
