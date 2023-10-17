@@ -1,4 +1,5 @@
 import Devices from '@/views/Devices'
+import Instances from '@/views/Instances'
 import Resources from '@/views/Resources'
 import Settings from '@/views/Settings'
 import { type RouteRecordRaw, createMemoryHistory, createRouter } from 'vue-router'
@@ -19,6 +20,10 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/resources',
     components: Resources
+  },
+  {
+    path: '/instances',
+    components: Instances
   }
 ]
 

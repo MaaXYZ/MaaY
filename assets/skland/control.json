@@ -4,6 +4,21 @@
       "name": "关闭森空岛",
       "type": "checkbox",
       "inject": ["CloseSkland.enabled"]
+    },
+    "server": {
+      "name": "服务器",
+      "type": "select_string",
+      "inject": ["StartApp.package"],
+      "case": [
+        {
+          "name": "官服",
+          "value": "aaa"
+        },
+        {
+          "name": "B服",
+          "value": "bbb"
+        }
+      ]
     }
   },
   "entry": [
