@@ -25,7 +25,8 @@ function setup(msg: MessageApiInjection, notify: NotificationApiInjection) {
   })
   register('debug.test-message', async () => {
     message.create('Message Content', {
-      duration: 0
+      duration: 0,
+      closable: true
     })
     return true
   })

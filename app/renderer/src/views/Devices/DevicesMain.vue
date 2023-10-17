@@ -2,12 +2,12 @@
 import { useController } from '@/stores/controller'
 import { useDevice } from '@/stores/device'
 import { NButton, NCard } from 'naive-ui'
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 
 const statusMessage = ref<string[]>([])
 
 const { device, selected } = useDevice
-const { handles, connect, find } = useController
+const { connect, find } = useController
 
 const info = computed(() => {
   if (selected.value !== null) {

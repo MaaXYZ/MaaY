@@ -1,4 +1,5 @@
 import { FlatToStream, context, deinit, init, set_debug_mode, set_logging } from '@maa/loader'
+import { ShallowRef, shallowRef } from '@vue/reactivity'
 import { ChildProcess, spawn } from 'child_process'
 import path from 'path'
 
@@ -26,7 +27,9 @@ export class MaaFrameworkModule extends Module {
 
   channel = 'running'
   version = 'N/A'
-  proc: ChildProcess | null = null
+  proc: ChildProcess | null = shallowRef<ChildProcess | null>(
+    null
+  ) as unknown as ChildProcess | null
 
   active = false
 

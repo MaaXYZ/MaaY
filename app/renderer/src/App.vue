@@ -6,9 +6,9 @@ import { NMessageProvider, NNotificationProvider } from 'naive-ui'
 
 <template>
   <NMessageProvider>
-    <NNotificationProvider>
+    <NNotificationProvider placement="bottom-right">
       <Command></Command>
-      <MainSideLayout class="p-2"></MainSideLayout>
+      <MainSideLayout></MainSideLayout>
     </NNotificationProvider>
   </NMessageProvider>
 </template>

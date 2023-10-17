@@ -1,5 +1,7 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import ModuleStatus from '@/components/Module'
+</script>
 
 <template>
-  <div>123</div>
+  <div><ModuleStatus></ModuleStatus></div>
 </template>
