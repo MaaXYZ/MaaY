@@ -8,6 +8,7 @@ export type ServerSideInterface = {
   'main.module.set_channel': (name: string, ch: string) => boolean
 
   'main.resource.refresh': () => void
+  'main.resource.join_path': (res: string, path: string) => Promise<string>
 
   'main.loader.stream': (cmd: string, args: any[]) => Promise<any>
 } & SyncVarInterfaceList_R2M &

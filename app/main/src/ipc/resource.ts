@@ -28,4 +28,8 @@ export function setupResource() {
     }
     resource_info.value = ri
   })
+
+  ipcMainHandle('main.resource.join_path', (_, res, p) => {
+    return path.join(process.cwd(), 'assets', res, p)
+  })
 }
