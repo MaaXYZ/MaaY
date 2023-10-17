@@ -1,4 +1,5 @@
 import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
 import path from 'path'
 import { defineConfig } from 'vite'
 
@@ -19,5 +20,5 @@ export default defineConfig({
       '@': path.join(__dirname, 'src')
     }
   },
-  plugins: [vue()]
+  plugins: [vue(), vueJsx()]
 })
