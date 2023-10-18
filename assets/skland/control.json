@@ -2,6 +2,7 @@
   "option": {
     "close": {
       "name": "关闭森空岛",
+      "default": true,
       "type": "checkbox",
       "inject": ["CloseSkland.enabled"]
     },
@@ -25,7 +26,7 @@
     {
       "name": "森空岛签到",
       "task": "Skland",
-      "option": ["close"]
+      "option": ["close", "server"]
     }
   ]
 }

@@ -1,92 +1,138 @@
 <script setup lang="ts">
-import { useController } from '@/stores/controller'
-import { useDevice } from '@/stores/device'
-import { NButton, NCard } from 'naive-ui'
-import { computed, ref } from 'vue'
+import { useInstance } from '@/stores/instance'
+import { useResPack } from '@/stores/respack'
+import { NButton, NCard, NInput, NSelect } from 'naive-ui'
+import { computed, provide, ref } from 'vue'
 
-const statusMessage = ref<string[]>([])
+import VariantEdit from './VariantEdit.vue'
 
-const { device, selected } = useDevice
-const { connect, find } = useController
+const { handles, selected } = useInstance
 
-const info = computed(() => {
-  if (selected.value !== null) {
-    return device.value[selected.value]
+const instInfo = computed(() => {
+  return selected.value ? handles.value[selected.value] : null
+})
+
+const respackInfo = computed(() => {
+  if (instInfo.value) {
+    return useResPack.info.value[instInfo.value.resource.name]
   } else {
     return null
   }
 })
 
-async function requestConnect() {
-  if (info.value) {
-    const { adb_path: path, adb_serial: serial, adb_type: type, adb_config: config } = info.value
-    await connect(processControllerCallback, {
-      path,
-      serial,
-      type,
-      config
-    })
-  }
-}
+const resourceOption = computed(() => {
+  return respackInfo.value
+    ? Object.entries(respackInfo.value.config.resource.resource).map(([k, v]) => ({
+        label: v.name,
+        value: k
+      }))
+    : []
+})
 
-function processControllerCallback(msg: string, detail: string) {
-  const info = JSON.parse(detail)
-  switch (msg) {
-    case 'Controller.UUIDGot':
-      statusMessage.value.push(`已获取UUID: ${info.uuid}`)
-      break
-    case 'Controller.UUIDGetFailed':
-      statusMessage.value.push(`获取UUID失败`)
-      break
-    case 'Controller.ResolutionGot':
-      statusMessage.value.push(`已获取分辨率: ${info.resolution.width}x${info.resolution.height}`)
-      break
-    case 'Controller.ResolutionGetFailed':
-      statusMessage.value.push(`获取分辨率失败`)
-      break
-    case 'Controller.ScreencapInited':
-      statusMessage.value.push(`已初始化截图`)
-      break
-    case 'Controller.ScreencapInitFailed':
-      statusMessage.value.push(`初始化截图失败`)
-      break
-    case 'Controller.ConnectSuccess':
-      statusMessage.value.push(`已连接`)
-      break
-    case 'Controller.ConnectFailed':
-      statusMessage.value.push(`连接失败: ${info.why}`)
-      break
-    default:
-      statusMessage.value.push(`${msg}: ${detail}`)
-      break
+const entryOption = computed(() => {
+  return respackInfo.value
+    ? respackInfo.value.config.control.entry.map((x, idx) => ({
+        label: x.name,
+        value: idx
+      }))
+    : []
+})
+
+const entryCorrespondingOption = computed(() => {
+  return respackInfo.value && instInfo.value!.resource.entry !== undefined
+    ? respackInfo.value.config.control.entry[instInfo.value!.resource.entry!]?.option ?? []
+    : []
+})
+
+provide(
+  'InstConfig',
+  computed(() => instInfo.value?.resource.config)
+)
+
+const buildConfigDiff = computed(() => {
+  const result: any = {}
+  if (!instInfo.value || !respackInfo.value) {
+    return result
   }
-}
+  for (const optkey of entryCorrespondingOption.value) {
+    const opt = respackInfo.value.config.control.option[optkey]!
+    const val = instInfo.value.resource.config[optkey] ?? opt.default
+    if (val === undefined) {
+      continue
+    }
+    for (const p of opt.inject ?? []) {
+      const ks = p.split('.')
+      let ptr: any = {
+        _: result
+      }
+      let key = '_'
+      for (const k of ks) {
+        const m = /^\[(\d+)\]$/.exec(k)
+        if (m) {
+          if (!(key in ptr)) {
+            ptr[key] = []
+          }
+          ptr = ptr[key]
+          key = m[1]!
+        } else {
+          if (!(key in ptr)) {
+            ptr[key] = {}
+          }
+          ptr = ptr[key]
+          key = k
+        }
+      }
+      ptr[key] = val
+    }
+    switch (opt.type) {
+      case 'checkbox':
+        if (val === true) {
+          Object.assign(result, opt.case?.true ?? {})
+        } else {
+          Object.assign(result, opt.case?.false ?? {})
+        }
+        break
+      case 'select_string':
+      case 'select_number':
+        for (const cs of opt.case) {
+          if (cs.value === val) {
+            Object.assign(result, cs.provide ?? {})
+          }
+        }
+        break
+    }
+  }
+  return result
+})
 </script>
 
 <template>
-  <div v-if="info" class="flex flex-col gap-2">
-    <NCard>
-      <div class="grid" style="grid-template-columns: 1fr 6fr">
+  <div v-if="selected" class="flex flex-col gap-2">
+    <NCard title="资源">
+      <div class="grid items-center gap-2" style="grid-template-columns: 1fr 6fr">
         <span> 名称 </span>
-        <span>{{ info.name }}</span>
-        <span> ADB路径 </span>
-        <span>{{ info.adb_path }}</span>
-        <span> 目标地址 </span>
-        <span>{{ info.adb_serial }}</span>
+        <NInput :value="instInfo!.resource.name" readonly></NInput>
+        <span> 资源包 </span>
+        <NSelect v-model:value="instInfo!.resource.resource" :options="resourceOption"></NSelect>
       </div>
     </NCard>
-    <NCard>
+    <NCard title="配置">
       <div class="flex flex-col gap-2">
-        <div class="flex gap-2">
-          <NButton v-if="find(info.adb_serial)" disabled>
-            已连接 - {{ find(info.adb_serial) }}
-          </NButton>
-          <NButton v-else @click="requestConnect"> 连接 </NButton>
+        <div class="grid items-center gap-2" style="grid-template-columns: 1fr 6fr">
+          <span> 入口 </span>
+          <NSelect v-model:value="instInfo!.resource.entry" :options="entryOption"></NSelect>
         </div>
-        <div class="flex flex-col gap-2">
-          <span v-for="(msg, idx) in statusMessage" :key="idx"> {{ msg }} </span>
-        </div>
+        <VariantEdit
+          v-for="(opt, idx) of entryCorrespondingOption"
+          :key="idx"
+          :option="respackInfo!.config.control.option[opt]!"
+          :propk="opt"
+        ></VariantEdit>
       </div>
+
+      <code>
+        {{ JSON.stringify(buildConfigDiff, null, 2) }}
+      </code>
     </NCard>
   </div>
   <div v-else></div>

@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import { useInstance } from '@/stores/instance'
 import { useResPack } from '@/stores/respack'
 import { NButton, NCard } from 'naive-ui'
 import { computed, ref } from 'vue'
 
 const { info, selected } = useResPack
+const { create } = useInstance
 
 const rinfo = computed(() => {
   if (selected.value !== null) {
@@ -12,10 +14,27 @@ const rinfo = computed(() => {
     return null
   }
 })
+
+function requestCreateInst() {
+  if (rinfo.value) {
+    create(
+      (msg, detail) => {
+        console.log(msg, detail)
+      },
+      rinfo.value.name,
+      rinfo.value.name
+    )
+  }
+}
 </script>
 
 <template>
   <div v-if="rinfo" class="flex flex-col gap-2">
+    <NCard>
+      <div class="flex gap-2">
+        <NButton @click="requestCreateInst"> 创建实例 </NButton>
+      </div>
+    </NCard>
     <NCard>
       <div class="grid" style="grid-template-columns: 1fr 6fr">
         <span> 名称 </span>
