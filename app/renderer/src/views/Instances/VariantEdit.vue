@@ -44,4 +44,31 @@ watch(
       ></NSelect>
     </div>
   </div>
+  <div v-else-if="option.type === 'select_number'">
+    <div class="flex gap-2 items-center">
+      <span class="whitespace-nowrap">{{ option.name }}</span>
+      <NSelect
+        :value="config[propk].toString()"
+        @update:value="v => (config[propk] = parseInt(v))"
+        :options="
+          option.case.map(x => ({
+            label: x.name,
+            value: x.value
+          }))
+        "
+      ></NSelect>
+    </div>
+  </div>
+  <div v-else-if="option.type === 'input_string'">
+    <div class="flex gap-2 items-center">
+      <span class="whitespace-nowrap">{{ option.name }}</span>
+      <NInput v-model:value="config[propk]"></NInput>
+    </div>
+  </div>
+  <div v-else-if="option.type === 'input_number'">
+    <div class="flex gap-2 items-center">
+      <span class="whitespace-nowrap">{{ option.name }}</span>
+      <NInputNumber v-model:value="config[propk]"></NInputNumber>
+    </div>
+  </div>
 </template>
