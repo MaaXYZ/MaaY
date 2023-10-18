@@ -114,13 +114,17 @@ const buildConfigDiff = computed(() => {
   return result
 })
 
+const running = ref(false)
+
 async function run() {
+  running.value = true
   if (
     instInfo.value!.resource.resource === undefined ||
     instInfo.value!.resource.entry === undefined ||
     instInfo.value!.controller.handle === undefined
   ) {
     console.log('require resource & entry & controller')
+    running.value = false
     return false
   }
   let resPaths: string[] = []
@@ -141,6 +145,7 @@ async function run() {
   }
   if (!(await hRes.loaded)) {
     console.log('resource not loaded')
+    running.value = false
     return false
   }
   const hCtrl = Controller.init_from(instInfo.value!.controller.handle)
@@ -167,6 +172,8 @@ async function run() {
       diff_task: buildConfigDiff.value
     })
     .wait()
+  running.value = false
+  return true
 }
 </script>
 
@@ -208,7 +215,7 @@ async function run() {
     </NCard>
     <NCard title="执行">
       <div class="flex gap-2">
-        <NButton @click="run"> 启动 </NButton>
+        <NButton @click="run" :disabled="running"> 启动 </NButton>
       </div>
     </NCard>
   </div>

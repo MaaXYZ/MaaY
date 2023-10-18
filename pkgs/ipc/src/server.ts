@@ -6,6 +6,7 @@ export type ServerSideInterface = {
   'main.module.load': (name: string) => boolean
   'main.module.unload': (name: string) => void
   'main.module.set_channel': (name: string, ch: string) => boolean
+  'main.module.set_config': (name: string, cfg: unknown) => boolean
 
   'main.resource.refresh': () => void
   'main.resource.join_path': (res: string, path: string) => Promise<string>

@@ -22,13 +22,17 @@ function load(m: string) {
 function setChannel(m: string, c: string) {
   window.ipcRenderer.invoke('main.module.set_channel', m, c)
 }
+
+function setConfig(m: string, c: unknown) {
+  window.ipcRenderer.invoke('main.module.set_config', m, c)
+}
 </script>
 
 <template>
   <div class="flex flex-col gap-2">
     <NCard v-for="(cfg, name) in info" :key="name" :title="name">
       <div class="flex flex-col gap-2">
-        <div class="flex gap-2">
+        <div class="flex gap-2 items-center">
           <NButton v-if="cfg.loaded" @click="unload(name)"> 卸载 </NButton>
           <NButton v-else @click="load(name)"> 加载 </NButton>
           <span> 版本: {{ cfg.version ?? 'N/A' }} </span>
@@ -39,7 +43,11 @@ function setChannel(m: string, c: string) {
           :options="cfg.channels.map(({ name, desc }) => ({ label: desc, value: name }))"
         ></NSelect>
 
-        <component v-if="name in moduleInfoProvider" :is="moduleInfoProvider[name]"></component>
+        <component
+          v-if="name in moduleInfoProvider"
+          :is="moduleInfoProvider[name]"
+          @update:config="(c: unknown) => setConfig(name, c)"
+        ></component>
         <div v-else>
           {{ cfg }}
         </div>

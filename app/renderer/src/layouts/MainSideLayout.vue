@@ -12,11 +12,13 @@ import { RouterView } from 'vue-router'
       <div class="flex justify-end">
         <NavigateGroup></NavigateGroup>
       </div>
-      <RouterView name="Main" v-slot="{ Component }">
-        <KeepAlive>
-          <component :is="Component"></component>
-        </KeepAlive>
-      </RouterView>
+      <div class="flex-0 overflow-y-auto">
+        <RouterView name="Main" v-slot="{ Component }">
+          <KeepAlive>
+            <component :is="Component"></component>
+          </KeepAlive>
+        </RouterView>
+      </div>
     </div>
   </div>
 </template>

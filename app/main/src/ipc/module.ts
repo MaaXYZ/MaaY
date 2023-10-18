@@ -39,4 +39,11 @@ export function setupModules() {
     }
     return false
   })
+  ipcMainHandle('main.module.set_config', async (_, name, cfg) => {
+    if (name in moduleIndexs) {
+      const m = moduleIndexs[name as keyof typeof moduleIndexs]
+      m.channel_config = cfg
+    }
+    return false
+  })
 }
