@@ -1,5 +1,6 @@
 import { spawn } from 'child_process'
 import electron from 'electron'
+import esbuild from 'esbuild'
 import { build, createServer } from 'vite'
 
 // let quitTimer = null
@@ -20,7 +21,7 @@ import { build, createServer } from 'vite'
 /**
  * @type {(server: import('vite').ViteDevServer) => Promise<import('rollup').RollupWatcher>}
  */
-function watchMain(server) {
+async function watchMain(server) {
   /**
    * @type {import('child_process').ChildProcessWithoutNullStreams | null}
    */
@@ -31,34 +32,34 @@ function watchMain(server) {
     VITE_DEV_SERVER_HOST: address.address,
     VITE_DEV_SERVER_PORT: address.port
   })
-  return build({
-    configFile: 'app/main/vite.config.ts',
-    mode: 'development',
+  const ctx = await esbuild.context({
+    sourceRoot: 'app/main',
+    entryPoints: ['app/main/src/main.ts'],
+    platform: 'node',
+    bundle: true,
+    external: ['electron', 'electron'],
+    outdir: './dist/main',
+    sourcemap: true,
     plugins: [
       {
         name: 'electron-main-watcher',
-        writeBundle() {
-          // stopQuit()
+        setup(ctx) {
+          ctx.onEnd(() => {
+            console.log('main rebuilt')
+            if (electronProcess) {
+              electronProcess.kill()
+            }
 
-          if (electronProcess) {
-            electronProcess.kill()
-          }
-
-          electronProcess = spawn(electron, ['.', '--inspect'], {
-            stdio: 'inherit',
-            env
+            electronProcess = spawn(electron, ['.', '--inspect'], {
+              stdio: 'inherit',
+              env
+            })
           })
-
-          // electronProcess.on('exit', () => {
-          //   startQuit()
-          // })
         }
       }
-    ],
-    build: {
-      watch: true
-    }
+    ]
   })
+  await ctx.watch()
 }
 
 /**

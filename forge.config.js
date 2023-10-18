@@ -1,31 +1,16 @@
 module.exports = {
-  rebuildConfig: {},
-  makers: [
-    {
-      name: '@electron-forge/maker-zip'
-    }
-  ],
-  plugins: [
-    {
-      name: '@electron-forge/plugin-vite',
-      config: {
-        build: [
-          {
-            entry: 'app/main/src/main.js',
-            config: 'app/main/vite.config.ts'
-          },
-          {
-            entry: 'app/preload/src/main.js',
-            config: 'app/preload/vite.config.ts'
-          }
-        ],
-        renderer: [
-          {
-            name: 'main_window',
-            config: 'app/renderer/vite.config.ts'
-          }
-        ]
+  packagerConfig: {
+    ignore: filepath => {
+      if (filepath.length === 0) {
+        return false
       }
+      if (/^\/dist/.test(filepath)) {
+        return false
+      }
+      if (/^\/package.json/.test(filepath)) {
+        return false
+      }
+      return true
     }
-  ]
+  }
 }

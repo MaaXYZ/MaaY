@@ -37,11 +37,15 @@ jobs:
         run: npm ci
 
       - name: Compile Electron app
-        run: npm run package
+        run: |
+          npm run make
+          npm run package
+          mkdir -p pkg
+          tar cjvf pkg/`ls out`.tar.gz -C ./out ./`ls out`
 
       - uses: actions/upload-artifact@v3
         if: always()
         with:
           # name: maa-y-${{ matrix.os }}-${{ matrix.arch }}
           name: maa-y-${{ matrix.os }}
-          path: 'out'
+          path: 'pkg'

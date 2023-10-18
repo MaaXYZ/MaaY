@@ -8,15 +8,13 @@
   "scripts": {
     "dev": "node scripts/watch.mjs",
     "build": "node scripts/build.mjs",
-    "package": "electron-forge package",
-    "make": "electron-forge make"
+    "package": "electron-forge package"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.4.2",
-    "@electron-forge/maker-zip": "^6.4.2",
-    "@electron-forge/plugin-vite": "^6.4.2",
     "@trivago/prettier-plugin-sort-imports": "^4.2.0",
     "electron": "^26.3.0",
+    "esbuild": "^0.19.5",
     "vite": "^4.4.11"
   }
 }
