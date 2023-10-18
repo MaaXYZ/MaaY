@@ -38,7 +38,7 @@ jobs:
 
       - name: Compile Electron app
         run: |
-          npm run make
+          npm run build
           npm run package
           mkdir -p pkg
           tar cjvf pkg/`ls out`.tar.gz -C ./out ./`ls out`
