@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useModule } from '@/stores/module'
 import { NButton, NCard, NSelect } from 'naive-ui'
-import type { Component } from 'vue'
+import { type Component, ref } from 'vue'
 
 import MaaFrameworkInfo from './MaaFramework.vue'
 
@@ -11,12 +11,18 @@ const moduleInfoProvider: Record<string, Component> = {
   MaaFramework: MaaFrameworkInfo
 }
 
-function unload(m: string) {
-  window.ipcRenderer.invoke('main.module.unload', m)
+const loading = ref(false)
+
+async function unload(m: string) {
+  loading.value = true
+  await window.ipcRenderer.invoke('main.module.unload', m)
+  loading.value = false
 }
 
-function load(m: string) {
-  window.ipcRenderer.invoke('main.module.load', m)
+async function load(m: string) {
+  loading.value = true
+  await window.ipcRenderer.invoke('main.module.load', m)
+  loading.value = false
 }
 
 function setChannel(m: string, c: string) {
@@ -33,13 +39,14 @@ function setConfig(m: string, c: unknown) {
     <NCard v-for="(cfg, name) in info" :key="name" :title="name">
       <div class="flex flex-col gap-2">
         <div class="flex gap-2 items-center">
-          <NButton v-if="cfg.loaded" @click="unload(name)"> 卸载 </NButton>
-          <NButton v-else @click="load(name)"> 加载 </NButton>
+          <NButton v-if="cfg.loaded" @click="unload(name)" :disabled="loading"> 卸载 </NButton>
+          <NButton v-else @click="load(name)" :disabled="loading"> 加载 </NButton>
           <span> 版本: {{ cfg.version ?? 'N/A' }} </span>
         </div>
         <NSelect
           :value="cfg.channel"
           @update:value="v => setChannel(name, v)"
+          :disabled="cfg.loaded"
           :options="cfg.channels.map(({ name, desc }) => ({ label: desc, value: name }))"
         ></NSelect>
 
@@ -47,6 +54,7 @@ function setConfig(m: string, c: unknown) {
           v-if="name in moduleInfoProvider"
           :is="moduleInfoProvider[name]"
           @update:config="(c: unknown) => setConfig(name, c)"
+          :disabled="cfg.loaded"
         ></component>
         <div v-else>
           {{ cfg }}

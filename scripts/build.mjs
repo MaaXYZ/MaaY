@@ -2,7 +2,6 @@ import esbuild from 'esbuild'
 import { build } from 'vite'
 
 await esbuild.build({
-  sourceRoot: 'app/main',
   entryPoints: ['app/main/src/main.ts'],
   platform: 'node',
   bundle: true,

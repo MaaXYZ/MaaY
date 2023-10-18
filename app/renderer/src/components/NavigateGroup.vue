@@ -8,28 +8,28 @@ const router = useRouter()
 
 <template>
   <div class="flex gap-2">
-    <NButton text @click="router.push('/instances')">
+    <NButton @click="router.push('/instances')">
       <template #icon>
         <NIcon>
           <Grid24Regular></Grid24Regular>
         </NIcon>
       </template>
     </NButton>
-    <NButton text @click="router.push('/resources')">
+    <NButton @click="router.push('/resources')">
       <template #icon>
         <NIcon>
           <Database24Regular></Database24Regular>
         </NIcon>
       </template>
     </NButton>
-    <NButton text @click="router.push('/devices')">
+    <NButton @click="router.push('/devices')">
       <template #icon>
         <NIcon>
           <Phone24Regular></Phone24Regular>
         </NIcon>
       </template>
     </NButton>
-    <NButton text @click="router.push('/settings')">
+    <NButton @click="router.push('/settings')">
       <template #icon>
         <NIcon>
           <Settings24Regular></Settings24Regular>

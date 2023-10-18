@@ -33,7 +33,6 @@ async function watchMain(server) {
     VITE_DEV_SERVER_PORT: address.port
   })
   const ctx = await esbuild.context({
-    sourceRoot: 'app/main',
     entryPoints: ['app/main/src/main.ts'],
     platform: 'node',
     bundle: true,

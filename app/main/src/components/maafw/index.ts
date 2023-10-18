@@ -65,7 +65,7 @@ export class MaaFrameworkModule extends Module {
         })
         // TODO: 想办法通个信而不是直接等
         await new Promise(resolve => {
-          setTimeout(resolve, 500)
+          setTimeout(resolve, 1000)
         })
         if (await this.connect()) {
           this.loaded = true

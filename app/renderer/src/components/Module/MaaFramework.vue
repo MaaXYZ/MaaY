@@ -4,6 +4,10 @@ import { version } from '@maa/loader'
 import { NInput } from 'naive-ui'
 import { computed, ref, watch } from 'vue'
 
+defineProps<{
+  disabled: boolean
+}>()
+
 const emits = defineEmits<{
   'update:config': [unknown]
 }>()
@@ -60,6 +64,7 @@ watch(
               path: p
             })
         "
+        :disabled="disabled"
       ></NInput>
     </div>
     <span> 服务地址: {{ cc.host }}:{{ cc.port }} </span>
