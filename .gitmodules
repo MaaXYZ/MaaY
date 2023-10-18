@@ -2,6 +2,3 @@
 	path = pkgs/loader
 	url = https://github.com/neko-para/MaaJSLoader
 	branch = grpc
-[submodule "assets/skland/MaaAssistantSkland"]
-	path = assets/skland/MaaAssistantSkland
-	url = https://github.com/MaaAssistantArknights/MaaAssistantSkland.git

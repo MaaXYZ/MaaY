@@ -2,6 +2,8 @@ node_modules
 
 dist
 out
+assets/*
+!assets/.gitkeep
 
 .DS_Store
 
