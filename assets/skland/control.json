@@ -5,28 +5,13 @@
       "default": true,
       "type": "checkbox",
       "inject": ["CloseSkland.enabled"]
-    },
-    "server": {
-      "name": "服务器",
-      "type": "select_string",
-      "inject": ["StartApp.package"],
-      "case": [
-        {
-          "name": "官服",
-          "value": "aaa"
-        },
-        {
-          "name": "B服",
-          "value": "bbb"
-        }
-      ]
     }
   },
   "entry": [
     {
       "name": "森空岛签到",
       "task": "Skland",
-      "option": ["close", "server"]
+      "option": ["close"]
     }
   ]
 }

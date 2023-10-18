@@ -2,8 +2,7 @@ node_modules
 
 dist
 out
-assets/*
-!assets/.gitkeep
+assets/*/resource
 
 .DS_Store
 
