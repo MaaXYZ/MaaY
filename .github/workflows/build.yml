@@ -37,4 +37,10 @@ jobs:
         run: npm ci
 
       - name: Compile Electron app
-        run: npm run make
+        run: npm run package
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: maa-y-${{ matrix.os }}-${{ matrix.arch }}
+          path: 'out'
