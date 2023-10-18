@@ -1,14 +1,24 @@
 <script setup lang="ts">
 import { useDevice } from '@/stores/device'
 import { NButton } from 'naive-ui'
+import { ref } from 'vue'
 
 const { device, refresh, selected } = useDevice
+
+const loading = ref(false)
+
+function doRefresh() {
+  loading.value = true
+  refresh().then(() => {
+    loading.value = false
+  })
+}
 </script>
 
 <template>
   <div class="flex flex-col gap-2">
     <div class="flex justify-center">
-      <NButton @click="refresh">refresh</NButton>
+      <NButton @click="doRefresh" :disabled="loading">刷新</NButton>
     </div>
     <NButton v-for="(item, idx) of device" :key="idx" @click="selected = idx">
       <div class="flex gap-2">

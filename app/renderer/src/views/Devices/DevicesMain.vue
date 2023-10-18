@@ -17,15 +17,19 @@ const info = computed(() => {
   }
 })
 
+const loading = ref(false)
+
 async function requestConnect() {
   if (info.value) {
     const { adb_path: path, adb_serial: serial, adb_type: type, adb_config: config } = info.value
+    loading.value = true
     await connect(processControllerCallback, {
       path,
       serial,
       type,
       config
     })
+    loading.value = false
   }
 }
 
@@ -64,30 +68,34 @@ function processControllerCallback(msg: string, detail: string) {
 </script>
 
 <template>
-  <div v-if="info" class="flex flex-col gap-2">
-    <NCard>
-      <div class="grid" style="grid-template-columns: 1fr 6fr">
-        <span> 名称 </span>
-        <span>{{ info.name }}</span>
-        <span> ADB路径 </span>
-        <span>{{ info.adb_path }}</span>
-        <span> 目标地址 </span>
-        <span>{{ info.adb_serial }}</span>
-      </div>
-    </NCard>
-    <NCard>
-      <div class="flex flex-col gap-2">
-        <div class="flex gap-2">
-          <NButton v-if="find(info.adb_serial)" disabled>
-            已连接 - {{ find(info.adb_serial) }}
-          </NButton>
-          <NButton v-else @click="requestConnect"> 连接 </NButton>
+  <div class="flex flex-col gap-2">
+    <template v-if="info">
+      <NCard title="信息">
+        <div class="grid" style="grid-template-columns: 1fr 6fr">
+          <span> 名称 </span>
+          <span>{{ info.name }}</span>
+          <span> ADB路径 </span>
+          <span>{{ info.adb_path }}</span>
+          <span> 目标地址 </span>
+          <span>{{ info.adb_serial }}</span>
         </div>
+      </NCard>
+      <NCard title="连接">
         <div class="flex flex-col gap-2">
-          <span v-for="(msg, idx) in statusMessage" :key="idx"> {{ msg }} </span>
+          <div class="flex gap-2">
+            <NButton v-if="find(info.adb_serial)" disabled>
+              已连接 - {{ find(info.adb_serial) }}
+            </NButton>
+            <NButton v-else @click="requestConnect" :disabled="loading"> 连接 </NButton>
+          </div>
+          <div class="flex flex-col gap-2">
+            <span v-for="(msg, idx) in statusMessage" :key="idx"> {{ msg }} </span>
+          </div>
         </div>
-      </div>
-    </NCard>
+      </NCard>
+    </template>
+    <div v-else class="flex items-center justify-center">
+      <span>选择一个设备</span>
+    </div>
   </div>
-  <div v-else></div>
 </template>

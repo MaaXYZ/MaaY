@@ -12,7 +12,7 @@ function refresh() {
 <template>
   <div class="flex flex-col gap-2">
     <div class="flex justify-center">
-      <NButton @click="refresh">refresh</NButton>
+      <NButton @click="refresh">刷新</NButton>
     </div>
     <NButton v-for="(item, key) in info" :key="key" @click="selected = key">
       <div class="flex gap-2">

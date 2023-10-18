@@ -114,7 +114,13 @@ const buildConfigDiff = computed(() => {
   return result
 })
 
-const running = ref(false)
+const enum RunningState {
+  Idle,
+  Loading,
+  Running
+}
+
+const running = ref<RunningState>(RunningState.Idle)
 const statusMessage = ref<string[]>([])
 
 function processCallback(msg: string, detail: string) {
@@ -148,14 +154,14 @@ function processCallback(msg: string, detail: string) {
 }
 
 async function run() {
-  running.value = true
+  running.value = RunningState.Loading
   if (
     instInfo.value!.resource.resource === undefined ||
     instInfo.value!.resource.entry === undefined ||
     instInfo.value!.controller.handle === undefined
   ) {
     console.log('require resource & entry & controller')
-    running.value = false
+    running.value = RunningState.Idle
     return false
   }
   let resPaths: string[] = []
@@ -179,7 +185,7 @@ async function run() {
   }
   if (!(await hRes.loaded)) {
     console.log('resource not loaded')
-    running.value = false
+    running.value = RunningState.Idle
     return false
   }
   const hCtrl = Controller.init_from(instInfo.value!.controller.handle)
@@ -201,13 +207,19 @@ async function run() {
   const hInst = Instance.init_from(selected.value!)
   await hInst.bind_controller(hCtrl)
   await hInst.bind_resource(hRes)
+  running.value = RunningState.Running
   await hInst
     .post_task(respackInfo.value!.config.control.entry[instInfo.value!.resource.entry!]!.task, {
       diff_task: buildConfigDiff.value
     })
     .wait()
-  running.value = false
+  running.value = RunningState.Idle
   return true
+}
+
+async function stop() {
+  const hInst = Instance.init_from(selected.value!)
+  await hInst.stop()
 }
 </script>
 
@@ -250,7 +262,14 @@ async function run() {
     <NCard title="执行">
       <div class="flex flex-col gap-2">
         <div class="flex gap-2">
-          <NButton @click="run" :disabled="running"> 启动 </NButton>
+          <NButton
+            @click="run"
+            v-if="running !== RunningState.Running"
+            :disabled="running === RunningState.Loading"
+          >
+            启动
+          </NButton>
+          <NButton @click="stop" v-if="running === RunningState.Running"> 停止 </NButton>
         </div>
         <div class="flex flex-col gap-2">
           <span v-for="(msg, idx) in statusMessage" :key="idx"> {{ msg }} </span>
