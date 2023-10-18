@@ -1,0 +1,40 @@
+name: 'Build'
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '.vscode'
+      - 'assets'
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node: ['20']
+        os: ['windows-latest', 'ubuntu-latest', 'macos-latest']
+        arch: ['amd64', 'arm64']
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      NODE_OPTIONS: '--max_old_space_size=16384'
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Compile Electron app
+        run: npm run make
