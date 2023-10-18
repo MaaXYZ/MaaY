@@ -20,13 +20,7 @@ const rinfo = computed(() => {
 
 async function requestCreateInst() {
   if (rinfo.value) {
-    const inst = await create(
-      (msg, detail) => {
-        console.log(msg, detail)
-      },
-      rinfo.value.name,
-      rinfo.value.name
-    )
+    const inst = await create(rinfo.value.name, rinfo.value.name)
     useInstance.selected.value = inst.handle
     router.push('/instances')
   }

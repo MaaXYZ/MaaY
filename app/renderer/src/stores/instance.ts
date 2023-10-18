@@ -12,6 +12,9 @@ const handles = ref<
     InstanceHandle,
     {
       name: string
+      extra: {
+        callback: (msg: string, detail: string) => void
+      }
       resource: {
         handle: ResourceHandle
         name: string
@@ -28,11 +31,17 @@ const handles = ref<
 
 const selected = ref<InstanceHandle | null>(null)
 
-async function create(cb: (msg: string, detail: string) => void, name: string, respack: string) {
-  const inst = await Instance.init(cb)
-  const res = await Resource.init(cb)
+async function create(name: string, respack: string) {
+  const extra: {
+    callback: (msg: string, detail: string) => void
+  } = {
+    callback: () => void 0
+  }
+  const inst = await Instance.init((msg, detail) => extra.callback(msg, detail))
+  const res = await Resource.init((msg, detail) => extra.callback(msg, detail))
   handles.value[inst.handle] = {
     name,
+    extra,
     resource: {
       handle: res.handle,
       name: respack,
