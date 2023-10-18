@@ -52,9 +52,20 @@ async function create(name: string, respack: string) {
   return inst
 }
 
+async function destroy(handle: InstanceHandle) {
+  const rh = handles.value[handle]!.resource.handle
+  delete handles.value[handle]
+  if (selected.value === handle) {
+    selected.value = null
+  }
+  await Instance.init_from(handle).destroy()
+  await Resource.init_from(rh).destroy()
+}
+
 export const useInstance = {
   handles,
   selected,
 
-  create
+  create,
+  destroy
 }

@@ -225,27 +225,45 @@ async function stop() {
 
 <template>
   <div v-if="selected" class="flex flex-col gap-2">
+    <NCard title="信息">
+      <div class="grid items-center gap-2" style="grid-template-columns: 1fr 6fr">
+        <span> 名称 </span>
+        <NInput v-model:value="instInfo!.name" placeholder="输入实例名称"></NInput>
+      </div>
+    </NCard>
     <NCard title="资源">
       <div class="grid items-center gap-2" style="grid-template-columns: 1fr 6fr">
         <span> 名称 </span>
         <NInput :value="instInfo!.resource.name" readonly></NInput>
         <span> 资源包 </span>
-        <NSelect v-model:value="instInfo!.resource.resource" :options="resourceOption"></NSelect>
+        <NSelect
+          v-model:value="instInfo!.resource.resource"
+          :options="resourceOption"
+          placeholder="选择一个资源包"
+        ></NSelect>
       </div>
     </NCard>
     <NCard title="设备">
       <div class="grid items-center gap-2" style="grid-template-columns: 1fr 6fr">
         <span> 设备 </span>
-        <NSelect v-model:value="instInfo!.controller.handle" :options="controllerOption"></NSelect>
+        <NSelect
+          v-model:value="instInfo!.controller.handle"
+          :options="controllerOption"
+          placeholder="选择一个设备"
+        ></NSelect>
         <span> 句柄 </span>
-        <NInput :value="instInfo!.controller.handle" readonly></NInput>
+        <NInput :value="instInfo!.controller.handle" readonly placeholder=""></NInput>
       </div>
     </NCard>
     <NCard title="配置">
       <div class="flex flex-col gap-2">
         <div class="grid items-center gap-2" style="grid-template-columns: 1fr 6fr">
           <span> 入口 </span>
-          <NSelect v-model:value="instInfo!.resource.entry" :options="entryOption"></NSelect>
+          <NSelect
+            v-model:value="instInfo!.resource.entry"
+            :options="entryOption"
+            placeholder="选择一个启动入口"
+          ></NSelect>
         </div>
         <VariantEdit
           v-for="(opt, idx) of entryCorrespondingOption"
