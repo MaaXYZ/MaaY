@@ -45,7 +45,7 @@ async function requestCreateInst() {
           <span> 默认关闭包 </span>
           <span>{{ rinfo.config.resource.app.stop ?? '未设置' }}</span>
           <span> 方向 </span>
-          <span>{{ rinfo.config.resource.app.orientation === 'portait' ? '竖屏' : '横屏' }}</span>
+          <span>{{ rinfo.config.resource.app.orientation === 'portrait' ? '竖屏' : '横屏' }}</span>
           <span> 大小 </span>
           <span>{{
             rinfo.config.resource.app.size?.short !== undefined

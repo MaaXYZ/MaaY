@@ -83,7 +83,7 @@ export type ResourceResource = {
   app: {
     start?: string
     stop?: string
-    orientation?: 'portait' | 'landscape'
+    orientation?: 'portrait' | 'landscape'
     size?:
       | {
           short: number
