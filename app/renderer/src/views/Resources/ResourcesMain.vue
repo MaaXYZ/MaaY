@@ -3,9 +3,12 @@ import { useInstance } from '@/stores/instance'
 import { useResPack } from '@/stores/respack'
 import { NButton, NCard } from 'naive-ui'
 import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const { info, selected } = useResPack
 const { create } = useInstance
+
+const router = useRouter()
 
 const rinfo = computed(() => {
   if (selected.value !== null) {
@@ -15,15 +18,17 @@ const rinfo = computed(() => {
   }
 })
 
-function requestCreateInst() {
+async function requestCreateInst() {
   if (rinfo.value) {
-    create(
+    const inst = await create(
       (msg, detail) => {
         console.log(msg, detail)
       },
       rinfo.value.name,
       rinfo.value.name
     )
+    useInstance.selected.value = inst.handle
+    router.push('/instances')
   }
 }
 </script>

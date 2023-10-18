@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { useController } from '@/stores/controller'
 import { useInstance } from '@/stores/instance'
 import { useResPack } from '@/stores/respack'
+import { Controller, Instance, Resource } from '@maa/loader'
 import { NButton, NCard, NInput, NSelect } from 'naive-ui'
 import { computed, provide, ref } from 'vue'
 
@@ -27,6 +29,13 @@ const resourceOption = computed(() => {
         value: k
       }))
     : []
+})
+
+const controllerOption = computed(() => {
+  return Object.entries(useController.handles.value).map(([ctrl, cfg]) => ({
+    label: cfg.serial ?? '127.0.0.1:5555',
+    value: ctrl
+  }))
 })
 
 const entryOption = computed(() => {
@@ -104,6 +113,61 @@ const buildConfigDiff = computed(() => {
   }
   return result
 })
+
+async function run() {
+  if (
+    instInfo.value!.resource.resource === undefined ||
+    instInfo.value!.resource.entry === undefined ||
+    instInfo.value!.controller.handle === undefined
+  ) {
+    console.log('require resource & entry & controller')
+    return false
+  }
+  let resPaths: string[] = []
+  let res = respackInfo.value!.config.resource.resource[instInfo.value!.resource.resource!]!
+  resPaths.push(res.path)
+  while (res.extends) {
+    res = respackInfo.value!.config.resource.resource[res.extends]!
+    resPaths.push(res.path)
+  }
+  resPaths = await Promise.all(
+    resPaths.reverse().map(p => {
+      return window.ipcRenderer.invoke('main.resource.join_path', instInfo.value!.resource.name, p)
+    })
+  )
+  const hRes = Resource.init_from(instInfo.value!.resource.handle)
+  for (const p of resPaths) {
+    await hRes.post_path(p).wait()
+  }
+  if (!(await hRes.loaded)) {
+    console.log('resource not loaded')
+    return false
+  }
+  const hCtrl = Controller.init_from(instInfo.value!.controller.handle)
+  const app = respackInfo.value!.config.resource.app
+  if (app.start) {
+    await hCtrl.set_package_entry(app.start)
+  }
+  if (app.stop) {
+    await hCtrl.set_package(app.stop)
+  }
+  if (app.size) {
+    if (app.size.long) {
+      // 0 is invalid
+      await hCtrl.set_long_side(app.size.long)
+    } else if (app.size.short) {
+      await hCtrl.set_short_side(app.size.short)
+    }
+  }
+  const hInst = Instance.init_from(selected.value!)
+  await hInst.bind_controller(hCtrl)
+  await hInst.bind_resource(hRes)
+  await hInst
+    .post_task(respackInfo.value!.config.control.entry[instInfo.value!.resource.entry!]!.task, {
+      diff_task: buildConfigDiff.value
+    })
+    .wait()
+}
 </script>
 
 <template>
@@ -114,6 +178,14 @@ const buildConfigDiff = computed(() => {
         <NInput :value="instInfo!.resource.name" readonly></NInput>
         <span> 资源包 </span>
         <NSelect v-model:value="instInfo!.resource.resource" :options="resourceOption"></NSelect>
+      </div>
+    </NCard>
+    <NCard title="设备">
+      <div class="grid items-center gap-2" style="grid-template-columns: 1fr 6fr">
+        <span> 设备 </span>
+        <NSelect v-model:value="instInfo!.controller.handle" :options="controllerOption"></NSelect>
+        <span> 句柄 </span>
+        <NInput :value="instInfo!.controller.handle" readonly></NInput>
       </div>
     </NCard>
     <NCard title="配置">
@@ -133,6 +205,11 @@ const buildConfigDiff = computed(() => {
       <code>
         {{ JSON.stringify(buildConfigDiff, null, 2) }}
       </code>
+    </NCard>
+    <NCard title="执行">
+      <div class="flex gap-2">
+        <NButton @click="run"> 启动 </NButton>
+      </div>
     </NCard>
   </div>
   <div v-else></div>

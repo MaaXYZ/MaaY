@@ -7,7 +7,7 @@ import { type RouteRecordRaw, createMemoryHistory, createRouter } from 'vue-rout
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: '/devices'
+    redirect: '/resources'
   },
   {
     path: '/settings',

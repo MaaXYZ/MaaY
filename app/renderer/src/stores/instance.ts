@@ -1,4 +1,10 @@
-import { Instance, type InstanceHandle, Resource, type ResourceHandle } from '@maa/loader'
+import {
+  type ControllerHandle,
+  Instance,
+  type InstanceHandle,
+  Resource,
+  type ResourceHandle
+} from '@maa/loader'
 import { ref } from 'vue'
 
 const handles = ref<
@@ -12,6 +18,9 @@ const handles = ref<
         resource?: string
         entry?: number
         config: Record<string, string | number | boolean>
+      }
+      controller: {
+        handle?: ControllerHandle
       }
     }
   >
@@ -28,7 +37,8 @@ async function create(cb: (msg: string, detail: string) => void, name: string, r
       handle: res.handle,
       name: respack,
       config: {}
-    }
+    },
+    controller: {}
   }
   return inst
 }
