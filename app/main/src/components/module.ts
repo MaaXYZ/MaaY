@@ -1,4 +1,4 @@
-import { ModuleInfo, ModuleUpgradeChannel } from '@maa/ipc'
+import { ModuleInfo, ModuleUpgradeChannel } from '@maa/type'
 
 export abstract class Module implements ModuleInfo {
   abstract readonly name: string

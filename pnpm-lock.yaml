@@ -26,6 +26,9 @@ importers:
       tailwindcss:
         specifier: ^3.3.3
         version: 3.3.3
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
       vite:
         specifier: ^4.4.11
         version: 4.4.11
@@ -38,6 +41,9 @@ importers:
       '@maa/loader':
         specifier: workspace:*
         version: link:../../pkgs/loader
+      '@maa/type':
+        specifier: workspace:*
+        version: link:../../pkgs/type
       '@vue-reactivity/watch':
         specifier: ^0.2.0
         version: 0.2.0(@vue/reactivity@3.3.4)(@vue/shared@3.3.4)
@@ -96,6 +102,9 @@ importers:
       '@maa/loader':
         specifier: workspace:*
         version: link:../../pkgs/loader
+      '@maa/type':
+        specifier: workspace:*
+        version: link:../../pkgs/type
       '@vicons/fluent':
         specifier: ^0.12.0
         version: 0.12.0
@@ -141,6 +150,9 @@ importers:
 
   pkgs/ipc:
     devDependencies:
+      '@maa/type':
+        specifier: workspace:*
+        version: link:../type
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
@@ -168,6 +180,12 @@ importers:
         version: 18.18.4
       typescript:
         specifier: ^5.1.6
+        version: 5.2.2
+
+  pkgs/type:
+    devDependencies:
+      typescript:
+        specifier: ^5.2.2
         version: 5.2.2
 
 packages:

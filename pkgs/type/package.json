@@ -1,0 +1,7 @@
+{
+  "name": "@maa/type",
+  "main": "./src/types.ts",
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  }
+}

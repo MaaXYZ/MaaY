@@ -1,4 +1,4 @@
-import type { ResourceInfo } from '@maa/ipc'
+import type { ResourceInfo } from '@maa/type'
 import fs from 'fs/promises'
 import path from 'path'
 

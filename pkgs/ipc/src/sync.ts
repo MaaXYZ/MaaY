@@ -1,4 +1,4 @@
-import type { ModuleInfo, ResourceInfo } from './types'
+import type { ModuleInfo, ResourceInfo } from '@maa/type'
 
 export type SyncVarInterface<Name extends string, Type, Cate extends 'main' | 'renderer'> = {
   [key in `${Cate}.var.${Name}`]: (nv: Type) => void

@@ -1,4 +1,4 @@
-import { ModuleInfo } from '@maa/ipc'
+import { ModuleInfo } from '@maa/type'
 import { computed } from '@vue/reactivity'
 
 import { ipcMainHandle } from '.'

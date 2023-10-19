@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ResourceControlOption } from '@maa/ipc'
+import type { ResourceControlOption } from '@maa/type'
 import { NCheckbox, NInput, NInputNumber, NSelect } from 'naive-ui'
 import { type ComputedRef, computed, inject, ref, watch } from 'vue'
 
