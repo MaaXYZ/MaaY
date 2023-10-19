@@ -3,6 +3,7 @@ import SelectController from '@/components/Controller/SelectController.vue'
 import GridFormLayout from '@/layouts/GridFormLayout.vue'
 import { useInstance } from '@/stores/instance'
 import { useResPack } from '@/stores/respack'
+import { translateCallback } from '@/utils/translog'
 import { Controller, Instance, Resource } from '@maa/loader'
 import { NButton, NCard, NCode, NInput, NSelect } from 'naive-ui'
 import { computed, provide, ref } from 'vue'
@@ -126,33 +127,7 @@ const running = ref<RunningState>(RunningState.Idle)
 const statusMessage = ref<string[]>([])
 
 function processCallback(msg: string, detail: string) {
-  const info = JSON.parse(detail)
-  switch (msg) {
-    case 'Resource.StartLoading':
-      statusMessage.value.push(`开始加载 ${info.path}`)
-      break
-    case 'Resource.LoadingCompleted':
-      statusMessage.value.push(`已加载 ${info.path}`)
-      break
-    case 'Resource.LoadingFailed':
-      statusMessage.value.push(`加载 ${info.path} 失败`)
-      break
-    case 'Task.Started':
-      statusMessage.value.push(`开始任务 ${info.entry}`)
-      break
-    case 'Task.Completed':
-      statusMessage.value.push(`任务 ${info.entry} 完成`)
-      break
-    case 'Task.Failed':
-      statusMessage.value.push(`任务 ${info.entry} 失败`)
-      break
-    case 'Task.Stopped':
-      statusMessage.value.push(`任务 ${info.entry} 停止`)
-      break
-    default:
-      statusMessage.value.push(`${msg}: ${detail}`)
-      break
-  }
+  statusMessage.value.push(translateCallback(msg, detail))
 }
 
 async function run() {

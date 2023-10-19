@@ -2,17 +2,20 @@
 import GridFormLayout from '@/layouts/GridFormLayout.vue'
 import { useController } from '@/stores/controller'
 import { useDevice } from '@/stores/device'
+import { translateCallback } from '@/utils/translog'
 import { NButton, NCard } from 'naive-ui'
 import { computed, ref } from 'vue'
 
+import { selectedDevice } from './state'
+
 const statusMessage = ref<string[]>([])
 
-const { device, selected } = useDevice
+const { device } = useDevice
 const { connect, find } = useController
 
 const info = computed(() => {
-  if (selected.value !== null) {
-    return device.value[selected.value]
+  if (selectedDevice.value !== null) {
+    return device.value[selectedDevice.value]
   } else {
     return null
   }
@@ -41,36 +44,7 @@ async function requestConnect() {
 }
 
 function processControllerCallback(msg: string, detail: string) {
-  const info = JSON.parse(detail)
-  switch (msg) {
-    case 'Controller.UUIDGot':
-      statusMessage.value.push(`已获取UUID: ${info.uuid}`)
-      break
-    case 'Controller.UUIDGetFailed':
-      statusMessage.value.push(`获取UUID失败`)
-      break
-    case 'Controller.ResolutionGot':
-      statusMessage.value.push(`已获取分辨率: ${info.resolution.width}x${info.resolution.height}`)
-      break
-    case 'Controller.ResolutionGetFailed':
-      statusMessage.value.push(`获取分辨率失败`)
-      break
-    case 'Controller.ScreencapInited':
-      statusMessage.value.push(`已初始化截图`)
-      break
-    case 'Controller.ScreencapInitFailed':
-      statusMessage.value.push(`初始化截图失败`)
-      break
-    case 'Controller.ConnectSuccess':
-      statusMessage.value.push(`已连接`)
-      break
-    case 'Controller.ConnectFailed':
-      statusMessage.value.push(`连接失败: ${info.why}`)
-      break
-    default:
-      statusMessage.value.push(`${msg}: ${detail}`)
-      break
-  }
+  statusMessage.value.push(translateCallback(msg, detail))
 }
 </script>
 

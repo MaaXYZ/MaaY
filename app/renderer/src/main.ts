@@ -3,7 +3,7 @@ import { createApp } from 'vue'
 
 import './assets/base.css'
 import router from './router'
-import { setupMaa } from './stores/maa'
+import { setupMaa } from './utils/maa'
 
 const meta = document.createElement('meta')
 meta.name = 'naive-ui-style'
