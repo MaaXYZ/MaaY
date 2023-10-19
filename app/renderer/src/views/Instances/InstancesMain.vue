@@ -3,7 +3,7 @@ import { useController } from '@/stores/controller'
 import { useInstance } from '@/stores/instance'
 import { useResPack } from '@/stores/respack'
 import { Controller, Instance, Resource } from '@maa/loader'
-import { NButton, NCard, NInput, NSelect } from 'naive-ui'
+import { NButton, NCard, NCode, NInput, NSelect } from 'naive-ui'
 import { computed, provide, ref } from 'vue'
 
 import VariantEdit from './VariantEdit.vue'
@@ -47,10 +47,17 @@ const entryOption = computed(() => {
     : []
 })
 
-const entryCorrespondingOption = computed(() => {
+const entryConfig = computed(() => {
   return respackInfo.value && instInfo.value!.resource.entry !== undefined
-    ? respackInfo.value.config.control.entry[instInfo.value!.resource.entry!]?.option ?? []
-    : []
+    ? respackInfo.value.config.control.entry[instInfo.value!.resource.entry!]
+    : null
+})
+
+const entryCorrespondingOption = computed(() => {
+  return [
+    ...(respackInfo.value?.config.control.global?.option ?? []),
+    ...(entryConfig.value?.option ?? [])
+  ]
 })
 
 provide(
@@ -111,6 +118,7 @@ const buildConfigDiff = computed(() => {
         break
     }
   }
+  Object.assign(result, entryConfig.value?.provide ?? {})
   return result
 })
 
@@ -264,18 +272,17 @@ async function stop() {
             :options="entryOption"
             placeholder="选择一个启动入口"
           ></NSelect>
+          <template v-for="(opt, idx) of entryCorrespondingOption" :key="idx">
+            <span> {{ respackInfo!.config.control.option[opt]!.name }} </span>
+            <VariantEdit
+              :option="respackInfo!.config.control.option[opt]!"
+              :propk="opt"
+            ></VariantEdit>
+          </template>
         </div>
-        <VariantEdit
-          v-for="(opt, idx) of entryCorrespondingOption"
-          :key="idx"
-          :option="respackInfo!.config.control.option[opt]!"
-          :propk="opt"
-        ></VariantEdit>
-      </div>
 
-      <code>
-        {{ JSON.stringify(buildConfigDiff, null, 2) }}
-      </code>
+        <NCode language="json" :code="JSON.stringify(buildConfigDiff, null, 2)"> </NCode>
+      </div>
     </NCard>
     <NCard title="执行">
       <div class="flex flex-col gap-2">

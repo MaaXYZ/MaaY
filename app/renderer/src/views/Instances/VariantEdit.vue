@@ -26,49 +26,37 @@ watch(
 
 <template>
   <div v-if="option.type === 'checkbox'">
-    <NCheckbox v-model:checked="config[propk]" :default-checked="option.default">
-      {{ option.name }}
-    </NCheckbox>
+    <NCheckbox v-model:checked="config[propk]" :default-checked="option.default"></NCheckbox>
   </div>
   <div v-else-if="option.type === 'select_string'">
-    <div class="flex gap-2 items-center">
-      <span class="whitespace-nowrap">{{ option.name }}</span>
-      <NSelect
-        v-model:value="config[propk]"
-        :options="
-          option.case.map(x => ({
-            label: x.name,
-            value: x.value
-          }))
-        "
-      ></NSelect>
-    </div>
+    <NSelect
+      v-model:value="config[propk]"
+      :options="
+        option.case.map(x => ({
+          label: x.name,
+          value: x.value
+        }))
+      "
+      :placeholder="`选择 ${option.name}`"
+    ></NSelect>
   </div>
   <div v-else-if="option.type === 'select_number'">
-    <div class="flex gap-2 items-center">
-      <span class="whitespace-nowrap">{{ option.name }}</span>
-      <NSelect
-        :value="config[propk].toString()"
-        @update:value="v => (config[propk] = parseInt(v))"
-        :options="
-          option.case.map(x => ({
-            label: x.name,
-            value: x.value
-          }))
-        "
-      ></NSelect>
-    </div>
+    <NSelect
+      :value="config[propk].toString()"
+      @update:value="v => (config[propk] = parseInt(v))"
+      :options="
+        option.case.map(x => ({
+          label: x.name,
+          value: x.value
+        }))
+      "
+      :placeholder="`选择 ${option.name}`"
+    ></NSelect>
   </div>
   <div v-else-if="option.type === 'input_string'">
-    <div class="flex gap-2 items-center">
-      <span class="whitespace-nowrap">{{ option.name }}</span>
-      <NInput v-model:value="config[propk]"></NInput>
-    </div>
+    <NInput v-model:value="config[propk]"></NInput>
   </div>
   <div v-else-if="option.type === 'input_number'">
-    <div class="flex gap-2 items-center">
-      <span class="whitespace-nowrap">{{ option.name }}</span>
-      <NInputNumber v-model:value="config[propk]"></NInputNumber>
-    </div>
+    <NInputNumber v-model:value="config[propk]"></NInputNumber>
   </div>
 </template>
