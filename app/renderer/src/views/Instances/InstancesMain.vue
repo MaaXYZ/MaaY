@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { useController } from '@/stores/controller'
+import SelectController from '@/components/Controller/SelectController.vue'
+import GridFormLayout from '@/layouts/GridFormLayout.vue'
 import { useInstance } from '@/stores/instance'
 import { useResPack } from '@/stores/respack'
 import { Controller, Instance, Resource } from '@maa/loader'
@@ -29,13 +30,6 @@ const resourceOption = computed(() => {
         value: k
       }))
     : []
-})
-
-const controllerOption = computed(() => {
-  return Object.entries(useController.handles.value).map(([ctrl, cfg]) => ({
-    label: cfg.serial ?? '127.0.0.1:5555',
-    value: ctrl
-  }))
 })
 
 const entryOption = computed(() => {
@@ -234,13 +228,13 @@ async function stop() {
 <template>
   <div v-if="selected" class="flex flex-col gap-2">
     <NCard title="信息">
-      <div class="grid items-center gap-2" style="grid-template-columns: 1fr 6fr">
+      <GridFormLayout>
         <span> 名称 </span>
         <NInput v-model:value="instInfo!.name" placeholder="输入实例名称"></NInput>
-      </div>
+      </GridFormLayout>
     </NCard>
     <NCard title="资源">
-      <div class="grid items-center gap-2" style="grid-template-columns: 1fr 6fr">
+      <GridFormLayout>
         <span> 名称 </span>
         <NInput :value="instInfo!.resource.name" readonly></NInput>
         <span> 资源包 </span>
@@ -249,23 +243,19 @@ async function stop() {
           :options="resourceOption"
           placeholder="选择一个资源包"
         ></NSelect>
-      </div>
+      </GridFormLayout>
     </NCard>
     <NCard title="设备">
-      <div class="grid items-center gap-2" style="grid-template-columns: 1fr 6fr">
+      <GridFormLayout>
         <span> 设备 </span>
-        <NSelect
-          v-model:value="instInfo!.controller.handle"
-          :options="controllerOption"
-          placeholder="选择一个设备"
-        ></NSelect>
+        <SelectController v-model:handle="instInfo!.controller.handle"></SelectController>
         <span> 句柄 </span>
         <NInput :value="instInfo!.controller.handle" readonly placeholder=""></NInput>
-      </div>
+      </GridFormLayout>
     </NCard>
     <NCard title="配置">
       <div class="flex flex-col gap-2">
-        <div class="grid items-center gap-2" style="grid-template-columns: 1fr 6fr">
+        <GridFormLayout>
           <span> 入口 </span>
           <NSelect
             v-model:value="instInfo!.resource.entry"
@@ -279,7 +269,7 @@ async function stop() {
               :propk="opt"
             ></VariantEdit>
           </template>
-        </div>
+        </GridFormLayout>
 
         <NCode language="json" :code="JSON.stringify(buildConfigDiff, null, 2)"> </NCode>
       </div>

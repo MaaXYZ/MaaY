@@ -3,5 +3,7 @@ import ModuleStatus from '@/components/Module'
 </script>
 
 <template>
-  <div><ModuleStatus></ModuleStatus></div>
+  <div>
+    <ModuleStatus></ModuleStatus>
+  </div>
 </template>

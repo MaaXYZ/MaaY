@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import GridFormLayout from '@/layouts/GridFormLayout.vue'
 import { useInstance } from '@/stores/instance'
 import { useResPack } from '@/stores/respack'
 import { NButton, NCard } from 'naive-ui'
@@ -31,15 +32,15 @@ async function requestCreateInst() {
   <div class="flex flex-col gap-2">
     <template v-if="rinfo">
       <NCard title="包信息">
-        <div class="grid" style="grid-template-columns: 1fr 6fr">
+        <GridFormLayout>
           <span> 名称 </span>
           <span>{{ rinfo.name }}</span>
           <span> 路径 </span>
           <span>{{ rinfo.path }}</span>
-        </div>
+        </GridFormLayout>
       </NCard>
       <NCard title="资源信息">
-        <div class="grid" style="grid-template-columns: 1fr 6fr">
+        <GridFormLayout>
           <span> 默认启动活动 </span>
           <span>{{ rinfo.config.resource.app.start ?? '未设置' }}</span>
           <span> 默认关闭包 </span>
@@ -53,10 +54,10 @@ async function requestCreateInst() {
               : `长边 ${rinfo.config.resource.app.size?.long ?? 1280}`
           }}</span>
           <span> 资源包 </span>
-          <div class="grid" style="grid-template-columns: 1fr 5fr">
+          <GridFormLayout :right="5">
             <template v-for="(cfg, key) in rinfo.config.resource.resource" :key="key">
               <span>{{ key }}</span>
-              <div class="grid" style="grid-template-columns: 1fr 4fr">
+              <GridFormLayout :right="4">
                 <span>名称</span>
                 <span>{{ cfg.name }}</span>
                 <template v-if="cfg.description">
@@ -65,10 +66,10 @@ async function requestCreateInst() {
                 </template>
                 <span>路径</span>
                 <span>{{ cfg.path }}</span>
-              </div>
+              </GridFormLayout>
             </template>
-          </div>
-        </div>
+          </GridFormLayout>
+        </GridFormLayout>
       </NCard>
       <NCard title="使用">
         <div class="flex gap-2">

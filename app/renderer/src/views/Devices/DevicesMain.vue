@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import GridFormLayout from '@/layouts/GridFormLayout.vue'
 import { useController } from '@/stores/controller'
 import { useDevice } from '@/stores/device'
 import { NButton, NCard } from 'naive-ui'
@@ -21,9 +22,15 @@ const loading = ref(false)
 
 async function requestConnect() {
   if (info.value) {
-    const { adb_path: path, adb_serial: serial, adb_type: type, adb_config: config } = info.value
+    const {
+      name,
+      adb_path: path,
+      adb_serial: serial,
+      adb_type: type,
+      adb_config: config
+    } = info.value
     loading.value = true
-    await connect(processControllerCallback, {
+    await connect(processControllerCallback, name, {
       path,
       serial,
       type,
@@ -71,14 +78,14 @@ function processControllerCallback(msg: string, detail: string) {
   <div class="flex flex-col gap-2">
     <template v-if="info">
       <NCard title="信息">
-        <div class="grid" style="grid-template-columns: 1fr 6fr">
+        <GridFormLayout>
           <span> 名称 </span>
           <span>{{ info.name }}</span>
           <span> ADB路径 </span>
           <span>{{ info.adb_path }}</span>
           <span> 目标地址 </span>
           <span>{{ info.adb_serial }}</span>
-        </div>
+        </GridFormLayout>
       </NCard>
       <NCard title="连接">
         <div class="flex flex-col gap-2">

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import GridFormLayout from '@/layouts/GridFormLayout.vue'
 import { useModule } from '@/stores/module'
 import { version } from '@maa/loader'
 import { NInput } from 'naive-ui'
@@ -52,9 +53,9 @@ watch(
 </script>
 
 <template>
-  <div class="flex flex-col gap-2">
-    <div v-if="info?.channel === 'external'" class="flex gap-2 items-center">
-      <span class="whitespace-nowrap"> MaaRpcCli路径: </span>
+  <GridFormLayout>
+    <template v-if="info?.channel === 'external'">
+      <span class="whitespace-nowrap"> MaaRpcCli路径 </span>
       <NInput
         :value="cc.path"
         @update:value="
@@ -66,8 +67,10 @@ watch(
         "
         :disabled="disabled"
       ></NInput>
-    </div>
-    <span> 服务地址: {{ cc.host }}:{{ cc.port }} </span>
-    <span v-if="info?.loaded"> Maa版本: {{ maaver }} </span>
-  </div>
+    </template>
+    <span> 服务地址 </span>
+    <span> {{ cc.host }}:{{ cc.port }} </span>
+    <span> Maa版本 </span>
+    <span v-if="info?.loaded"> {{ maaver }} </span>
+  </GridFormLayout>
 </template>
