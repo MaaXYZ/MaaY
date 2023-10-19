@@ -1,6 +1,8 @@
 {
   "name": "@maa/maay-main",
   "dependencies": {
+    "@maa/ipc": "workspace:*",
+    "@maa/loader": "workspace:*",
     "@vue-reactivity/watch": "^0.2.0",
     "@vue/reactivity": "^3.3.4",
     "source-map-support": "^0.5.21"

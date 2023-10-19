@@ -28,21 +28,26 @@ jobs:
         with:
           submodules: recursive
 
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
       - name: Use Node.js ${{ matrix.node }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
+          cache: 'pnpm'
 
       - name: Download MaaAgentBinary
         run: git clone https://github.com/MaaAssistantArknights/MaaAgentBinary.git --depth=1
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm i
 
       - name: Compile Electron app
         run: |
-          npm run build
-          npm run package
+          pnpm run build
+          pnpm run package
           mkdir -p pkg
           cp -r MaaAgentBinary ./out/`ls out`/
           cp -r assets ./out/`ls out`/

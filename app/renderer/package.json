@@ -1,6 +1,8 @@
 {
   "name": "@maa/maay-renderer",
   "devDependencies": {
+    "@maa/ipc": "workspace:*",
+    "@maa/loader": "workspace:*",
     "@vicons/fluent": "^0.12.0",
     "@vicons/material": "^0.12.0",
     "@vitejs/plugin-vue": "^4.4.0",
