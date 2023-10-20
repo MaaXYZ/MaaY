@@ -5,29 +5,10 @@ import {
   Resource,
   type ResourceHandle
 } from '@maa/loader'
+import type { InstanceHandleInfo } from '@maa/type'
 import { ref } from 'vue'
 
-const handles = ref<
-  Record<
-    InstanceHandle,
-    {
-      name: string
-      extra: {
-        callback: (msg: string, detail: string) => void
-      }
-      resource: {
-        handle: ResourceHandle
-        name: string
-        resource?: string
-        entry?: number
-        config: Record<string, string | number | boolean>
-      }
-      controller: {
-        handle?: ControllerHandle
-      }
-    }
-  >
->({})
+const handles = ref<Record<InstanceHandle, InstanceHandleInfo>>({})
 
 async function create(name: string, respack: string) {
   const extra: {
@@ -39,9 +20,11 @@ async function create(name: string, respack: string) {
   const res = await Resource.init((msg, detail) => extra.callback(msg, detail))
   handles.value[inst.handle] = {
     name,
+    obj: inst,
     extra,
     resource: {
       handle: res.handle,
+      obj: res,
       name: respack,
       config: {}
     },
@@ -51,10 +34,10 @@ async function create(name: string, respack: string) {
 }
 
 async function destroy(handle: InstanceHandle) {
-  const rh = handles.value[handle]!.resource.handle
+  const ii = handles.value[handle]!
   delete handles.value[handle]
-  await Instance.init_from(handle).destroy()
-  await Resource.init_from(rh).destroy()
+  await ii.obj.destroy()
+  await ii.resource.obj.destroy()
 }
 
 export const useInstance = {

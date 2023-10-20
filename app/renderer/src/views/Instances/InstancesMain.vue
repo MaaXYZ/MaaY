@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Controller, Instance, Resource } from '@maa/loader'
 import { NButton, NCard, NCode, NInput, NSelect } from 'naive-ui'
 import { computed, provide, ref } from 'vue'
 
@@ -8,6 +7,7 @@ import { selectedInstance } from './state'
 
 import SelectController from '@/components/Controller/SelectController.vue'
 import GridFormLayout from '@/layouts/GridFormLayout.vue'
+import { useController } from '@/stores/controller'
 import { useInstance } from '@/stores/instance'
 import { useResPack } from '@/stores/respack'
 import { translateCallback } from '@/utils/translog'
@@ -158,7 +158,7 @@ async function run() {
 
   instInfo.value!.extra.callback = processCallback
 
-  const hRes = Resource.init_from(instInfo.value!.resource.handle)
+  const hRes = instInfo.value!.resource.obj
   for (const p of resPaths) {
     await hRes.post_path(p).wait()
   }
@@ -167,7 +167,7 @@ async function run() {
     running.value = RunningState.Idle
     return false
   }
-  const hCtrl = Controller.init_from(instInfo.value!.controller.handle)
+  const hCtrl = useController.handles[instInfo.value!.controller.handle]!.obj
   const app = respackInfo.value!.config.resource.app
   if (app.start) {
     await hCtrl.set_package_entry(app.start)
@@ -183,7 +183,7 @@ async function run() {
       await hCtrl.set_short_side(app.size.short)
     }
   }
-  const hInst = Instance.init_from(selectedInstance.value!)
+  const hInst = instInfo.value!.obj
   await hInst.bind_controller(hCtrl)
   await hInst.bind_resource(hRes)
   running.value = RunningState.Running
@@ -197,8 +197,7 @@ async function run() {
 }
 
 async function stop() {
-  const hInst = Instance.init_from(selectedInstance.value!)
-  await hInst.stop()
+  await instInfo.value!.obj.stop()
 }
 </script>
 

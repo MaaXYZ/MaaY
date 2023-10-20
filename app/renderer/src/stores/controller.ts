@@ -15,7 +15,8 @@ async function connect(
     if (await ctrl.connected) {
       handles[ctrl.handle] = {
         name,
-        cfg
+        cfg,
+        obj: ctrl
       }
       return ctrl
     } else {
