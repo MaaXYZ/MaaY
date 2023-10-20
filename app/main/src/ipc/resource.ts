@@ -1,4 +1,4 @@
-import type { ResourceInfo } from '@maa/type'
+import type { RespackInfo } from '@maa/type'
 import fs from 'fs/promises'
 import path from 'path'
 
@@ -6,7 +6,7 @@ import { ipcMainHandle } from '.'
 import { registerSend } from '../sync'
 
 async function refreshResource() {
-  const ri: Record<string, ResourceInfo> = {}
+  const ri: Record<string, RespackInfo> = {}
   for (const name of await fs.readdir('./assets')) {
     const p = path.join(process.cwd(), 'assets', name)
     if (!(await fs.stat(p)).isDirectory()) {

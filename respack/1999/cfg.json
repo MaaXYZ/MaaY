@@ -1,0 +1,10 @@
+{
+  "repo": {
+    "url": "https://github.com/MaaAssistantArknights/MAA1999",
+    "hash": "544881b6b72aa4e3f8800d499352f50719548892"
+  },
+  "version": "v0.5.3",
+  "resource": {
+    "default": "assets/resource"
+  }
+}

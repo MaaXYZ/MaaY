@@ -1,0 +1,10 @@
+{
+  "repo": {
+    "url": "https://github.com/MaaAssistantArknights/MaaAssistantSkland",
+    "hash": "bbf68b90f97d3421b02602321d84c5de240bfa07"
+  },
+  "version": "v1.0.4",
+  "resource": {
+    "default": "assets/resource"
+  }
+}
