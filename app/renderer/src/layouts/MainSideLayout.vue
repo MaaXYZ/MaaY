@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import NavigateGroup from '@/components/NavigateGroup.vue'
 import { RouterView } from 'vue-router'
+
+import NavigateGroup from '@/components/NavigateGroup.vue'
 </script>
 
 <template>

@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import GridFormLayout from '@/layouts/GridFormLayout.vue'
-import { useModule } from '@/stores/module'
 import { version } from '@maa/loader'
 import { NInput } from 'naive-ui'
 import { computed, ref, watch } from 'vue'
+
+import GridFormLayout from '@/layouts/GridFormLayout.vue'
+import { useModule } from '@/stores/module'
 
 defineProps<{
   disabled: boolean

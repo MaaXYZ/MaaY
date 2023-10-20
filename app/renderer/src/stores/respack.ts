@@ -1,5 +1,6 @@
-import { registerRecv } from '@/sync'
 import { ref } from 'vue'
+
+import { registerRecv } from '@/sync'
 
 const info = registerRecv('resource_info', {})
 const selected = ref<string | null>(null)

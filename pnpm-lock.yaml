@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -23,6 +23,9 @@ importers:
       esbuild:
         specifier: ^0.19.5
         version: 0.19.5
+      prettier:
+        specifier: ^3.0.3
+        version: 3.0.3
       tailwindcss:
         specifier: ^3.3.3
         version: 3.3.3

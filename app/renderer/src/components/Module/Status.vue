@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { useModule } from '@/stores/module'
 import { NButton, NCard, NSelect } from 'naive-ui'
 import { type Component, ref } from 'vue'
 
 import MaaFrameworkInfo from './MaaFramework.vue'
+
+import { useModule } from '@/stores/module'
 
 const { info } = useModule
 

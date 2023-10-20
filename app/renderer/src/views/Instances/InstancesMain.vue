@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import SelectController from '@/components/Controller/SelectController.vue'
-import GridFormLayout from '@/layouts/GridFormLayout.vue'
-import { useInstance } from '@/stores/instance'
-import { useResPack } from '@/stores/respack'
-import { translateCallback } from '@/utils/translog'
 import { Controller, Instance, Resource } from '@maa/loader'
 import { NButton, NCard, NCode, NInput, NSelect } from 'naive-ui'
 import { computed, provide, ref } from 'vue'
 
 import VariantEdit from './VariantEdit.vue'
+
+import SelectController from '@/components/Controller/SelectController.vue'
+import GridFormLayout from '@/layouts/GridFormLayout.vue'
+import { useInstance } from '@/stores/instance'
+import { useResPack } from '@/stores/respack'
+import { translateCallback } from '@/utils/translog'
 
 const { handles, selected } = useInstance
 

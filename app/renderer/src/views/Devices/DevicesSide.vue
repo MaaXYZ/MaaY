@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { useDevice } from '@/stores/device'
 import { NButton } from 'naive-ui'
 import { ref } from 'vue'
 
 import { selectedDevice } from './state'
+
+import { useDevice } from '@/stores/device'
 
 const { device, refresh } = useDevice
 

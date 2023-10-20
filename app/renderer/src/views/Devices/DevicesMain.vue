@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import GridFormLayout from '@/layouts/GridFormLayout.vue'
-import { useController } from '@/stores/controller'
-import { useDevice } from '@/stores/device'
-import { translateCallback } from '@/utils/translog'
 import { NButton, NCard } from 'naive-ui'
 import { computed, ref } from 'vue'
 
 import { selectedDevice } from './state'
+
+import GridFormLayout from '@/layouts/GridFormLayout.vue'
+import { useController } from '@/stores/controller'
+import { useDevice } from '@/stores/device'
+import { translateCallback } from '@/utils/translog'
 
 const statusMessage = ref<string[]>([])
 

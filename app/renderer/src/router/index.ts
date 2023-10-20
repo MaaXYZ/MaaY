@@ -1,9 +1,10 @@
+import { type RouteRecordRaw, createMemoryHistory, createRouter } from 'vue-router'
+
 import Devices from '@/views/Devices'
 import Instances from '@/views/Instances'
 import Resources from '@/views/Resources'
 import Settings from '@/views/Settings'
 import Welcome from '@/views/Welcome'
-import { type RouteRecordRaw, createMemoryHistory, createRouter } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
   {

@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { useController } from '@/stores/controller'
 import type { ControllerHandle } from '@maa/loader'
 import { NSelect } from 'naive-ui'
 import { computed } from 'vue'
+
+import { useController } from '@/stores/controller'
 
 defineProps<{
   handle?: ControllerHandle

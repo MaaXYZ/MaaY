@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import GridFormLayout from '@/layouts/GridFormLayout.vue'
-import { useInstance } from '@/stores/instance'
-import { useResPack } from '@/stores/respack'
 import { NButton, NCard } from 'naive-ui'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
+
+import GridFormLayout from '@/layouts/GridFormLayout.vue'
+import { useInstance } from '@/stores/instance'
+import { useResPack } from '@/stores/respack'
 
 const { info, selected } = useResPack
 const { create } = useInstance

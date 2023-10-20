@@ -1,9 +1,10 @@
-import App from '@/App.vue'
 import { createApp } from 'vue'
 
 import './assets/base.css'
 import router from './router'
 import { setupMaa } from './utils/maa'
+
+import App from '@/App.vue'
 
 const meta = document.createElement('meta')
 meta.name = 'naive-ui-style'

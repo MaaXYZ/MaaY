@@ -1,7 +1,8 @@
 <script setup lang="tsx">
-import { useCommands } from '@/commands'
 import { type MessageReactive, NCard, NInput, useMessage, useNotification } from 'naive-ui'
 import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
+
+import { useCommands } from '@/commands'
 
 const message = useMessage()
 const notification = useNotification()

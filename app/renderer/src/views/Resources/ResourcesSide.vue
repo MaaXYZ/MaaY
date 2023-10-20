@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { useResPack } from '@/stores/respack'
 import { NButton } from 'naive-ui'
+
+import { useResPack } from '@/stores/respack'
 
 const { info, selected } = useResPack
 

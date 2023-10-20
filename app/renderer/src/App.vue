@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import Command from '@/Command.vue'
-import MainSideLayout from '@/layouts/MainSideLayout.vue'
 import hljs from 'highlight.js/lib/core'
 import json from 'highlight.js/lib/languages/json'
 import { NConfigProvider, NMessageProvider, NNotificationProvider } from 'naive-ui'
+
+import Command from '@/Command.vue'
+import MainSideLayout from '@/layouts/MainSideLayout.vue'
 
 hljs.registerLanguage('json', json)
 </script>

@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { useInstance } from '@/stores/instance'
 import { Delete24Regular } from '@vicons/fluent'
 import { NButton, NIcon } from 'naive-ui'
+
+import { useInstance } from '@/stores/instance'
 
 const { handles, selected, destroy } = useInstance
 </script>
