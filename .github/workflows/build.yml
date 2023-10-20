@@ -49,11 +49,6 @@ jobs:
           path: maa-cache
           name: MAA-${{ matrix.os == 'windows-latest' && 'win' || (matrix.os == 'ubuntu-latest' && 'linux' || 'macos') }}-x86_64
 
-      - name: Prepare MAA
-        run: |
-          unzip ./`ls maa-cache` -d ./maa-cache
-          cp -r ./maa-cache/bin ./maa
-
       - name: Download MaaAgentBinary
         run: git clone https://github.com/MaaAssistantArknights/MaaAgentBinary.git --depth=1
 
@@ -66,7 +61,7 @@ jobs:
           pnpm run package
           mkdir -p pkg
           cp -r MaaAgentBinary ./out/`ls out`/
-          cp -r maa ./out/`ls out`/
+          cp -r maa-cache/bin ./out/`ls out`/maa
           cp initcfg.json ./out/`ls out`/config.json
 
       - name: Package app without respack
