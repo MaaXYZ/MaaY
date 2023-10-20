@@ -2,7 +2,7 @@
 import { NButton } from 'naive-ui'
 import { ref } from 'vue'
 
-import { selectedDevice } from './state'
+import { curDevice } from './state'
 
 import { useDevice } from '@/stores/device'
 
@@ -26,9 +26,9 @@ function doRefresh() {
     <NButton
       v-for="(item, idx) of device"
       :key="idx"
-      @click="selectedDevice = idx"
+      @click="curDevice = idx"
       secondary
-      :type="selectedDevice === idx ? 'primary' : 'default'"
+      :type="curDevice === idx ? 'primary' : 'default'"
     >
       <div class="flex gap-2">
         <span> {{ item.name }} </span>

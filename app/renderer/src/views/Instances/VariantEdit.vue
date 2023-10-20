@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { ResourceControlOption } from '@maa/type'
+import type { RespackControlOption } from '@maa/type'
 import { NCheckbox, NInput, NInputNumber, NSelect } from 'naive-ui'
 import { type ComputedRef, computed, inject, ref, watch } from 'vue'
 
 const props = defineProps<{
-  option: ResourceControlOption
+  option: RespackControlOption
   propk: string
 }>()
 

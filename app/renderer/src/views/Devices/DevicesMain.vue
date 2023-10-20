@@ -2,7 +2,7 @@
 import { NButton, NCard } from 'naive-ui'
 import { computed, ref } from 'vue'
 
-import { selectedDevice } from './state'
+import { curDevice } from './state'
 
 import GridFormLayout from '@/layouts/GridFormLayout.vue'
 import { useController } from '@/stores/controller'
@@ -15,8 +15,8 @@ const { device } = useDevice
 const { connect, find } = useController
 
 const info = computed(() => {
-  if (selectedDevice.value !== null) {
-    return device.value[selectedDevice.value]
+  if (curDevice.value !== null) {
+    return device.value[curDevice.value]
   } else {
     return null
   }

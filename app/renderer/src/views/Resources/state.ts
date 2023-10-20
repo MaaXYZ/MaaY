@@ -1,3 +1,3 @@
 import { ref } from 'vue'
 
-export const selectedResPack = ref<string | null>(null)
+export const curResPack = ref<string | null>(null)

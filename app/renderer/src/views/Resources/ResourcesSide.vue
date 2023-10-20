@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { NButton } from 'naive-ui'
 
-import { selectedResPack } from './state'
+import { curResPack } from './state'
 
-import { useResPack } from '@/stores/respack'
+import { useRespack } from '@/stores/respack'
 
-const { info } = useResPack
+const { info } = useRespack
 
 function refresh() {
   window.ipcRenderer.invoke('main.resource.refresh')
@@ -20,9 +20,9 @@ function refresh() {
     <NButton
       v-for="(item, key) in info"
       :key="key"
-      @click="selectedResPack = key"
+      @click="curResPack = key"
       secondary
-      :type="selectedResPack === key ? 'primary' : 'default'"
+      :type="curResPack === key ? 'primary' : 'default'"
     >
       {{ item.name }}
     </NButton>

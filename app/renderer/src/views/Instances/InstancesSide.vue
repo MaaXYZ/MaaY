@@ -3,15 +3,15 @@ import type { InstanceHandle } from '@maa/loader'
 import { Delete24Regular } from '@vicons/fluent'
 import { NButton, NIcon } from 'naive-ui'
 
-import { selectedInstance } from './state'
+import { curInstanceHandle } from './state'
 
 import { useInstance } from '@/stores/instance'
 
 const { handles, destroy } = useInstance
 
 function requestDestroy(h: InstanceHandle) {
-  if (selectedInstance.value === h) {
-    selectedInstance.value = null
+  if (curInstanceHandle.value === h) {
+    curInstanceHandle.value = null
   }
   destroy(h)
 }
@@ -23,9 +23,9 @@ function requestDestroy(h: InstanceHandle) {
       <div class="flex gap-2">
         <NButton
           class="flex-1"
-          @click="selectedInstance = h"
+          @click="curInstanceHandle = h"
           secondary
-          :type="selectedInstance === h ? 'primary' : 'default'"
+          :type="curInstanceHandle === h ? 'primary' : 'default'"
         >
           {{ item.name }}
         </NButton>

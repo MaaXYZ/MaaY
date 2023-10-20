@@ -3,41 +3,17 @@ import { NButton, NCard, NCode, NInput, NSelect } from 'naive-ui'
 import { computed, provide, ref } from 'vue'
 
 import VariantEdit from './VariantEdit.vue'
-import { selectedInstance } from './state'
+import { curInstanceHandle, curInstanceInfo, curInstanceRespackInfo } from './state'
 
 import SelectController from '@/components/Controller/SelectController.vue'
+import SelectRespackResource from '@/components/Respack/SelectRespackResource.vue'
 import GridFormLayout from '@/layouts/GridFormLayout.vue'
 import { useController } from '@/stores/controller'
-import { useInstance } from '@/stores/instance'
-import { useResPack } from '@/stores/respack'
 import { translateCallback } from '@/utils/translog'
 
-const { handles } = useInstance
-
-const instInfo = computed(() => {
-  return selectedInstance.value ? handles.value[selectedInstance.value] : null
-})
-
-const respackInfo = computed(() => {
-  if (instInfo.value) {
-    return useResPack.info.value[instInfo.value.resource.name]
-  } else {
-    return null
-  }
-})
-
-const resourceOption = computed(() => {
-  return respackInfo.value
-    ? Object.entries(respackInfo.value.config.resource.resource).map(([k, v]) => ({
-        label: v.name,
-        value: k
-      }))
-    : []
-})
-
 const entryOption = computed(() => {
-  return respackInfo.value
-    ? respackInfo.value.config.control.entry.map((x, idx) => ({
+  return curInstanceRespackInfo.value
+    ? curInstanceRespackInfo.value.config.control.entry.map((x, idx) => ({
         label: x.name,
         value: idx
       }))
@@ -45,31 +21,31 @@ const entryOption = computed(() => {
 })
 
 const entryConfig = computed(() => {
-  return respackInfo.value && instInfo.value!.resource.entry !== undefined
-    ? respackInfo.value.config.control.entry[instInfo.value!.resource.entry!]
+  return curInstanceRespackInfo.value && curInstanceInfo.value!.resource.entry !== undefined
+    ? curInstanceRespackInfo.value.config.control.entry[curInstanceInfo.value!.resource.entry!]
     : null
 })
 
 const entryCorrespondingOption = computed(() => {
   return [
-    ...(respackInfo.value?.config.control.global?.option ?? []),
+    ...(curInstanceRespackInfo.value?.config.control.global?.option ?? []),
     ...(entryConfig.value?.option ?? [])
   ]
 })
 
 provide(
   'InstConfig',
-  computed(() => instInfo.value?.resource.config)
+  computed(() => curInstanceInfo.value?.resource.config)
 )
 
 const buildConfigDiff = computed(() => {
   const result: any = {}
-  if (!instInfo.value || !respackInfo.value) {
+  if (!curInstanceInfo.value || !curInstanceRespackInfo.value) {
     return result
   }
   for (const optkey of entryCorrespondingOption.value) {
-    const opt = respackInfo.value.config.control.option[optkey]!
-    const val = instInfo.value.resource.config[optkey] ?? opt.default
+    const opt = curInstanceRespackInfo.value.config.control.option[optkey]!
+    const val = curInstanceInfo.value.resource.config[optkey] ?? opt.default
     if (val === undefined) {
       continue
     }
@@ -135,30 +111,37 @@ function processCallback(msg: string, detail: string) {
 async function run() {
   running.value = RunningState.Loading
   if (
-    instInfo.value!.resource.resource === undefined ||
-    instInfo.value!.resource.entry === undefined ||
-    instInfo.value!.controller.handle === undefined
+    curInstanceInfo.value!.resource.resource === undefined ||
+    curInstanceInfo.value!.resource.entry === undefined ||
+    curInstanceInfo.value!.controller.handle === undefined
   ) {
     console.log('require resource & entry & controller')
     running.value = RunningState.Idle
     return false
   }
   let resPaths: string[] = []
-  let res = respackInfo.value!.config.resource.resource[instInfo.value!.resource.resource!]!
+  let res =
+    curInstanceRespackInfo.value!.config.resource.resource[
+      curInstanceInfo.value!.resource.resource!
+    ]!
   resPaths.push(res.path)
   while (res.extends) {
-    res = respackInfo.value!.config.resource.resource[res.extends]!
+    res = curInstanceRespackInfo.value!.config.resource.resource[res.extends]!
     resPaths.push(res.path)
   }
   resPaths = await Promise.all(
     resPaths.reverse().map(p => {
-      return window.ipcRenderer.invoke('main.resource.join_path', instInfo.value!.resource.name, p)
+      return window.ipcRenderer.invoke(
+        'main.resource.join_path',
+        curInstanceInfo.value!.resource.name,
+        p
+      )
     })
   )
 
-  instInfo.value!.extra.callback = processCallback
+  curInstanceInfo.value!.extra.callback = processCallback
 
-  const hRes = instInfo.value!.resource.obj
+  const hRes = curInstanceInfo.value!.resource.obj
   for (const p of resPaths) {
     await hRes.post_path(p).wait()
   }
@@ -167,8 +150,8 @@ async function run() {
     running.value = RunningState.Idle
     return false
   }
-  const hCtrl = useController.handles[instInfo.value!.controller.handle]!.obj
-  const app = respackInfo.value!.config.resource.app
+  const hCtrl = useController.handles[curInstanceInfo.value!.controller.handle]!.obj
+  const app = curInstanceRespackInfo.value!.config.resource.app
   if (app.start) {
     await hCtrl.set_package_entry(app.start)
   }
@@ -183,50 +166,53 @@ async function run() {
       await hCtrl.set_short_side(app.size.short)
     }
   }
-  const hInst = instInfo.value!.obj
+  const hInst = curInstanceInfo.value!.obj
   await hInst.bind_controller(hCtrl)
   await hInst.bind_resource(hRes)
   running.value = RunningState.Running
   await hInst
-    .post_task(respackInfo.value!.config.control.entry[instInfo.value!.resource.entry!]!.task, {
-      diff_task: buildConfigDiff.value
-    })
+    .post_task(
+      curInstanceRespackInfo.value!.config.control.entry[curInstanceInfo.value!.resource.entry!]!
+        .task,
+      {
+        diff_task: buildConfigDiff.value
+      }
+    )
     .wait()
   running.value = RunningState.Idle
   return true
 }
 
 async function stop() {
-  await instInfo.value!.obj.stop()
+  await curInstanceInfo.value!.obj.stop()
 }
 </script>
 
 <template>
-  <div v-if="selectedInstance" class="flex flex-col gap-2">
+  <div v-if="curInstanceHandle" class="flex flex-col gap-2">
     <NCard title="信息">
       <GridFormLayout>
         <span> 名称 </span>
-        <NInput v-model:value="instInfo!.name" placeholder="输入实例名称"></NInput>
+        <NInput v-model:value="curInstanceInfo!.name" placeholder="输入实例名称"></NInput>
       </GridFormLayout>
     </NCard>
     <NCard title="资源">
       <GridFormLayout>
         <span> 名称 </span>
-        <NInput :value="instInfo!.resource.name" readonly></NInput>
+        <NInput :value="curInstanceInfo!.resource.name" readonly></NInput>
         <span> 资源包 </span>
-        <NSelect
-          v-model:value="instInfo!.resource.resource"
-          :options="resourceOption"
-          placeholder="选择一个资源包"
-        ></NSelect>
+        <SelectRespackResource
+          v-model:value="curInstanceInfo!.resource.resource"
+          :pack="curInstanceRespackInfo?.name"
+        ></SelectRespackResource>
       </GridFormLayout>
     </NCard>
     <NCard title="设备">
       <GridFormLayout>
         <span> 设备 </span>
-        <SelectController v-model:handle="instInfo!.controller.handle"></SelectController>
+        <SelectController v-model:handle="curInstanceInfo!.controller.handle"></SelectController>
         <span> 句柄 </span>
-        <NInput :value="instInfo!.controller.handle" readonly placeholder=""></NInput>
+        <NInput :value="curInstanceInfo!.controller.handle" readonly placeholder=""></NInput>
       </GridFormLayout>
     </NCard>
     <NCard title="配置">
@@ -234,14 +220,14 @@ async function stop() {
         <GridFormLayout>
           <span> 入口 </span>
           <NSelect
-            v-model:value="instInfo!.resource.entry"
+            v-model:value="curInstanceInfo!.resource.entry"
             :options="entryOption"
             placeholder="选择一个启动入口"
           ></NSelect>
           <template v-for="(opt, idx) of entryCorrespondingOption" :key="idx">
-            <span> {{ respackInfo!.config.control.option[opt]!.name }} </span>
+            <span> {{ curInstanceRespackInfo!.config.control.option[opt]!.name }} </span>
             <VariantEdit
-              :option="respackInfo!.config.control.option[opt]!"
+              :option="curInstanceRespackInfo!.config.control.option[opt]!"
               :propk="opt"
             ></VariantEdit>
           </template>

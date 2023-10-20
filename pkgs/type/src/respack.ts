@@ -1,4 +1,4 @@
-export type ResourceControlOption = {
+export type RespackControlOption = {
   name: string
 } & (
   | {
@@ -42,9 +42,9 @@ export type ResourceControlOption = {
     }
 )
 
-export type ResourceControl = {
+export type RespackControl = {
   option: {
-    [key: string]: ResourceControlOption
+    [key: string]: RespackControlOption
   }
   global?: {
     option?: string[]
@@ -57,9 +57,9 @@ export type ResourceControl = {
   }[]
 }
 
-export type ResourceCustom = {}
+export type RespackCustom = {}
 
-export type ResourceResource = {
+export type RespackResource = {
   resource: {
     [key: string]: {
       name: string
@@ -84,12 +84,12 @@ export type ResourceResource = {
   }
 }
 
-export interface ResourceInfo {
+export interface RespackInfo {
   name: string
   path: string
   config: {
-    control: ResourceControl
-    custom?: ResourceCustom
-    resource: ResourceResource
+    control: RespackControl
+    custom?: RespackCustom
+    resource: RespackResource
   }
 }
