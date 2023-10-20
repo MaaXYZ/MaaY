@@ -51,11 +51,26 @@ jobs:
           pnpm run package
           mkdir -p pkg
           cp -r MaaAgentBinary ./out/`ls out`/
-          cp -r assets ./out/`ls out`/
           mkdir ./out/`ls out`/maa
           touch "./out/`ls out`/maa/PUT_MaaRpcCli_HERE"
           cp initcfg.json ./out/`ls out`/config.json
+
+      - name: Package app without respack
+        run: |
           tar cjvf pkg/`ls out`.tar.gz -C ./out ./`ls out`
+
+      - name: Download artifact
+        id: download-artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: respack.yml
+          workflow_conclusion: success
+          path: assets
+
+      - name: Package app with all respack
+        run: |
+          cp -r assets ./out/`ls out`/
+          tar cjvf pkg/`ls out`-full.tar.gz -C ./out ./`ls out`
 
       - uses: actions/upload-artifact@v3
         if: always()
