@@ -67,8 +67,16 @@ jobs:
           workflow_conclusion: success
           path: assets-cache
 
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          # name: maa-y-${{ matrix.os }}-${{ matrix.arch }}
+          name: maa-y-${{ matrix.os }}
+          path: 'pkg'
+
       - name: Package app with all respack
         run: |
+          rm pkg/`ls out`.tar.gz
           mkdir -p assets
           tar xjvf assets-cache/maa-y-assets/assets.tar.gz -C assets
           cp -r assets ./out/`ls out`/
@@ -78,5 +86,5 @@ jobs:
         if: always()
         with:
           # name: maa-y-${{ matrix.os }}-${{ matrix.arch }}
-          name: maa-y-${{ matrix.os }}
+          name: maa-y-${{ matrix.os }}-full
           path: 'pkg'
