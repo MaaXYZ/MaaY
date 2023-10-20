@@ -39,6 +39,21 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: 'pnpm'
 
+      - name: Download MAA
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          repo: MaaAssistantArknights/MaaFramework
+          workflow: ci.yml
+          workflow_conclusion: success
+          path: maa-cache
+          name: MAA-${{ matrix.os == 'windows-latest' && 'win' || (matrix.os == 'ubuntu-latest' && 'linux' || 'macos') }}-x86_64
+
+      - name: Prepare MAA
+        run: |
+          unzip ./`ls maa-cache` -d ./maa-cache
+          cp -r ./maa-cache/bin ./maa
+
       - name: Download MaaAgentBinary
         run: git clone https://github.com/MaaAssistantArknights/MaaAgentBinary.git --depth=1
 
@@ -51,8 +66,7 @@ jobs:
           pnpm run package
           mkdir -p pkg
           cp -r MaaAgentBinary ./out/`ls out`/
-          mkdir ./out/`ls out`/maa
-          touch "./out/`ls out`/maa/PUT_MaaRpcCli_HERE"
+          cp -r maa ./out/`ls out`/
           cp initcfg.json ./out/`ls out`/config.json
 
       - name: Package app without respack
