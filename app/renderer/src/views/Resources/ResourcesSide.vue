@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { NButton } from 'naive-ui'
 
+import { selectedResPack } from './state'
+
 import { useResPack } from '@/stores/respack'
 
-const { info, selected } = useResPack
+const { info } = useResPack
 
 function refresh() {
   window.ipcRenderer.invoke('main.resource.refresh')
@@ -15,10 +17,14 @@ function refresh() {
     <div class="flex justify-center">
       <NButton @click="refresh">刷新</NButton>
     </div>
-    <NButton v-for="(item, key) in info" :key="key" @click="selected = key">
-      <div class="flex gap-2">
-        <span> {{ item.name }} </span>
-      </div>
+    <NButton
+      v-for="(item, key) in info"
+      :key="key"
+      @click="selectedResPack = key"
+      secondary
+      :type="selectedResPack === key ? 'primary' : 'default'"
+    >
+      {{ item.name }}
     </NButton>
   </div>
 </template>

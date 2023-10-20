@@ -1,20 +1,23 @@
 <script setup lang="ts">
 import { NButton, NCard } from 'naive-ui'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
+
+import { selectedInstance } from '../Instances/state'
+import { selectedResPack } from './state'
 
 import GridFormLayout from '@/layouts/GridFormLayout.vue'
 import { useInstance } from '@/stores/instance'
 import { useResPack } from '@/stores/respack'
 
-const { info, selected } = useResPack
+const { info } = useResPack
 const { create } = useInstance
 
 const router = useRouter()
 
 const rinfo = computed(() => {
-  if (selected.value !== null) {
-    return info.value[selected.value]
+  if (selectedResPack.value !== null) {
+    return info.value[selectedResPack.value]
   } else {
     return null
   }
@@ -23,7 +26,7 @@ const rinfo = computed(() => {
 async function requestCreateInst() {
   if (rinfo.value) {
     const inst = await create(rinfo.value.name, rinfo.value.name)
-    useInstance.selected.value = inst.handle
+    selectedInstance.value = inst.handle
     router.push('/instances')
   }
 }

@@ -4,6 +4,7 @@ import { NButton, NCard, NCode, NInput, NSelect } from 'naive-ui'
 import { computed, provide, ref } from 'vue'
 
 import VariantEdit from './VariantEdit.vue'
+import { selectedInstance } from './state'
 
 import SelectController from '@/components/Controller/SelectController.vue'
 import GridFormLayout from '@/layouts/GridFormLayout.vue'
@@ -11,10 +12,10 @@ import { useInstance } from '@/stores/instance'
 import { useResPack } from '@/stores/respack'
 import { translateCallback } from '@/utils/translog'
 
-const { handles, selected } = useInstance
+const { handles } = useInstance
 
 const instInfo = computed(() => {
-  return selected.value ? handles.value[selected.value] : null
+  return selectedInstance.value ? handles.value[selectedInstance.value] : null
 })
 
 const respackInfo = computed(() => {
@@ -182,7 +183,7 @@ async function run() {
       await hCtrl.set_short_side(app.size.short)
     }
   }
-  const hInst = Instance.init_from(selected.value!)
+  const hInst = Instance.init_from(selectedInstance.value!)
   await hInst.bind_controller(hCtrl)
   await hInst.bind_resource(hRes)
   running.value = RunningState.Running
@@ -196,13 +197,13 @@ async function run() {
 }
 
 async function stop() {
-  const hInst = Instance.init_from(selected.value!)
+  const hInst = Instance.init_from(selectedInstance.value!)
   await hInst.stop()
 }
 </script>
 
 <template>
-  <div v-if="selected" class="flex flex-col gap-2">
+  <div v-if="selectedInstance" class="flex flex-col gap-2">
     <NCard title="信息">
       <GridFormLayout>
         <span> 名称 </span>

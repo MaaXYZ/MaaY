@@ -23,7 +23,13 @@ function doRefresh() {
     <div class="flex justify-center">
       <NButton @click="doRefresh" :disabled="loading">刷新</NButton>
     </div>
-    <NButton v-for="(item, idx) of device" :key="idx" @click="selectedDevice = idx">
+    <NButton
+      v-for="(item, idx) of device"
+      :key="idx"
+      @click="selectedDevice = idx"
+      secondary
+      :type="selectedDevice === idx ? 'primary' : 'default'"
+    >
       <div class="flex gap-2">
         <span> {{ item.name }} </span>
         <span> {{ item.adb_serial }} </span>
