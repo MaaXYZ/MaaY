@@ -86,8 +86,7 @@ jobs:
       - name: Package app with all respack
         run: |
           rm pkg/`ls out`.tar.gz
-          mkdir -p assets
-          tar xjvf assets-cache/maa-y-assets/assets.tar.gz -C assets
+          tar xjvf assets-cache/maa-y-assets/assets.tar.gz
           cp -r assets ./out/`ls out`/
           tar cjvf pkg/`ls out`-full.tar.gz -C ./out ./`ls out`
 
