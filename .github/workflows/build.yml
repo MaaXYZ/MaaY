@@ -65,10 +65,11 @@ jobs:
         with:
           workflow: respack.yml
           workflow_conclusion: success
-          path: assets
+          path: assets-cache
 
       - name: Package app with all respack
         run: |
+          tar xjvf assets-cache/maa-y-assets/assets.tar.gz -C assets
           cp -r assets ./out/`ls out`/
           tar cjvf pkg/`ls out`-full.tar.gz -C ./out ./`ls out`
 
