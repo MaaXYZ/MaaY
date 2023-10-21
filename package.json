@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "node scripts/watch.mjs",
     "build": "node scripts/build.mjs",
-    "package": "electron-forge package"
+    "package": "electron-forge package",
+    "respack": "node scripts/buildRespack.mjs"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.4.2",

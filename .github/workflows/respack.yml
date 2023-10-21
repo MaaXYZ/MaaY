@@ -28,7 +28,7 @@ jobs:
 
       - name: Setup assets
         run: |
-          node scripts/makeRespack.mjs
+          npm run respack
           mkdir res
           tar cjvfh res/assets.tar.gz ./assets
 
