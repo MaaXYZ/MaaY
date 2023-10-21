@@ -109,7 +109,15 @@ export class MaaFrameworkModule extends Module {
       const stream = FlatToStream(context, (id, msg, detail) => {
         ipcMainSend('renderer.loader.callback', id, msg, detail)
       })
-      ipcMainHandle('main.loader.stream', (_, cmd, args) => stream(cmd, args))
+      ipcMainHandle('main.loader.stream', async (_, cmd, args) => {
+        try {
+          return await stream(cmd, args)
+        } catch (err) {
+          console.log('Failed to call', cmd, ...args)
+          console.log(err)
+          throw err
+        }
+      })
       this.active = true
       await set_logging(path.join(process.cwd(), 'debug'))
       return true
