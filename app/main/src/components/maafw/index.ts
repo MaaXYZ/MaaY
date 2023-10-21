@@ -57,7 +57,8 @@ export class MaaFrameworkModule extends Module {
         }
       case 'external': {
         this.proc = spawn(this.cfg.path, {
-          stdio: 'inherit'
+          stdio: 'inherit',
+          windowsHide: true
         })
         await new Promise((resolve, reject) => {
           this.proc!.on('spawn', resolve)
