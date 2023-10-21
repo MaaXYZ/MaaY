@@ -98,12 +98,12 @@ function merge(to: any, from: any) {
         break
       case 'object':
         if (v instanceof Array) {
-          to[key] = v // array not merge
+          to[key] = JSON.parse(JSON.stringify(v)) // array not merge
         } else {
           if (key in to) {
             merge(to[key], v)
           } else {
-            to[key] = v
+            to[key] = JSON.parse(JSON.stringify(v))
           }
         }
         break
@@ -224,6 +224,7 @@ async function run(
     merge(finalDiff, localDiff)
     merge(finalDiff, entry.provide ?? {})
 
+    console.log(entry.task, finalDiff)
     await hinst.post_task(entry.task, finalDiff).wait()
   }
 

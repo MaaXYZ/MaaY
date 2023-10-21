@@ -56,18 +56,29 @@ export class MaaFrameworkModule extends Module {
           return false
         }
       case 'external': {
-        this.proc = spawn(this.cfg.path, {
-          stdio: 'inherit',
+        this.proc = spawn(this.cfg.path, ['-mi'], {
+          stdio: ['inherit', 'pipe', 'inherit'],
           windowsHide: true
         })
-        await new Promise((resolve, reject) => {
-          this.proc!.on('spawn', resolve)
-          this.proc!.on('error', reject)
+        await new Promise<void>(resolve => {
+          this.proc?.stdout?.on('data', (chunk: Buffer) => {
+            const row = chunk.toString('utf-8')
+            const m = /^\[MAARPC\](.+)\r?\n/.exec(row)
+            if (m) {
+              const info = m[1]!
+              if (info.startsWith('START|')) {
+                resolve()
+              } else if (info === 'STOP') {
+                this.unload()
+              }
+            }
+            console.log(row)
+          })
         })
-        // TODO: 想办法通个信而不是直接等
-        await new Promise(resolve => {
-          setTimeout(resolve, 1000)
-        })
+        // setTimeout(() => {
+        //   console.log(this.proc, 'try auto stop maarpc')
+        //   this.proc?.kill('SIGINT')
+        // }, 10000)
         if (await this.connect()) {
           this.loaded = true
           return true
