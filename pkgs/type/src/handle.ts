@@ -24,8 +24,12 @@ export type InstanceHandleInfo = {
     obj: Resource
     name: string
     resource?: string
-    entry?: number
+
     config: Record<string, unknown>
+    entries: {
+      entry: number
+      config: Record<string, unknown>
+    }[]
   }
   controller: {
     handle?: ControllerHandle
