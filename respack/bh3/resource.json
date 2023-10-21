@@ -1,0 +1,17 @@
+{
+  "resource": {
+    "default": {
+      "name": "默认",
+      "path": "./resource/default"
+    }
+  },
+  "app": {
+    "start": "com.miHoYo.enterprise.NGHSoD/com.miHoYo.overridenativeactivity.OverrideNativeActivity",
+    "stop": "com.miHoYo.enterprise.NGHSoD",
+    "orientation": "landscape",
+    "size": {
+      "short": 720
+    },
+    "__comment": "这里的start&stop也许应该直接做成多个, 或者配置到resource下面去"
+  }
+}
