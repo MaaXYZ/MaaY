@@ -1,0 +1,10 @@
+{
+  "repo": {
+    "url": "https://github.com/MaaAssistantArknights/MAABH3",
+    "hash": "15984b2e4606257a554f932b1ceb344a33059a71"
+  },
+  "version": "v0.4.5",
+  "resource": {
+    "default": "assets/resource"
+  }
+}
