@@ -1,27 +1,20 @@
-import type {
-  AdbControllerConfig,
-  Controller,
-  ControllerHandle,
-  Instance,
-  Resource,
-  ResourceHandle
-} from '@maa/loader'
+import type { ControllerHandle, DeviceInfo, ResourceHandle } from '@maa/loader'
 
 export type ControllerHandleInfo = {
+  cb: string
+
   name: string
-  cfg: AdbControllerConfig
-  obj: Controller
+  cfg: DeviceInfo
 }
 
 export type InstanceHandleInfo = {
+  cb: string
+
   name: string
-  obj: Instance
-  extra: {
-    callback: (msg: string, detail: string) => void
-  }
   resource: {
     handle: ResourceHandle
-    obj: Resource
+    cb: string
+
     name: string
     resource?: string
 
@@ -31,7 +24,5 @@ export type InstanceHandleInfo = {
       config: Record<string, unknown>
     }[]
   }
-  controller: {
-    handle?: ControllerHandle
-  }
+  controller?: ControllerHandle
 }

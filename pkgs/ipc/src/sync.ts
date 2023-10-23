@@ -1,4 +1,5 @@
-import type { ModuleInfo, RespackInfo } from '@maa/type'
+import type { ControllerHandle, InstanceHandle } from '@maa/loader'
+import type { ControllerHandleInfo, InstanceHandleInfo, ModuleInfo, RespackInfo } from '@maa/type'
 
 export type SyncVarInterface<Name extends string, Type, Cate extends 'main' | 'renderer'> = {
   [key in `${Cate}.var.${Name}`]: (nv: Type) => void
@@ -13,7 +14,10 @@ export type SyncVarInfo_M2R = [
   ['resource_info', Record<string, RespackInfo>]
 ]
 
-export type SyncVarInfo_R2M = []
+export type SyncVarInfo_R2M = [
+  ['controllers', Record<ControllerHandle, ControllerHandleInfo>],
+  ['instances', Record<InstanceHandle, InstanceHandleInfo>]
+]
 
 export type SyncVarNameList<I, KS extends unknown[] = []> = I extends [infer X, ...infer Y]
   ? X extends [infer N, ...infer R]

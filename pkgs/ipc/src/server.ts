@@ -9,7 +9,10 @@ export type ServerSideInterface = {
   'main.module.set_config': (name: string, cfg: unknown) => boolean
 
   'main.resource.refresh': () => void
-  'main.resource.join_path': (res: string, path: string) => Promise<string>
+  'main.resource.join_path': (res: string, path: string) => string
+
+  'main.reload.fetch_controllers': () => string
+  'main.reload.fetch_instances': () => string
 
   'main.loader.stream': (cmd: string, args: any[]) => Promise<any>
 } & SyncVarInterfaceList_R2M &

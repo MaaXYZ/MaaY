@@ -1,16 +1,10 @@
-import {
-  Controller,
-  type ControllerHandle,
-  Instance,
-  type InstanceHandle,
-  Resource,
-  type ResourceHandle
-} from '@maa/loader'
+import { Controller, Instance, type InstanceHandle, Resource } from '@maa/loader'
 import type { InstanceHandleInfo, RespackControlOption, RespackInfo } from '@maa/type'
-import { type Ref, ref } from 'vue'
 
 import { useController } from './controller'
 import { useRespack } from './respack'
+
+import { registerSend } from '@/sync'
 
 export const enum RunningState {
   Idle,
@@ -18,28 +12,27 @@ export const enum RunningState {
   Running
 }
 
-const handles = ref<Record<InstanceHandle, InstanceHandleInfo>>({})
+const handles = registerSend('instances', {}, false)
+
+window.ipcRenderer.invoke('main.reload.fetch_instances').then(obj => {
+  handles.value = JSON.parse(obj)
+})
 
 async function create(name: string, respack: string) {
-  const extra: {
-    callback: (msg: string, detail: string) => void
-  } = {
-    callback: () => void 0
-  }
-  const inst = await Instance.init((msg, detail) => extra.callback(msg, detail))
-  const res = await Resource.init((msg, detail) => extra.callback(msg, detail))
+  const inst = await Instance.init()
+  const res = await Resource.init()
   handles.value[inst.handle] = {
+    cb: inst.cbId,
+
     name,
-    obj: inst,
-    extra,
     resource: {
       handle: res.handle,
-      obj: res,
+      cb: res.cbId,
+
       name: respack,
       config: {},
       entries: [{ entry: 0, config: {} }]
-    },
-    controller: {}
+    }
   }
   return inst
 }
@@ -47,8 +40,8 @@ async function create(name: string, respack: string) {
 async function destroy(handle: InstanceHandle) {
   const ii = handles.value[handle]!
   delete handles.value[handle]
-  await ii.obj.destroy()
-  await ii.resource.obj.destroy()
+  await (await Instance.init_from(handle, ii.cb)).destroy()
+  await (await Resource.init_from(ii.resource.handle, ii.resource.cb)).destroy()
 }
 
 async function resolveResourcePaths(ii: InstanceHandleInfo, pack: RespackInfo) {
@@ -167,6 +160,17 @@ function buildDiffConfig(
   return result
 }
 
+function init_res_from(handle: InstanceHandle) {
+  return Resource.init_from(
+    handles.value[handle]!.resource.handle,
+    handles.value[handle]!.resource.cb
+  )
+}
+
+function init_from(handle: InstanceHandle) {
+  return Instance.init_from(handle, handles.value[handle]!.cb)
+}
+
 async function run(
   handle: InstanceHandle,
   output: {
@@ -183,14 +187,14 @@ async function run(
     return false
   }
 
-  if (!ii.resource.resource || ii.resource.entries.length === 0 || !ii.controller.handle) {
+  if (!ii.resource.resource || ii.resource.entries.length === 0 || !ii.controller) {
     output.state = RunningState.Idle
     return false
   }
 
   const resPaths = await resolveResourcePaths(ii, pack)
 
-  const hres = ii.resource.obj
+  const hres = await init_res_from(handle)
   for (const p of resPaths) {
     await hres.post_path(p).wait()
   }
@@ -199,10 +203,10 @@ async function run(
     return false
   }
 
-  const hctrl = useController.handles[ii.controller.handle!]!.obj
+  const hctrl = await useController.init_from(ii.controller!)
   await applyDefaultCtrlConfig(hctrl, pack.config.resource.app)
 
-  const hinst = ii.obj
+  const hinst = await init_from(handle)
   await hinst.bind_resource(hres)
   await hinst.bind_controller(hctrl)
 
@@ -237,5 +241,7 @@ export const useInstance = {
 
   create,
   destroy,
+  init_res_from,
+  init_from,
   run
 }

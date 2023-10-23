@@ -14,9 +14,11 @@ export function ipcMainHandle<Key extends keyof ServerSideInterface>(
 ): void {
   console.log('main register: ', eventName)
   ipcMain.removeHandler(eventName)
-  ipcMain.handle(eventName, (event, ...args) => {
+  ipcMain.handle(eventName, async (event, ...args) => {
     console.log('main handle: ', eventName, ...args)
-    return listener(event, ...(args as Parameters<ServerSideInterface[Key]>))
+    const result = await listener(event, ...(args as Parameters<ServerSideInterface[Key]>))
+    console.log('main handle: ', eventName, 'return: ', result)
+    return result
   })
 }
 

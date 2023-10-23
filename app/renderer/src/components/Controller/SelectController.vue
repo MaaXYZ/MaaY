@@ -14,8 +14,8 @@ const emits = defineEmits<{
 }>()
 
 const option = computed(() => {
-  return Object.entries(useController.handles).map(([ctrl, info]) => ({
-    label: info.cfg.serial ?? '127.0.0.1:5555',
+  return Object.entries(useController.handles.value).map(([ctrl, info]) => ({
+    label: info.cfg.adb_serial ?? '127.0.0.1:5555',
     value: ctrl
   }))
 })

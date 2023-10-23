@@ -2,6 +2,7 @@
   "name": "@maa/ipc",
   "main": "./src/index.ts",
   "devDependencies": {
+    "@maa/loader": "workspace:*",
     "@maa/type": "workspace:*",
     "typescript": "^5.2.2"
   }

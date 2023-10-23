@@ -8,9 +8,7 @@ import SelectController from '@/components/Controller/SelectController.vue'
 import EditGlobalRespackConfig from '@/components/Respack/EditGlobalRespackConfig.vue'
 import EditRespackConfig from '@/components/Respack/EditRespackConfig.vue'
 import SelectRespackResource from '@/components/Respack/SelectRespackResource.vue'
-import VariantEdit from '@/components/VariantEdit.vue'
 import GridFormLayout from '@/layouts/GridFormLayout.vue'
-import { useController } from '@/stores/controller'
 import { RunningState, useInstance } from '@/stores/instance'
 import { translateCallback } from '@/utils/translog'
 
@@ -34,7 +32,8 @@ async function run() {
   if (!curInstanceHandle.value) {
     return
   }
-  curInstanceInfo.value!.extra.callback = processCallback
+  ;(await useInstance.init_from(curInstanceHandle.value)).onCallback = processCallback
+  ;(await useInstance.init_res_from(curInstanceHandle.value)).onCallback = processCallback
   await useInstance.run(
     curInstanceHandle.value,
     reactive({
@@ -45,7 +44,9 @@ async function run() {
 }
 
 async function stop() {
-  await curInstanceInfo.value!.obj.stop()
+  if (curInstanceHandle.value) {
+    await (await useInstance.init_from(curInstanceHandle.value)).stop()
+  }
 }
 </script>
 
@@ -71,9 +72,9 @@ async function stop() {
     <NCard title="设备">
       <GridFormLayout>
         <span> 设备 </span>
-        <SelectController v-model:handle="curInstanceInfo!.controller.handle"></SelectController>
+        <SelectController v-model:handle="curInstanceInfo!.controller"></SelectController>
         <span> 句柄 </span>
-        <NInput :value="curInstanceInfo!.controller.handle" readonly placeholder=""></NInput>
+        <NInput :value="curInstanceInfo!.controller" readonly placeholder=""></NInput>
       </GridFormLayout>
     </NCard>
     <NCard title="配置">

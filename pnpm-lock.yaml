@@ -156,6 +156,9 @@ importers:
 
   pkgs/ipc:
     devDependencies:
+      '@maa/loader':
+        specifier: workspace:*
+        version: link:../loader
       '@maa/type':
         specifier: workspace:*
         version: link:../type

@@ -12,11 +12,15 @@ import { translateCallback } from '@/utils/translog'
 const statusMessage = ref<string[]>([])
 
 const { device } = useDevice
-const { connect, find } = useController
+const { connect, find, handles } = useController
 
 const info = computed(() => {
   if (curDevice.value !== null) {
-    return device.value[curDevice.value]
+    if (typeof curDevice.value === 'number') {
+      return device.value[curDevice.value]!
+    } else {
+      return handles.value[curDevice.value]!.cfg
+    }
   } else {
     return null
   }
@@ -26,20 +30,8 @@ const loading = ref(false)
 
 async function requestConnect() {
   if (info.value) {
-    const {
-      name,
-      adb_path: path,
-      adb_serial: serial,
-      adb_type: type,
-      adb_config: config
-    } = info.value
     loading.value = true
-    await connect(processControllerCallback, name, {
-      path,
-      serial,
-      type,
-      config
-    })
+    await connect(info.value, processControllerCallback)
     loading.value = false
   }
 }
