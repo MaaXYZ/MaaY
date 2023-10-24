@@ -1,10 +1,23 @@
 import { Device, type DeviceInfo } from '@maa/loader'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
-const device = ref<DeviceInfo[]>([])
+import { useConfig } from './config'
+
+const foundDevices = ref<DeviceInfo[]>([])
+
+function mergeDevices(known: DeviceInfo[], found: DeviceInfo[]) {
+  return [
+    ...known.filter(x => found.findIndex(y => x.adb_serial === y.adb_serial) === -1),
+    ...found
+  ]
+}
+
+const device = computed<DeviceInfo[]>(() => {
+  return mergeDevices(useConfig.global.value.known_devices ?? [], foundDevices.value)
+})
 
 async function refresh() {
-  device.value = await Device.find()
+  foundDevices.value = await Device.find()
 }
 
 export const useDevice = {

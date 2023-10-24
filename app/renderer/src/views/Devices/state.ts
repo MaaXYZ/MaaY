@@ -4,10 +4,16 @@ import { computed, ref } from 'vue'
 import { useController } from '@/stores/controller'
 import { useDevice } from '@/stores/device'
 
+const { handles, find } = useController
+
 export const curDevice = ref<number | ControllerHandle | null>(null)
 
 export const foundDevices = computed(() => {
   return useDevice.device.value.filter(x => {
-    return !useController.find(x.adb_serial)
+    return !find(x.adb_serial)
   })
+})
+
+export const connectDevices = computed(() => {
+  return Object.keys(handles.value) as ControllerHandle[]
 })

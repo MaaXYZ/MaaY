@@ -53,7 +53,16 @@ async function disconnect_all() {
 function find(serial?: string) {
   for (const [handle, info] of Object.entries(handles.value)) {
     if (info.cfg.adb_serial === serial) {
-      return handle
+      return handle as ControllerHandle
+    }
+  }
+  return null
+}
+
+function info(serial?: string) {
+  for (const [handle, info] of Object.entries(handles.value)) {
+    if (info.cfg.adb_serial === serial) {
+      return info.cfg
     }
   }
   return null
@@ -70,5 +79,6 @@ export const useController = {
   disconnect,
   disconnect_all,
   find,
+  info,
   init_from
 }
