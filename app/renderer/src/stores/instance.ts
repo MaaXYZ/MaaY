@@ -44,6 +44,13 @@ async function destroy(handle: InstanceHandle) {
   await (await Resource.init_from(ii.resource.handle, ii.resource.cb)).destroy()
 }
 
+async function destroy_all() {
+  const hs = Object.keys(handles.value) as InstanceHandle[]
+  for (const h of hs) {
+    await destroy(h)
+  }
+}
+
 async function resolveResourcePaths(ii: InstanceHandleInfo, pack: RespackInfo) {
   let resPaths: string[] = []
   let res = pack.config.resource.resource[ii.resource.resource!]!
@@ -241,6 +248,7 @@ export const useInstance = {
 
   create,
   destroy,
+  destroy_all,
   init_res_from,
   init_from,
   run

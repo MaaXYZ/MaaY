@@ -52,7 +52,7 @@ async function stop() {
 </script>
 
 <template>
-  <div v-if="curInstanceHandle" class="flex flex-col gap-2">
+  <div v-if="curInstanceInfo" class="flex flex-col gap-2">
     <NCard title="信息">
       <GridFormLayout>
         <span> 名称 </span>

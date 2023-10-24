@@ -37,6 +37,19 @@ async function connect(cfg: DeviceInfo, cb: (msg: string, detail: string) => voi
   }
 }
 
+async function disconnect(handle: ControllerHandle) {
+  const ci = handles.value[handle]!
+  delete handles.value[handle]
+  await (await Controller.init_from(handle, ci.cb)).destroy()
+}
+
+async function disconnect_all() {
+  const hs = Object.keys(handles.value) as ControllerHandle[]
+  for (const h of hs) {
+    await disconnect(h)
+  }
+}
+
 function find(serial?: string) {
   for (const [handle, info] of Object.entries(handles.value)) {
     if (info.cfg.adb_serial === serial) {
@@ -54,6 +67,8 @@ export const useController = {
   handles,
 
   connect,
+  disconnect,
+  disconnect_all,
   find,
   init_from
 }

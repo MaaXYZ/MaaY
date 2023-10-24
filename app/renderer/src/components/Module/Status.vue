@@ -2,20 +2,22 @@
 import { NButton, NCard, NSelect } from 'naive-ui'
 import { type Component, ref } from 'vue'
 
-import MaaFrameworkInfo from './MaaFramework.vue'
+import MaaFramework from './MaaFramework'
 
 import { useModule } from '@/stores/module'
 
 const { info } = useModule
 
-const moduleInfoProvider: Record<string, Component> = {
-  MaaFramework: MaaFrameworkInfo
-}
+const moduleInfoProvider: Record<string, { Config: Component; beforeUnload: () => Promise<void> }> =
+  {
+    MaaFramework
+  }
 
 const loading = ref(false)
 
 async function unload(m: string) {
   loading.value = true
+  await moduleInfoProvider[m]!.beforeUnload()
   await window.ipcRenderer.invoke('main.module.unload', m)
   loading.value = false
 }
@@ -53,7 +55,7 @@ function setConfig(m: string, c: unknown) {
 
         <component
           v-if="name in moduleInfoProvider"
-          :is="moduleInfoProvider[name]"
+          :is="moduleInfoProvider[name]!.Config"
           @update:config="(c: unknown) => setConfig(name, c)"
           :disabled="cfg.loaded"
         ></component>
