@@ -40,7 +40,7 @@ export class MaaFrameworkModule extends Module {
       host: '0.0.0.0',
       port: 8080,
       path: 'MaaRpcCli',
-      ...(this.channel_config ?? {})
+      ...(this.config ?? {})
     }
   }
 
@@ -56,8 +56,8 @@ export class MaaFrameworkModule extends Module {
           return false
         }
       case 'external': {
-        this.proc = spawn(this.cfg.path, ['-mi'], {
-          stdio: ['inherit', 'pipe', 'inherit'],
+        this.proc = spawn(this.cfg.path, ['-mi', `-p=${this.cfg.port}`], {
+          stdio: ['pipe', 'pipe', 'inherit'],
           windowsHide: true
         })
         await new Promise<void>(resolve => {
@@ -83,7 +83,7 @@ export class MaaFrameworkModule extends Module {
           this.loaded = true
           return true
         } else {
-          this.proc.kill('SIGINT')
+          this.proc.stdin?.write('\n')
           return false
         }
       }
@@ -94,7 +94,7 @@ export class MaaFrameworkModule extends Module {
   async unload() {
     await this.disconnect()
     if (this.proc) {
-      this.proc.kill('SIGINT')
+      this.proc.stdin?.write('\n')
       this.proc = null
     }
     this.loaded = false

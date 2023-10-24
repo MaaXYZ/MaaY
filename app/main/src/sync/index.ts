@@ -38,7 +38,8 @@ type SimpleRef<T> = {
 
 export function registerSendFor<Var extends SyncVarName_M2R>(
   name: Var,
-  val: SimpleRef<SyncVarMap_M2R[Var]>
+  val: SimpleRef<SyncVarMap_M2R[Var]>,
+  initPush = true
 ) {
   watch(
     val,
@@ -47,15 +48,19 @@ export function registerSendFor<Var extends SyncVarName_M2R>(
     },
     {
       deep: true,
-      immediate: true
+      immediate: initPush
     }
   )
   push(name, val)
 }
 
-export function registerSend<Var extends SyncVarName_M2R>(name: Var, init: SyncVarMap_M2R[Var]) {
+export function registerSend<Var extends SyncVarName_M2R>(
+  name: Var,
+  init: SyncVarMap_M2R[Var],
+  initPush = true
+) {
   const value = ref(init)
-  registerSendFor(name, value)
+  registerSendFor(name, value, initPush)
   return value
 }
 

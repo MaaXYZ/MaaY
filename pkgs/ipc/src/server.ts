@@ -14,6 +14,8 @@ export type ServerSideInterface = {
   'main.reload.fetch_controllers': () => string
   'main.reload.fetch_instances': () => string
 
+  'main.config.fetch_global': () => string
+
   'main.loader.stream': (cmd: string, args: any[]) => Promise<any>
 } & SyncVarInterfaceList_R2M &
   SyncVarPullInterfaceList_M2R

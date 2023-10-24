@@ -1,18 +1,21 @@
 import { BrowserWindow, app } from 'electron'
 import * as sms from 'source-map-support'
 
-import { loadConfig, modules, setupAutoSaving } from './components'
+import { loadModuleConfig, modules, setupModuleConfigAutoSaving } from './components'
+import { loadGlobalConfig, setupGlobalConfigAutoSaving } from './ipc/config'
 import { createWindow } from './window'
 
 sms.install()
 
 async function main() {
-  await loadConfig()
+  await loadGlobalConfig()
+  await loadModuleConfig()
   for (const m of modules) {
     const state = await m.load()
     console.log(m.name, state)
   }
-  setupAutoSaving()
+  setupGlobalConfigAutoSaving()
+  setupModuleConfigAutoSaving()
 }
 
 app.on('ready', createWindow)

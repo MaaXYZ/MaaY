@@ -6,7 +6,7 @@ export abstract class Module implements ModuleInfo {
 
   loaded = false
   channel?: string
-  channel_config?: unknown
+  config?: unknown
   version?: string
   update_version?: string
 

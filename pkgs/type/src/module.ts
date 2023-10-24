@@ -9,7 +9,7 @@ export interface ModuleInfo {
 
   loaded: boolean
   channel?: string
-  channel_config?: unknown
+  config?: unknown
   version?: string
   update_version?: string
 }

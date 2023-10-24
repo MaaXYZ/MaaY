@@ -44,12 +44,11 @@ export function registerSendFor<Var extends SyncVarName_R2M>(
       send(name, nv)
     },
     {
-      deep: true
+      deep: true,
+      immediate: initPush
     }
   )
-  if (initPush) {
-    push(name, val)
-  }
+  push(name, val)
 }
 
 export function registerSend<Var extends SyncVarName_R2M>(

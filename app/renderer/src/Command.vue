@@ -17,13 +17,48 @@ const renderInput = () => {
   const options = computed(() => {
     return Object.keys(useCommands.handlers).filter(k => k.indexOf(cmd.value) !== -1)
   })
+  const selected = ref(0)
+  const fixSelected = computed<number>({
+    set(v) {
+      if (options.value.length === 0) {
+        selected.value = 0
+        return
+      }
+      if (v < 0) {
+        selected.value = 0
+      } else if (v >= options.value.length) {
+        selected.value = options.value.length - 1
+      } else {
+        selected.value = v
+      }
+    },
+    get() {
+      return selected.value
+    }
+  })
   nextTick(() => {
     inputNode.value?.focus()
   })
   return (
     <NCard>
       <div class="flex flex-col gap-2">
-        <NInput ref={inputNode} v-model:value={cmd.value} onBlur={closeDlg} placeholder="">
+        <NInput
+          ref={inputNode}
+          v-model:value={cmd.value}
+          onBlur={closeDlg}
+          onKeydown={e => {
+            if (e.key === 'Enter') {
+              if (options.value.length > 0) {
+                useCommands.handlers[options.value[fixSelected.value]!]!()
+              }
+            } else if (e.key === 'ArrowUp') {
+              fixSelected.value = fixSelected.value - 1
+            } else if (e.key === 'ArrowDown') {
+              fixSelected.value = fixSelected.value + 1
+            }
+          }}
+          placeholder=""
+        >
           {{
             prefix: () => '>'
           }}
@@ -31,7 +66,9 @@ const renderInput = () => {
         <div class="flex flex-col gap-1">
           {options.value.map((key, idx) => (
             <span
-              class={(idx === 0 ? 'font-bold' : '') + ' cursor-pointer hover:underline'}
+              class={
+                (idx === fixSelected.value ? 'font-bold' : '') + ' cursor-pointer hover:underline'
+              }
               onClick={useCommands.handlers[key]}
             >
               {key}

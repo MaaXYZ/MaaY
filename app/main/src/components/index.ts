@@ -1,4 +1,4 @@
-import { computed, reactive } from '@vue/reactivity'
+import { reactive } from '@vue/reactivity'
 
 import { MaaFrameworkModule } from './maafw'
 import { Module } from './module'

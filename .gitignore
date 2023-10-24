@@ -8,6 +8,8 @@ out
 debug
 
 config.json
+config.module.json
+!init/*.json
 
 Maa
 MaaAgentBinary

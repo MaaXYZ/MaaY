@@ -62,7 +62,7 @@ jobs:
           mkdir -p pkg
           cp -r MaaAgentBinary ./out/`ls out`/
           cp -r maa-cache/bin ./out/`ls out`/maa
-          cp initcfg.json ./out/`ls out`/config.json
+          cp init/*.json ./out/`ls out`/
 
       - name: Package app without respack
         run: |

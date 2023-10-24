@@ -14,7 +14,7 @@ export function setupModules() {
         channels: m.channels,
         loaded: m.loaded,
         channel: m.channel,
-        channel_config: m.channel_config,
+        config: m.config,
         version: m.version,
         update_version: m.update_version
       }
@@ -42,7 +42,7 @@ export function setupModules() {
   ipcMainHandle('main.module.set_config', async (_, name, cfg) => {
     if (name in moduleIndexs) {
       const m = moduleIndexs[name as keyof typeof moduleIndexs]
-      m.channel_config = cfg
+      m.config = cfg
     }
     return false
   })

@@ -4,7 +4,7 @@ import fs from 'fs/promises'
 
 import { modules } from '.'
 
-export const ConfigFilePath = 'config.json'
+export const ModuleConfigFilePath = 'config.module.json'
 
 type ModuleConfig = Record<
   string,
@@ -14,34 +14,34 @@ type ModuleConfig = Record<
   }
 >
 
-export async function loadConfig() {
-  if (existsSync(ConfigFilePath)) {
-    const data = JSON.parse(await fs.readFile(ConfigFilePath, 'utf-8')) as ModuleConfig
+export async function loadModuleConfig() {
+  if (existsSync(ModuleConfigFilePath)) {
+    const data = JSON.parse(await fs.readFile(ModuleConfigFilePath, 'utf-8')) as ModuleConfig
     for (const m of modules) {
       if (m.name in data) {
         m.channel = data[m.name]!.channel
-        m.channel_config = data[m.name]!.data
+        m.config = data[m.name]!.data
       }
     }
   }
 }
 
-export async function saveConfig() {
+export async function saveModuleConfig() {
   const obj: ModuleConfig = {}
   for (const m of modules) {
     obj[m.name] = {
       channel: m.channel,
-      data: m.channel_config
+      data: m.config
     }
   }
-  await fs.writeFile(ConfigFilePath, JSON.stringify(obj, null, 2))
+  await fs.writeFile(ModuleConfigFilePath, JSON.stringify(obj, null, 2))
 }
 
-export function setupAutoSaving() {
+export function setupModuleConfigAutoSaving() {
   watch(
     modules,
     () => {
-      saveConfig()
+      saveModuleConfig()
     },
     {
       deep: true,

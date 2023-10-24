@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { version } from '@maa/loader'
-import { NInput } from 'naive-ui'
+import { NInput, NInputNumber } from 'naive-ui'
 import { computed, ref, watch } from 'vue'
 
 import GridFormLayout from '@/layouts/GridFormLayout.vue'
@@ -19,7 +19,7 @@ const info = computed(() => {
 })
 
 const cc = computed(() => {
-  const cc = info.value?.channel_config as
+  const cc = info.value?.config as
     | {
         host?: string
         port?: number
@@ -70,7 +70,21 @@ watch(
       ></NInput>
     </template>
     <span> 服务地址 </span>
-    <span> {{ cc.host }}:{{ cc.port }} </span>
+    <NInputNumber
+      :min="1"
+      :max="65535"
+      :value="cc.port"
+      @update:value="
+        v =>
+          emits('update:config', {
+            ...cc,
+            port: v
+          })
+      "
+      :disabled="disabled"
+    >
+      <template #prefix> {{ cc.host }}: </template>
+    </NInputNumber>
     <span> Maa版本 </span>
     <span v-if="info?.loaded"> {{ maaver }} </span>
   </GridFormLayout>
