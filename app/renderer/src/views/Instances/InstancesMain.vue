@@ -8,10 +8,20 @@ import EditGlobalRespackConfig from '@/components/Respack/EditGlobalRespackConfi
 import EditRespackConfig from '@/components/Respack/EditRespackConfig.vue'
 import SelectRespackResource from '@/components/Respack/SelectRespackResource.vue'
 import GridFormLayout from '@/layouts/GridFormLayout.vue'
+import { useConfig } from '@/stores/config'
 import { RunningState, useInstance } from '@/stores/instance'
 import { translateCallback } from '@/utils/translog'
 
-import { curInstanceHandle, curInstanceInfo, curInstanceRespackInfo } from './state'
+import {
+  curInstanceHandle,
+  curInstanceInfo,
+  curInstanceRespackInfo,
+  curInstanceSaveInfo,
+  isInstance
+} from './state'
+
+const { global } = useConfig
+const { create_with, init_from, init_res_from } = useInstance
 
 const running = ref<RunningState>(RunningState.Idle)
 const statusMessage = ref<string[]>([])
@@ -30,11 +40,11 @@ function processCallback(msg: string, detail: string) {
 }
 
 async function run() {
-  if (!curInstanceHandle.value) {
+  if (!isInstance(curInstanceHandle.value)) {
     return
   }
-  ;(await useInstance.init_from(curInstanceHandle.value)).onCallback = processCallback
-  ;(await useInstance.init_res_from(curInstanceHandle.value)).onCallback = processCallback
+  ;(await init_from(curInstanceHandle.value)).onCallback = processCallback
+  ;(await init_res_from(curInstanceHandle.value)).onCallback = processCallback
   await useInstance.run(
     curInstanceHandle.value,
     reactive({
@@ -45,37 +55,48 @@ async function run() {
 }
 
 async function stop() {
-  if (curInstanceHandle.value) {
-    await (await useInstance.init_from(curInstanceHandle.value)).stop()
+  if (!isInstance(curInstanceHandle.value)) {
+    return
   }
+  await (await useInstance.init_from(curInstanceHandle.value)).stop()
+}
+
+function requestCreate(id: string) {
+  const ii = global.value.preset_instance?.[id]
+  if (!ii) {
+    return
+  }
+  create_with(ii).then(inst => {
+    curInstanceHandle.value = inst.handle
+  })
 }
 </script>
 
 <template>
-  <div v-if="curInstanceInfo" class="flex flex-col gap-2">
+  <div v-if="curInstanceSaveInfo" class="flex flex-col gap-2">
     <NCard title="信息">
       <GridFormLayout>
         <span> 名称 </span>
-        <NInput v-model:value="curInstanceInfo!.name" placeholder="输入实例名称"></NInput>
+        <NInput v-model:value="curInstanceSaveInfo.name" placeholder="输入实例名称"></NInput>
       </GridFormLayout>
     </NCard>
     <NCard title="资源">
       <GridFormLayout>
         <span> 名称 </span>
-        <NInput :value="curInstanceInfo!.resource.name" readonly></NInput>
+        <NInput :value="curInstanceSaveInfo.resource.name" readonly></NInput>
         <span> 资源包 </span>
         <SelectRespackResource
-          v-model:value="curInstanceInfo!.resource.resource"
+          v-model:value="curInstanceSaveInfo.resource.resource"
           :pack="curInstanceRespackInfo?.name"
         ></SelectRespackResource>
       </GridFormLayout>
     </NCard>
-    <NCard title="设备">
+    <NCard title="设备" v-if="isInstance(curInstanceHandle)">
       <GridFormLayout>
         <span> 设备 </span>
-        <SelectController v-model:handle="curInstanceInfo!.controller"></SelectController>
+        <SelectController v-model:handle="curInstanceInfo!.runtime.controller"></SelectController>
         <span> 句柄 </span>
-        <NInput :value="curInstanceInfo!.controller" readonly placeholder=""></NInput>
+        <NInput :value="curInstanceInfo!.runtime.controller" readonly placeholder=""></NInput>
       </GridFormLayout>
     </NCard>
     <NCard title="配置">
@@ -84,11 +105,11 @@ async function stop() {
           <GridFormLayout>
             <EditGlobalRespackConfig
               :resctrl="curInstanceRespackInfo!.config.control"
-              :entry="curInstanceInfo!.resource"
+              :entry="curInstanceSaveInfo.resource"
             ></EditGlobalRespackConfig>
           </GridFormLayout>
         </NCard>
-        <NCard v-for="(entry, idx) of curInstanceInfo!.resource.entries" :key="idx">
+        <NCard v-for="(entry, idx) of curInstanceSaveInfo.resource.entries" :key="idx">
           <GridFormLayout>
             <span> 入口 </span>
             <div class="flex gap-2">
@@ -100,10 +121,10 @@ async function stop() {
               <NButton
                 @click="
                   () => {
-                    curInstanceInfo!.resource.entries.splice(idx, 1)
+                    curInstanceSaveInfo?.resource.entries.splice(idx, 1)
                   }
                 "
-                :disabled="curInstanceInfo!.resource.entries.length === 1"
+                :disabled="curInstanceSaveInfo.resource.entries.length === 1"
               >
                 <template #icon>
                   <NIcon>
@@ -119,13 +140,13 @@ async function stop() {
           </GridFormLayout>
         </NCard>
         <div class="flex">
-          <NButton @click="curInstanceInfo!.resource.entries.push({ entry: 0, config: {} })">
+          <NButton @click="curInstanceSaveInfo.resource.entries.push({ entry: 0, config: {} })">
             添加
           </NButton>
         </div>
       </div>
     </NCard>
-    <NCard title="执行">
+    <NCard title="执行" v-if="isInstance(curInstanceHandle)">
       <div class="flex flex-col gap-2">
         <div class="flex gap-2">
           <NButton
@@ -139,6 +160,13 @@ async function stop() {
         </div>
         <div class="flex flex-col gap-2">
           <span v-for="(msg, idx) in statusMessage" :key="idx"> {{ msg }} </span>
+        </div>
+      </div>
+    </NCard>
+    <NCard v-else-if="curInstanceHandle">
+      <div class="flex flex-col gap-2">
+        <div class="flex gap-2">
+          <NButton @click="requestCreate(curInstanceHandle)"> 创建 </NButton>
         </div>
       </div>
     </NCard>

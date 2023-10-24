@@ -1,8 +1,17 @@
 import { Controller, Instance, type InstanceHandle, Resource } from '@maa/loader'
-import type { InstanceHandleInfo, RespackControlOption, RespackInfo } from '@maa/type'
+import type {
+  InstanceHandleInfo,
+  InstanceSaveInfo,
+  RespackControlOption,
+  RespackInfo
+} from '@maa/type'
+import { configProviderProps } from 'naive-ui'
+import { v4 } from 'uuid'
+import { watch } from 'vue'
 
 import { registerSend } from '@/sync'
 
+import { useConfig } from './config'
 import { useController } from './controller'
 import { useRespack } from './respack'
 
@@ -12,35 +21,73 @@ export const enum RunningState {
   Running
 }
 
+const { global } = useConfig
+
 const handles = registerSend('instances', {}, false)
 
 window.ipcRenderer.invoke('main.reload.fetch_instances').then(obj => {
   handles.value = JSON.parse(obj)
 })
 
-async function create(name: string, respack: string) {
+function takeInfo(x: InstanceHandleInfo) {
+  const y: InstanceSaveInfo = { ...x }
+  delete y['runtime']
+  return y
+}
+
+watch(
+  handles,
+  v => {
+    global.value.preset_instance = global.value.preset_instance ?? {}
+    const pi = global.value.preset_instance!
+    for (const info of Object.values(v)) {
+      pi[info.id] = takeInfo(info)
+    }
+  },
+  {
+    deep: true
+  }
+)
+
+async function create_with(cfg: InstanceSaveInfo) {
   const inst = await Instance.init()
   const res = await Resource.init()
   handles.value[inst.handle] = {
-    cb: inst.cbId,
-
-    name,
-    resource: {
-      handle: res.handle,
-      cb: res.cbId,
-
-      name: respack,
-      config: {},
-      entries: [{ entry: 0, config: {} }]
+    ...cfg,
+    runtime: {
+      instance: {
+        handle: inst.handle,
+        cb: inst.cbId
+      },
+      resource: {
+        handle: res.handle,
+        cb: res.cbId
+      }
     }
   }
   return inst
 }
 
+async function create(name: string, respack: string) {
+  return await create_with({
+    id: v4(),
+    name,
+    resource: {
+      name: respack,
+      config: {},
+      entries: [{ entry: 0, config: {} }]
+    }
+  })
+}
+
+function is_created(id: string) {
+  return !!Object.values(handles.value).find(x => x.id === id)
+}
+
 async function destroy(handle: InstanceHandle) {
-  const ii = handles.value[handle]!
+  const ii = handles.value[handle]!.runtime
   delete handles.value[handle]
-  await (await Instance.init_from(handle, ii.cb)).destroy()
+  await (await Instance.init_from(ii.instance.handle, ii.instance.cb)).destroy()
   await (await Resource.init_from(ii.resource.handle, ii.resource.cb)).destroy()
 }
 
@@ -169,13 +216,13 @@ function buildDiffConfig(
 
 function init_res_from(handle: InstanceHandle) {
   return Resource.init_from(
-    handles.value[handle]!.resource.handle,
-    handles.value[handle]!.resource.cb
+    handles.value[handle]!.runtime.resource.handle,
+    handles.value[handle]!.runtime.resource.cb
   )
 }
 
 function init_from(handle: InstanceHandle) {
-  return Instance.init_from(handle, handles.value[handle]!.cb)
+  return Instance.init_from(handle, handles.value[handle]!.runtime.instance.cb)
 }
 
 async function run(
@@ -194,7 +241,7 @@ async function run(
     return false
   }
 
-  if (!ii.resource.resource || ii.resource.entries.length === 0 || !ii.controller) {
+  if (!ii.resource.resource || ii.resource.entries.length === 0 || !ii.runtime.controller) {
     output.state = RunningState.Idle
     return false
   }
@@ -210,7 +257,7 @@ async function run(
     return false
   }
 
-  const hctrl = await useController.init_from(ii.controller!)
+  const hctrl = await useController.init_from(ii.runtime.controller!)
   await applyDefaultCtrlConfig(hctrl, pack.config.resource.app)
 
   const hinst = await init_from(handle)
@@ -246,7 +293,9 @@ async function run(
 export const useInstance = {
   handles,
 
+  create_with,
   create,
+  is_created,
   destroy,
   destroy_all,
   init_res_from,

@@ -7,20 +7,20 @@ import fs from 'fs/promises'
 import { ipcMainHandle } from '.'
 import { registerRecvFor } from '../sync'
 
-export const ModuleConfigFilePath = 'config.module.json'
+export const GlobalConfigFilePath = 'config.json'
 
 export const global_config = ref<GlobalConfig>({})
 
 export async function loadGlobalConfig() {
-  if (existsSync(ModuleConfigFilePath)) {
+  if (existsSync(GlobalConfigFilePath)) {
     global_config.value = JSON.parse(
-      await fs.readFile(ModuleConfigFilePath, 'utf-8')
+      await fs.readFile(GlobalConfigFilePath, 'utf-8')
     ) as GlobalConfig
   }
 }
 
 export async function saveGlobalConfig() {
-  await fs.writeFile(ModuleConfigFilePath, JSON.stringify(global_config.value, null, 2))
+  await fs.writeFile(GlobalConfigFilePath, JSON.stringify(global_config.value, null, 2))
 }
 
 export function setupGlobalConfigAutoSaving() {

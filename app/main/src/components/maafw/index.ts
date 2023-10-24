@@ -83,7 +83,7 @@ export class MaaFrameworkModule extends Module {
           this.loaded = true
           return true
         } else {
-          this.proc.stdin?.write('\n')
+          this.proc?.stdin?.write('\n')
           return false
         }
       }

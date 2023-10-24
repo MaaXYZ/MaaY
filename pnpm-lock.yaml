@@ -108,6 +108,9 @@ importers:
       '@maa/type':
         specifier: workspace:*
         version: link:../../pkgs/type
+      '@types/uuid':
+        specifier: ^9.0.6
+        version: 9.0.6
       '@vicons/fluent':
         specifier: ^0.12.0
         version: 0.12.0
@@ -141,6 +144,9 @@ importers:
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
+      uuid:
+        specifier: ^9.0.1
+        version: 9.0.1
       vfonts:
         specifier: ^0.0.3
         version: 0.0.3
@@ -1499,6 +1505,10 @@ packages:
     resolution: {integrity: sha512-u5nwLcaENciDwebPwwZb2AM1LvdlgFQfqCKxWQxcgNsQhUQciGuUnJ2LjGFAkInY2APXQzIypiUSa9zB6Epddg==}
     dependencies:
       source-map: 0.6.1
+    dev: true
+
+  /@types/uuid@9.0.6:
+    resolution: {integrity: sha512-BT2Krtx4xaO6iwzwMFUYvWBWkV2pr37zD68Vmp1CDV196MzczBRxuEpD6Pr395HAgebC/co7hOphs53r8V7jew==}
     dev: true
 
   /@types/yauzl@2.10.1:
@@ -4795,6 +4805,11 @@ packages:
 
   /util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
+    dev: true
+
+  /uuid@9.0.1:
+    resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
+    hasBin: true
     dev: true
 
   /validate-npm-package-license@3.0.4:

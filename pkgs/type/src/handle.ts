@@ -1,4 +1,4 @@
-import type { ControllerHandle, DeviceInfo, ResourceHandle } from '@maa/loader'
+import type { ControllerHandle, DeviceInfo, InstanceHandle, ResourceHandle } from '@maa/loader'
 
 export type ControllerHandleInfo = {
   cb: string
@@ -7,14 +7,12 @@ export type ControllerHandleInfo = {
   cfg: DeviceInfo
 }
 
-export type InstanceHandleInfo = {
-  cb: string
+export type InstanceSaveInfo = {
+  runtime?: unknown
 
+  id: string
   name: string
   resource: {
-    handle: ResourceHandle
-    cb: string
-
     name: string
     resource?: string
 
@@ -24,5 +22,18 @@ export type InstanceHandleInfo = {
       config: Record<string, unknown>
     }[]
   }
-  controller?: ControllerHandle
+}
+
+export type InstanceHandleInfo = InstanceSaveInfo & {
+  runtime: {
+    controller?: ControllerHandle
+    resource: {
+      handle: ResourceHandle
+      cb: string
+    }
+    instance: {
+      handle: InstanceHandle
+      cb: string
+    }
+  }
 }
