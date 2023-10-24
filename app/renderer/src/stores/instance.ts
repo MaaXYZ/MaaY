@@ -1,10 +1,10 @@
 import { Controller, Instance, type InstanceHandle, Resource } from '@maa/loader'
 import type { InstanceHandleInfo, RespackControlOption, RespackInfo } from '@maa/type'
 
+import { registerSend } from '@/sync'
+
 import { useController } from './controller'
 import { useRespack } from './respack'
-
-import { registerSend } from '@/sync'
 
 export const enum RunningState {
   Idle,

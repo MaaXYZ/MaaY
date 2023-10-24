@@ -5,7 +5,7 @@ import { existsSync } from 'fs'
 import fs from 'fs/promises'
 
 import { ipcMainHandle } from '.'
-import { registerRecv, registerRecvFor } from '../sync'
+import { registerRecvFor } from '../sync'
 
 export const ModuleConfigFilePath = 'config.module.json'
 

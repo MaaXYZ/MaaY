@@ -1,4 +1,4 @@
-import { type ClientSideInterface, type ServerSideInterface } from '@maa/ipc'
+import type { ClientSideInterface, ServerSideInterface } from '@maa/ipc'
 import { type IpcMainInvokeEvent, ipcMain } from 'electron'
 
 import { mainWindow } from '../window'

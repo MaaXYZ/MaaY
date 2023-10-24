@@ -3,9 +3,9 @@ import type { InstanceHandle } from '@maa/loader'
 import { Delete24Regular } from '@vicons/fluent'
 import { NButton, NIcon } from 'naive-ui'
 
-import { curInstanceHandle } from './state'
-
 import { useInstance } from '@/stores/instance'
+
+import { curInstanceHandle } from './state'
 
 const { handles, destroy } = useInstance
 

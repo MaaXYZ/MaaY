@@ -1,7 +1,6 @@
 import { BrowserWindow, app } from 'electron'
 import * as path from 'path'
 
-import { setupIpc } from '../ipc'
 import useDebug from '../misc/debug'
 
 export let mainWindow: BrowserWindow
@@ -27,6 +26,4 @@ export function createWindow() {
       useDebug(mainWindow)
     })
   }
-
-  setupIpc()
 }

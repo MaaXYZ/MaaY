@@ -2,9 +2,9 @@
 import { NButton, NCard, NSelect } from 'naive-ui'
 import { type Component, ref } from 'vue'
 
-import MaaFramework from './MaaFramework'
-
 import { useModule } from '@/stores/module'
+
+import MaaFramework from './MaaFramework'
 
 const { info } = useModule
 

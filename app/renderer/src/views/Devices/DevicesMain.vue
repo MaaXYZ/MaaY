@@ -2,12 +2,12 @@
 import { NButton, NCard } from 'naive-ui'
 import { computed, ref } from 'vue'
 
-import { curDevice } from './state'
-
 import GridFormLayout from '@/layouts/GridFormLayout.vue'
 import { useController } from '@/stores/controller'
 import { useDevice } from '@/stores/device'
 import { translateCallback } from '@/utils/translog'
+
+import { curDevice } from './state'
 
 const statusMessage = ref<string[]>([])
 

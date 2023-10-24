@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import type { ControllerHandle, DeviceInfo } from '@maa/loader'
+import type { DeviceInfo } from '@maa/loader'
 import { Star24Filled, Star24Regular } from '@vicons/fluent'
 import { NButton, NCard, NIcon } from 'naive-ui'
-import { computed, ref } from 'vue'
-
-import { connectDevices, curDevice, foundDevices } from './state'
+import { ref } from 'vue'
 
 import { useConfig } from '@/stores/config'
 import { useController } from '@/stores/controller'
 import { useDevice } from '@/stores/device'
+
+import { connectDevices, curDevice, foundDevices } from './state'
 
 const { refresh } = useDevice
 const { handles } = useController
@@ -16,11 +16,10 @@ const { global } = useConfig
 
 const loading = ref(false)
 
-function doRefresh() {
+async function doRefresh() {
   loading.value = true
-  refresh().then(() => {
-    loading.value = false
-  })
+  await refresh()
+  loading.value = false
 }
 
 function isSaved(serial: string) {
@@ -53,8 +52,8 @@ function dropSaved(serial: string) {
             :type="curDevice === item ? 'primary' : 'default'"
           >
             <div class="flex gap-2">
-              <span> {{ useController.handles.value[item]!.name }} </span>
-              <span> {{ useController.handles.value[item]!.cfg.adb_serial }} </span>
+              <span> {{ handles[item]!.name }} </span>
+              <span> {{ handles[item]!.cfg.adb_serial }} </span>
             </div>
           </NButton>
           <NButton

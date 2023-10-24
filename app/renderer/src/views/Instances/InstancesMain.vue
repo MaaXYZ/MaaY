@@ -3,8 +3,6 @@ import { Delete24Regular } from '@vicons/fluent'
 import { NButton, NCard, NIcon, NInput, NSelect } from 'naive-ui'
 import { computed, reactive, ref } from 'vue'
 
-import { curInstanceHandle, curInstanceInfo, curInstanceRespackInfo } from './state'
-
 import SelectController from '@/components/Controller/SelectController.vue'
 import EditGlobalRespackConfig from '@/components/Respack/EditGlobalRespackConfig.vue'
 import EditRespackConfig from '@/components/Respack/EditRespackConfig.vue'
@@ -12,6 +10,8 @@ import SelectRespackResource from '@/components/Respack/SelectRespackResource.vu
 import GridFormLayout from '@/layouts/GridFormLayout.vue'
 import { RunningState, useInstance } from '@/stores/instance'
 import { translateCallback } from '@/utils/translog'
+
+import { curInstanceHandle, curInstanceInfo, curInstanceRespackInfo } from './state'
 
 const running = ref<RunningState>(RunningState.Idle)
 const statusMessage = ref<string[]>([])

@@ -2,6 +2,7 @@ import { BrowserWindow, app } from 'electron'
 import * as sms from 'source-map-support'
 
 import { loadModuleConfig, modules, setupModuleConfigAutoSaving } from './components'
+import { setupIpc } from './ipc'
 import { loadGlobalConfig, setupGlobalConfigAutoSaving } from './ipc/config'
 import { createWindow } from './window'
 
@@ -18,18 +19,14 @@ async function main() {
   setupModuleConfigAutoSaving()
 }
 
-app.on('ready', createWindow)
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
+app.on('ready', async () => {
+  createWindow()
+  await main()
+  setupIpc()
 })
 
-app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow()
-  }
+app.on('window-all-closed', () => {
+  app.quit()
 })
 
 main()

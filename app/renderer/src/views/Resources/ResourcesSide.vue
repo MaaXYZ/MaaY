@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { NButton } from 'naive-ui'
 
-import { curResPack } from './state'
-
 import { useRespack } from '@/stores/respack'
+
+import { curResPack } from './state'
 
 const { info } = useRespack
 
