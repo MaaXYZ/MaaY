@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { NButton, NCard, NCode, NInput, NSelect } from 'naive-ui'
-import { computed, provide, reactive, ref } from 'vue'
+import { Delete24Regular } from '@vicons/fluent'
+import { NButton, NCard, NIcon, NInput, NSelect } from 'naive-ui'
+import { computed, reactive, ref } from 'vue'
 
 import { curInstanceHandle, curInstanceInfo, curInstanceRespackInfo } from './state'
 
@@ -90,11 +91,27 @@ async function stop() {
         <NCard v-for="(entry, idx) of curInstanceInfo!.resource.entries" :key="idx">
           <GridFormLayout>
             <span> 入口 </span>
-            <NSelect
-              v-model:value="entry.entry"
-              :options="entryOption"
-              placeholder="选择一个启动入口"
-            ></NSelect>
+            <div class="flex gap-2">
+              <NSelect
+                v-model:value="entry.entry"
+                :options="entryOption"
+                placeholder="选择一个启动入口"
+              ></NSelect>
+              <NButton
+                @click="
+                  () => {
+                    curInstanceInfo!.resource.entries.splice(idx, 1)
+                  }
+                "
+                :disabled="curInstanceInfo!.resource.entries.length === 1"
+              >
+                <template #icon>
+                  <NIcon>
+                    <Delete24Regular></Delete24Regular>
+                  </NIcon>
+                </template>
+              </NButton>
+            </div>
             <EditRespackConfig
               :resctrl="curInstanceRespackInfo!.config.control"
               :entry="entry"
