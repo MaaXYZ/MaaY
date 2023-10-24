@@ -126,5 +126,7 @@ async function stop() {
       </div>
     </NCard>
   </div>
-  <div v-else></div>
+  <div v-else class="flex items-center justify-center">
+    <span>从资源页创建一个新实例</span>
+  </div>
 </template>

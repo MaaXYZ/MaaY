@@ -14,9 +14,11 @@ const ipc = {
     console.log('preload off: ', channel)
     ipcRenderer.off(channel, listener)
   },
-  invoke: (channel: string, ...args: any[]): Promise<any> => {
+  invoke: async (channel: string, ...args: any[]): Promise<any> => {
     console.log('preload invoke: ', channel, ...args)
-    return ipcRenderer.invoke(channel, ...args)
+    const ret = await ipcRenderer.invoke(channel, ...args)
+    console.log('preload invoke: ', channel, 'return: ', ret)
+    return ret
   }
 }
 
