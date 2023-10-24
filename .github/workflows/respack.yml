@@ -6,6 +6,7 @@ on:
       - '.github/workflows/respack.yml'
       - 'respack/**'
       - 'scripts/**'
+      - 'package.json'
 
 defaults:
   run:
