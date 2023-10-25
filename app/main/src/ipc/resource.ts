@@ -1,14 +1,26 @@
 import type { RespackInfo } from '@maa/type'
+import { existsSync } from 'fs'
 import fs from 'fs/promises'
 import path from 'path'
 
 import { ipcMainHandle } from '.'
 import { registerSend } from '../sync'
 
+const resourcePath = path.join(process.cwd(), 'assets')
+
+async function readJsonOr(path: string, data: any): Promise<any> {
+  if (existsSync(path)) {
+    return JSON.parse(await fs.readFile(path, 'utf-8'))
+  } else {
+    return data
+  }
+}
+
 async function refreshResource() {
+  await fs.mkdir(resourcePath, { recursive: true })
   const ri: Record<string, RespackInfo> = {}
-  for (const name of await fs.readdir('./assets')) {
-    const p = path.join(process.cwd(), 'assets', name)
+  for (const name of await fs.readdir(resourcePath)) {
+    const p = path.join(resourcePath, name)
     if (!(await fs.stat(p)).isDirectory()) {
       continue
     }
@@ -17,6 +29,9 @@ async function refreshResource() {
         name,
         path: p,
         config: {
+          repo: await readJsonOr(path.join(p, 'repo.json'), {
+            resource: {}
+          }),
           control: JSON.parse(await fs.readFile(path.join(p, 'control.json'), 'utf-8')),
           resource: JSON.parse(await fs.readFile(path.join(p, 'resource.json'), 'utf-8'))
         }
@@ -37,6 +52,11 @@ export function setupResource() {
   })
 
   ipcMainHandle('main.resource.join_path', (_, res, p) => {
-    return path.join(process.cwd(), 'assets', res, p)
+    const info = resource_info.value[res]!
+    if (p.startsWith('@')) {
+      return path.join(resourcePath, res, 'repo', info.config.repo.resource[p.substring(1)]!)
+    } else {
+      return path.join(resourcePath, res, p)
+    }
   })
 }

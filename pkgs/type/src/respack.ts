@@ -42,6 +42,10 @@ export type RespackControlOption = {
     }
 )
 
+export type RespackRepo = {
+  resource: Record<string, string>
+}
+
 export type RespackControl = {
   option: {
     [key: string]: RespackControlOption
@@ -88,6 +92,7 @@ export interface RespackInfo {
   name: string
   path: string
   config: {
+    repo: RespackRepo
     control: RespackControl
     custom?: RespackCustom
     resource: RespackResource

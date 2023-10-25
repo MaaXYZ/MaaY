@@ -65,35 +65,13 @@ jobs:
           cp -r maa-cache/bin ./out/`ls out`/maa
           cp init/*.json ./out/`ls out`/
 
-      - name: Package app without respack
+      - name: Package app
         run: |
           tar cjvf pkg/`ls out`.tar.gz -C ./out ./`ls out`
-
-      - name: Download artifact
-        id: download-artifact
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          workflow: respack.yml
-          workflow_conclusion: success
-          path: assets-cache
 
       - uses: actions/upload-artifact@v3
         if: always()
         with:
           # name: maa-y-${{ matrix.os }}-${{ matrix.arch }}
           name: maa-y-${{ matrix.os }}
-          path: 'pkg'
-
-      - name: Package app with all respack
-        run: |
-          rm pkg/`ls out`.tar.gz
-          tar xjvf assets-cache/maa-y-assets/assets.tar.gz
-          cp -r assets ./out/`ls out`/
-          tar cjvf pkg/`ls out`-full.tar.gz -C ./out ./`ls out`
-
-      - uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          # name: maa-y-${{ matrix.os }}-${{ matrix.arch }}
-          name: maa-y-${{ matrix.os }}-full
           path: 'pkg'
