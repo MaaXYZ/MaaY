@@ -12,6 +12,7 @@ export type ServerSideInterface = {
   'main.module.set_config': (name: string, cfg: unknown) => boolean
 
   'main.resource.refresh': () => void
+  'main.resource.import': (repo: string) => void
   'main.resource.join_path': (res: string, path: string) => string
 
   'main.reload.fetch_controllers': () => Record<ControllerHandle, ControllerHandleInfo>

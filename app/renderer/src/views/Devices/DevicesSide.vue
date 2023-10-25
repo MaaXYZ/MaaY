@@ -41,7 +41,7 @@ function dropSaved(serial: string) {
 <template>
   <div class="flex flex-col gap-2">
     <div class="flex justify-center">
-      <NButton @click="doRefresh" :disabled="loading">刷新</NButton>
+      <NButton @click="doRefresh" :loading="loading"> 刷新 </NButton>
     </div>
     <NCard title="已连接" :theme-overrides="{ color: 'transparent' }">
       <div class="flex flex-col gap-2">
@@ -50,8 +50,9 @@ function dropSaved(serial: string) {
             @click="curDevice = item"
             secondary
             :type="curDevice === item ? 'primary' : 'default'"
+            size="large"
           >
-            <div class="flex gap-2">
+            <div class="flex flex-col gap-0.5 items-center">
               <span> {{ handles[item]!.name }} </span>
               <span> {{ handles[item]!.cfg.adb_serial }} </span>
             </div>
@@ -94,8 +95,9 @@ function dropSaved(serial: string) {
             @click="curDevice = idx"
             secondary
             :type="curDevice === idx ? 'primary' : 'default'"
+            size="large"
           >
-            <div class="flex gap-2">
+            <div class="flex flex-col gap-0.5 items-center">
               <span> {{ item.name }} </span>
               <span> {{ item.adb_serial }} </span>
             </div>

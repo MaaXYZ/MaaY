@@ -152,7 +152,7 @@ function requestCreate(id: string) {
           <NButton
             @click="run"
             v-if="running !== RunningState.Running"
-            :disabled="running === RunningState.Loading"
+            :loading="running === RunningState.Loading"
           >
             启动
           </NButton>

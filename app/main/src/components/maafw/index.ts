@@ -56,7 +56,7 @@ export class MaaFrameworkModule extends Module {
           return false
         }
       case 'external': {
-        this.proc = spawn(this.cfg.path, ['-mi', `-p=${this.cfg.port}`], {
+        this.proc = spawn(this.cfg.path, ['-mi', `-h=${this.cfg.host}`, `-p=${this.cfg.port}`], {
           stdio: ['pipe', 'pipe', 'inherit'],
           windowsHide: true
         })
