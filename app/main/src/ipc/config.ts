@@ -5,6 +5,7 @@ import { existsSync } from 'fs'
 import fs from 'fs/promises'
 
 import { ipcMainHandle } from '.'
+import { useThrottle } from '../misc/throttle'
 import { registerRecvFor } from '../sync'
 
 export const GlobalConfigFilePath = 'config.json'
@@ -24,16 +25,10 @@ export async function saveGlobalConfig() {
 }
 
 export function setupGlobalConfigAutoSaving() {
-  watch(
-    global_config,
-    () => {
-      saveGlobalConfig()
-    },
-    {
-      deep: true,
-      immediate: true
-    }
-  )
+  watch(global_config, useThrottle(saveGlobalConfig), {
+    deep: true,
+    immediate: true
+  })
 }
 
 export function setupGlobalConfig() {

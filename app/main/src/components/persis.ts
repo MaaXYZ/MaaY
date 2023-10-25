@@ -3,6 +3,7 @@ import { existsSync } from 'fs'
 import fs from 'fs/promises'
 
 import { modules } from '.'
+import { useThrottle } from '../misc/throttle'
 
 export const ModuleConfigFilePath = 'config.module.json'
 
@@ -38,14 +39,8 @@ export async function saveModuleConfig() {
 }
 
 export function setupModuleConfigAutoSaving() {
-  watch(
-    modules,
-    () => {
-      saveModuleConfig()
-    },
-    {
-      deep: true,
-      immediate: true
-    }
-  )
+  watch(modules, useThrottle(saveModuleConfig), {
+    deep: true,
+    immediate: true
+  })
 }
