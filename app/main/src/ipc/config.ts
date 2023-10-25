@@ -39,6 +39,6 @@ export function setupGlobalConfigAutoSaving() {
 export function setupGlobalConfig() {
   registerRecvFor('global_config', global_config)
   ipcMainHandle('main.config.fetch_global', () => {
-    return JSON.stringify(global_config.value)
+    return JSON.parse(JSON.stringify(global_config.value))
   })
 }

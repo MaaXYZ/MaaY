@@ -26,7 +26,7 @@ const { global } = useConfig
 const handles = registerSend('instances', {}, false)
 
 window.ipcRenderer.invoke('main.reload.fetch_instances').then(obj => {
-  handles.value = JSON.parse(obj)
+  handles.value = obj
 })
 
 function takeInfo(x: InstanceHandleInfo) {

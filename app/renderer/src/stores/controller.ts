@@ -10,7 +10,7 @@ import { registerSend } from '@/sync'
 const handles = registerSend('controllers', {}, false)
 
 window.ipcRenderer.invoke('main.reload.fetch_controllers').then(obj => {
-  handles.value = JSON.parse(obj)
+  handles.value = obj
 })
 
 async function connect(cfg: DeviceInfo, cb: (msg: string, detail: string) => void) {

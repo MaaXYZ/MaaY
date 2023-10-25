@@ -1,3 +1,6 @@
+import { ControllerHandle, InstanceHandle } from '@maa/loader'
+import { ControllerHandleInfo, GlobalConfig, InstanceHandleInfo } from '@maa/type'
+
 import { SyncVarInterfaceList_R2M, SyncVarPullInterfaceList_M2R } from './sync'
 
 export type ServerSideInterface = {
@@ -11,10 +14,10 @@ export type ServerSideInterface = {
   'main.resource.refresh': () => void
   'main.resource.join_path': (res: string, path: string) => string
 
-  'main.reload.fetch_controllers': () => string
-  'main.reload.fetch_instances': () => string
+  'main.reload.fetch_controllers': () => Record<ControllerHandle, ControllerHandleInfo>
+  'main.reload.fetch_instances': () => Record<InstanceHandle, InstanceHandleInfo>
 
-  'main.config.fetch_global': () => string
+  'main.config.fetch_global': () => GlobalConfig
 
   'main.loader.stream': (cmd: string, args: any[]) => Promise<any>
 } & SyncVarInterfaceList_R2M &
