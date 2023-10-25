@@ -87,7 +87,7 @@ function dropSaved(serial: string) {
         </div>
       </div>
     </NCard>
-    <NCard title="新设备" :theme-overrides="{ color: 'transparent' }">
+    <NCard title="未连接" :theme-overrides="{ color: 'transparent' }">
       <div class="flex flex-col gap-2">
         <div class="flex gap-2" v-for="(item, idx) of foundDevices" :key="idx">
           <NButton

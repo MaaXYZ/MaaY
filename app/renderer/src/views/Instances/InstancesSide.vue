@@ -6,16 +6,16 @@ import { NButton, NCard, NIcon } from 'naive-ui'
 import { useConfig } from '@/stores/config'
 import { useInstance } from '@/stores/instance'
 
-import { curInstanceHandle, notCreatedInstances } from './state'
+import { curInstanceHandle, curInstanceSaveInfo, notCreatedInstances } from './state'
 
 const { global } = useConfig
 const { handles, destroy, create_with } = useInstance
 
-function requestDestroy(h: InstanceHandle) {
+async function requestDestroy(h: InstanceHandle) {
   if (curInstanceHandle.value === h) {
-    curInstanceHandle.value = null
+    curInstanceHandle.value = curInstanceSaveInfo.value!.id
   }
-  destroy(h)
+  await destroy(h)
 }
 
 function requestDestroySave(id: string) {

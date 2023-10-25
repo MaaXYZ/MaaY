@@ -46,7 +46,7 @@ async function watchMain(server) {
           ctx.onEnd(() => {
             console.log('main rebuilt')
             if (electronProcess) {
-              electronProcess.kill()
+              electronProcess.kill('SIGINT')
             }
 
             electronProcess = spawn(electron, ['.', '--inspect'], {
@@ -57,6 +57,14 @@ async function watchMain(server) {
         }
       }
     ]
+  })
+  process.on('SIGINT', () => {
+    if (electronProcess) {
+      electronProcess.kill('SIGINT')
+      electronProcess.on('exit', () => {
+        process.exit(0)
+      })
+    }
   })
   await ctx.watch()
 }
