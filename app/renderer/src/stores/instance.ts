@@ -3,7 +3,8 @@ import type {
   InstanceHandleInfo,
   InstanceSaveInfo,
   RespackControlOption,
-  RespackInfo
+  RespackInfo,
+  RespackResource
 } from '@maa/type'
 import { configProviderProps } from 'naive-ui'
 import { v4 } from 'uuid'
@@ -98,20 +99,24 @@ async function destroy_all() {
   }
 }
 
-async function resolveResourcePaths(ii: InstanceHandleInfo, pack: RespackInfo) {
+async function resolve_resource_paths(name: string, target: string, pack: RespackResource) {
   let resPaths: string[] = []
-  let res = pack.config.resource.resource[ii.resource.resource!]!
+  let res = pack.resource[target]!
   resPaths.push(res.path)
   while (res.extends) {
-    res = pack.config.resource.resource[res.extends]!
+    res = pack.resource[res.extends]!
     resPaths.push(res.path)
   }
   resPaths = await Promise.all(
     resPaths.reverse().map(p => {
-      return window.ipcRenderer.invoke('main.resource.join_path', ii.resource.name, p)
+      return window.ipcRenderer.invoke('main.resource.join_path', name, p)
     })
   )
   return resPaths
+}
+
+async function resolveResourcePathsForInstance(ii: InstanceHandleInfo, pack: RespackInfo) {
+  return resolve_resource_paths(ii.resource.name, ii.resource.resource!, pack.config.resource)
 }
 
 async function applyDefaultCtrlConfig(
@@ -246,7 +251,7 @@ async function run(
     return false
   }
 
-  const resPaths = await resolveResourcePaths(ii, pack)
+  const resPaths = await resolveResourcePathsForInstance(ii, pack)
 
   const hres = await init_res_from(handle)
   for (const p of resPaths) {
@@ -300,5 +305,6 @@ export const useInstance = {
   destroy_all,
   init_res_from,
   init_from,
-  run
+  run,
+  resolve_resource_paths
 }

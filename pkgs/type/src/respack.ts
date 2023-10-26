@@ -63,15 +63,15 @@ export type RespackControl = {
 
 export type RespackCustom = {}
 
+export type RespackResourceTarget = {
+  name: string
+  description?: string
+  extends?: string
+  path: string
+}
+
 export type RespackResource = {
-  resource: {
-    [key: string]: {
-      name: string
-      description?: string
-      extends?: string
-      path: string
-    }
-  }
+  resource: Record<string, RespackResourceTarget>
   app: {
     start?: string
     stop?: string
