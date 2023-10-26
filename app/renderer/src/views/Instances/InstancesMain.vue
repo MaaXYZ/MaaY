@@ -85,10 +85,16 @@ function requestCreate(id: string) {
         <span> 名称 </span>
         <NInput :value="curInstanceSaveInfo.resource.name" readonly></NInput>
         <span> 资源包 </span>
-        <SelectRespackResource
-          v-model:value="curInstanceSaveInfo.resource.resource"
-          :pack="curInstanceRespackInfo?.name"
-        ></SelectRespackResource>
+        <template v-if="curInstanceRespackInfo">
+          <SelectRespackResource
+            v-model:value="curInstanceSaveInfo.resource.resource"
+            :pack="curInstanceRespackInfo.name"
+          >
+          </SelectRespackResource>
+        </template>
+        <template v-else>
+          <span> 资源加载失败 </span>
+        </template>
       </GridFormLayout>
     </NCard>
     <NCard title="设备" v-if="isInstance(curInstanceHandle)">
@@ -99,12 +105,12 @@ function requestCreate(id: string) {
         <NInput :value="curInstanceInfo!.runtime.controller" readonly placeholder=""></NInput>
       </GridFormLayout>
     </NCard>
-    <NCard title="配置">
+    <NCard title="配置" v-if="curInstanceRespackInfo">
       <div class="flex flex-col gap-2">
         <NCard>
           <GridFormLayout>
             <EditGlobalRespackConfig
-              :resctrl="curInstanceRespackInfo!.config.control"
+              :resctrl="curInstanceRespackInfo.config.control"
               :entry="curInstanceSaveInfo.resource"
             ></EditGlobalRespackConfig>
           </GridFormLayout>
@@ -134,7 +140,7 @@ function requestCreate(id: string) {
               </NButton>
             </div>
             <EditRespackConfig
-              :resctrl="curInstanceRespackInfo!.config.control"
+              :resctrl="curInstanceRespackInfo.config.control"
               :entry="entry"
             ></EditRespackConfig>
           </GridFormLayout>
@@ -146,7 +152,7 @@ function requestCreate(id: string) {
         </div>
       </div>
     </NCard>
-    <NCard title="执行" v-if="isInstance(curInstanceHandle)">
+    <NCard title="执行" v-if="isInstance(curInstanceHandle) && curInstanceRespackInfo">
       <div class="flex flex-col gap-2">
         <div class="flex gap-2">
           <NButton
@@ -172,6 +178,6 @@ function requestCreate(id: string) {
     </NCard>
   </div>
   <div v-else class="flex items-center justify-center">
-    <span>从资源页创建一个新实例</span>
+    <span> 从资源页创建一个新实例 </span>
   </div>
 </template>

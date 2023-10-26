@@ -46,11 +46,11 @@ function processControllerCallback(msg: string, detail: string) {
     <NCard title="信息">
       <GridFormLayout>
         <span> 名称 </span>
-        <span>{{ info.name }}</span>
+        <span> {{ info.name }} </span>
         <span> ADB路径 </span>
-        <span>{{ info.adb_path }}</span>
+        <span> {{ info.adb_path }} </span>
         <span> 目标地址 </span>
-        <span>{{ info.adb_serial }}</span>
+        <span> {{ info.adb_serial }} </span>
       </GridFormLayout>
     </NCard>
     <NCard title="连接">
@@ -68,6 +68,6 @@ function processControllerCallback(msg: string, detail: string) {
     </NCard>
   </div>
   <div v-else class="flex items-center justify-center">
-    <span>选择一个设备</span>
+    <span> 选择一个设备 </span>
   </div>
 </template>

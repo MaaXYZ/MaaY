@@ -95,8 +95,21 @@ export function setupResource() {
   refreshResource().then(v => {
     resource_info.value = v
   })
+
   ipcMainHandle('main.resource.refresh', async () => {
     resource_info.value = await refreshResource()
+  })
+
+  ipcMainHandle('main.resource.delete', async (_, name) => {
+    if (!/^[a-zA-Z0-9_]+$/.test(name)) {
+      // for save
+      return false
+    }
+    if (!existsSync(path.join(resourcePath, name))) {
+      return false
+    }
+    await fs.rm(path.join(resourcePath, name), { recursive: true })
+    return true
   })
 
   ipcMainHandle('main.resource.import_repo', async (_, name, url) => {

@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { NButton, NCard, NInput, NModal } from 'naive-ui'
+import type { RespackInfo } from '@maa/type'
+import { Delete24Regular } from '@vicons/fluent'
+import { NButton, NCard, NIcon } from 'naive-ui'
 import { ref } from 'vue'
 
 import ImportResource from '@/components/Respack/ImportResource.vue'
@@ -18,23 +20,45 @@ async function refresh() {
 }
 
 const importEl = ref<InstanceType<typeof ImportResource> | null>(null)
+
+const deleteLoading = ref(false)
+
+async function requestDelete(pack: RespackInfo) {
+  deleteLoading.value = true
+  if (await window.ipcRenderer.invoke('main.resource.delete', pack.name)) {
+    await refresh()
+  }
+  deleteLoading.value = false
+}
 </script>
 
 <template>
   <ImportResource ref="importEl"></ImportResource>
   <div class="flex flex-col gap-2">
     <div class="flex gap-2 justify-center">
-      <NButton @click="refresh" :loading="refreshLoading">刷新</NButton>
-      <NButton @click="importEl?.open()">导入</NButton>
+      <NButton @click="refresh" :loading="refreshLoading"> 刷新 </NButton>
+      <NButton @click="importEl?.open()"> 导入 </NButton>
     </div>
-    <NButton
-      v-for="(item, key) in info"
-      :key="key"
-      @click="curResPack = key"
-      secondary
-      :type="curResPack === key ? 'primary' : 'default'"
-    >
-      {{ item.name }}
-    </NButton>
+    <NCard :theme-overrides="{ color: 'transparent' }">
+      <div class="flex flex-col gap-2">
+        <div v-for="(item, key) in info" :key="key" class="flex gap-2">
+          <NButton
+            class="flex-1"
+            @click="curResPack = key"
+            secondary
+            :type="curResPack === key ? 'primary' : 'default'"
+          >
+            {{ item.name }}
+          </NButton>
+          <NButton @click="requestDelete(item)">
+            <template #icon>
+              <NIcon>
+                <Delete24Regular></Delete24Regular>
+              </NIcon>
+            </template>
+          </NButton>
+        </div>
+      </div>
+    </NCard>
   </div>
 </template>

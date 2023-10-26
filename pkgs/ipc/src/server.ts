@@ -12,6 +12,7 @@ export type ServerSideInterface = {
   'main.module.set_config': (name: string, cfg: unknown) => boolean
 
   'main.resource.refresh': () => void
+  'main.resource.delete': (name: string) => boolean
   'main.resource.import_repo': (name: string, repo: string) => boolean
   'main.resource.import_dir': (name: string, dir: string) => boolean
   'main.resource.join_path': (res: string, path: string) => string
