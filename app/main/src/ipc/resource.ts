@@ -9,15 +9,37 @@ import { registerSend } from '../sync'
 
 const resourcePath = path.join(process.cwd(), 'assets')
 
-async function loadNormalResource(name: string, p: string): Promise<RespackInfo | null> {
+type ResourceResolveInfo = { path: string; type: 'direct' | 'redirect' }
+
+async function resolveResource(name: string): Promise<ResourceResolveInfo> {
+  let res = path.join(resourcePath, name)
+  if ((await fs.stat(res)).isDirectory()) {
+    return {
+      path: res,
+      type: 'direct'
+    }
+  } else {
+    return {
+      path: await fs.readFile(res, 'utf-8'),
+      type: 'redirect'
+    }
+  }
+}
+
+async function loadNormalResource(
+  name: string,
+  p: ResourceResolveInfo
+): Promise<RespackInfo | null> {
   try {
     return {
       name,
-      path: p,
+      path: p.path,
+      type: 'direct',
+      link: p.type,
       config: {
         repo: { resource: {} },
-        control: JSON.parse(await fs.readFile(path.join(p, 'control.json'), 'utf-8')),
-        resource: JSON.parse(await fs.readFile(path.join(p, 'resource.json'), 'utf-8'))
+        control: JSON.parse(await fs.readFile(path.join(p.path, 'control.json'), 'utf-8')),
+        resource: JSON.parse(await fs.readFile(path.join(p.path, 'resource.json'), 'utf-8'))
       }
     }
   } catch (_) {
@@ -25,12 +47,14 @@ async function loadNormalResource(name: string, p: string): Promise<RespackInfo 
   }
 }
 
-async function loadRepoResource(name: string, p: string): Promise<RespackInfo | null> {
-  const _maay = path.join(p, '.maay')
+async function loadRepoResource(name: string, p: ResourceResolveInfo): Promise<RespackInfo | null> {
+  const _maay = path.join(p.path, '.maay')
   try {
     return {
       name,
-      path: p,
+      path: p.path,
+      type: 'repo',
+      link: p.type,
       config: {
         repo: JSON.parse(await fs.readFile(path.join(_maay, 'repo.json'), 'utf-8')),
         control: JSON.parse(await fs.readFile(path.join(_maay, 'control.json'), 'utf-8')),
@@ -46,17 +70,17 @@ async function refreshResource() {
   await fs.mkdir(resourcePath, { recursive: true })
   const ri: Record<string, RespackInfo> = {}
   for (const name of await fs.readdir(resourcePath)) {
-    const p = path.join(resourcePath, name)
-    if (!(await fs.stat(p)).isDirectory()) {
+    const rp = await resolveResource(name)
+    if (!(await fs.stat(rp.path)).isDirectory()) {
       continue
     }
-    if (existsSync(path.join(p, '.maay'))) {
-      const r = await loadRepoResource(name, p)
+    if (existsSync(path.join(rp.path, '.maay'))) {
+      const r = await loadRepoResource(name, rp)
       if (r) {
         ri[name] = r
       }
     } else {
-      const r = await loadNormalResource(name, p)
+      const r = await loadNormalResource(name, rp)
       if (r) {
         ri[name] = r
       }
@@ -75,22 +99,54 @@ export function setupResource() {
     resource_info.value = await refreshResource()
   })
 
-  ipcMainHandle('main.resource.import', async (_, url) => {
-    const name = /\/([^/]+)$/.exec(url)![1]!
-    const proc = spawn('git', ['clone', url, path.join(resourcePath, name)], {
+  ipcMainHandle('main.resource.import_repo', async (_, name, url) => {
+    if (!/^[a-zA-Z0-9_]+$/.test(name)) {
+      // for save
+      return false
+    }
+    if (existsSync(path.join(resourcePath, name))) {
+      return false
+    }
+    const repoPath = path.join(resourcePath, name)
+    const proc = spawn('git', ['clone', url, repoPath], {
       stdio: 'inherit'
     })
-    return new Promise<void>(resolve => {
-      proc.on('exit', resolve)
+    return new Promise<boolean>(resolve => {
+      proc.on('exit', async () => {
+        if (proc.exitCode === 0 && existsSync(path.join(repoPath, '.maay'))) {
+          resolve(true)
+        } else {
+          if (existsSync(repoPath)) {
+            await fs.rm(repoPath, { recursive: true })
+          }
+          resolve(false)
+        }
+      })
     })
   })
 
-  ipcMainHandle('main.resource.join_path', (_, res, p) => {
-    const info = resource_info.value[res]!
+  ipcMainHandle('main.resource.import_dir', async (_, name, dir) => {
+    if (!/^[a-zA-Z0-9_]+$/.test(name)) {
+      // for save
+      return false
+    }
+    if (existsSync(path.join(resourcePath, name))) {
+      return false
+    }
+    if (!existsSync(dir)) {
+      return false
+    }
+    await fs.writeFile(path.join(resourcePath, name), dir)
+    return true
+  })
+
+  ipcMainHandle('main.resource.join_path', async (_, name, p) => {
+    const info = resource_info.value[name]!
+    const rp = await resolveResource(name)
     if (p.startsWith('@')) {
-      return path.join(resourcePath, res, info.config.repo.resource[p.substring(1)]!)
+      return path.join(rp.path, info.config.repo.resource[p.substring(1)]!)
     } else {
-      return path.join(resourcePath, res, p)
+      return path.join(rp.path, p)
     }
   })
 }

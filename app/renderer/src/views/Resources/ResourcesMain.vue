@@ -41,6 +41,11 @@ async function requestCreateInst() {
           <span>{{ rinfo.name }}</span>
           <span> 路径 </span>
           <span>{{ rinfo.path }}</span>
+          <span> 类型 </span>
+          <span
+            >{{ rinfo.link === 'redirect' ? '外部' : '内部' }}
+            {{ rinfo.type === 'repo' ? '仓库' : '目录' }}</span
+          >
         </GridFormLayout>
       </NCard>
       <NCard title="资源信息">

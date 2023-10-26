@@ -91,6 +91,8 @@ export type RespackResource = {
 export interface RespackInfo {
   name: string
   path: string
+  type: 'direct' | 'repo'
+  link: 'direct' | 'redirect'
   config: {
     repo: RespackRepo
     control: RespackControl
