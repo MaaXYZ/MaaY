@@ -87,7 +87,7 @@ function requestCreate(id: string) {
         <span> 资源包 </span>
         <template v-if="curInstanceRespackInfo">
           <SelectRespackResource
-            v-model:value="curInstanceSaveInfo.resource.resource"
+            v-model:value="curInstanceSaveInfo.resource.target"
             :pack="curInstanceRespackInfo.name"
           >
           </SelectRespackResource>

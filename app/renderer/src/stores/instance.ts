@@ -116,7 +116,7 @@ async function resolve_resource_paths(name: string, target: string, pack: Respac
 }
 
 async function resolveResourcePathsForInstance(ii: InstanceHandleInfo, pack: RespackInfo) {
-  return resolve_resource_paths(ii.resource.name, ii.resource.resource!, pack.config.resource)
+  return resolve_resource_paths(ii.resource.name, ii.resource.target!, pack.config.resource)
 }
 
 async function applyDefaultCtrlConfig(
@@ -246,7 +246,7 @@ async function run(
     return false
   }
 
-  if (!ii.resource.resource || ii.resource.entries.length === 0 || !ii.runtime.controller) {
+  if (!ii.resource.target || ii.resource.entries.length === 0 || !ii.runtime.controller) {
     output.state = RunningState.Idle
     return false
   }

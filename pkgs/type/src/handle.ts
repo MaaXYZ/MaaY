@@ -14,7 +14,7 @@ export type InstanceSaveInfo = {
   name: string
   resource: {
     name: string
-    resource?: string
+    target?: string
 
     config: Record<string, unknown>
     entries: {
