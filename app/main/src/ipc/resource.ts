@@ -112,6 +112,23 @@ export function setupResource() {
     return true
   })
 
+  ipcMainHandle('main.resource.rename', async (_, from, to) => {
+    if (!/^[a-zA-Z0-9_]+$/.test(from)) {
+      return false
+    }
+    if (!/^[a-zA-Z0-9_]+$/.test(to)) {
+      return false
+    }
+    if (!existsSync(path.join(resourcePath, from))) {
+      return false
+    }
+    if (existsSync(path.join(resourcePath, to))) {
+      return false
+    }
+    await fs.rename(path.join(resourcePath, from), path.join(resourcePath, to))
+    return true
+  })
+
   ipcMainHandle('main.resource.import_repo', async (_, name, url) => {
     if (!/^[a-zA-Z0-9_]+$/.test(name)) {
       // for save

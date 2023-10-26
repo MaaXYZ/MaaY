@@ -66,7 +66,7 @@ defineExpose({
 
 <template>
   <NModal v-model:show="showImport">
-    <NCard style="width: 80vw">
+    <NCard style="width: 80vw" title="导入资源">
       <div class="flex flex-col gap-2">
         <NRadioGroup v-model:value="importType">
           <div class="flex gap-2">

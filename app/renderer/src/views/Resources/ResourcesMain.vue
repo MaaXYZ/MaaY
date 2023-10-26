@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { NButton, NCard } from 'naive-ui'
-import { computed } from 'vue'
+import { Edit24Regular } from '@vicons/fluent'
+import { NButton, NCard, NIcon, NInput, NModal } from 'naive-ui'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import ViewResource from '@/components/Respack/ViewResource.vue'
@@ -31,15 +32,62 @@ async function requestCreateInst() {
     router.push('/instances')
   }
 }
+
+const showRename = ref(false)
+const renameTo = ref('')
+const renameLoading = ref(false)
+
+function openRename() {
+  if (rinfo.value) {
+    showRename.value = true
+    renameTo.value = rinfo.value.name
+  }
+}
+
+async function requestRename() {
+  if (!rinfo.value) {
+    return
+  }
+  renameLoading.value = true
+  if (await window.ipcRenderer.invoke('main.resource.rename', rinfo.value.name, renameTo.value)) {
+    await window.ipcRenderer.invoke('main.resource.refresh')
+    showRename.value = false
+    renameLoading.value = false
+  }
+}
 </script>
 
 <template>
+  <NModal v-model:show="showRename">
+    <NCard style="width: 80vw" title="重命名资源">
+      <div class="flex gap-2">
+        <NInput v-model:value="renameTo" placeholder="<重命名>"></NInput>
+        <NButton
+          @click="requestRename"
+          :disabled="!renameTo || rinfo?.name === renameTo"
+          :loading="renameLoading"
+        >
+          确认
+        </NButton>
+      </div>
+    </NCard>
+  </NModal>
+
   <div class="flex flex-col gap-2">
     <template v-if="rinfo">
       <NCard title="包信息">
         <GridFormLayout>
           <span> 名称 </span>
-          <span> {{ rinfo.name }} </span>
+          <div class="flex gap-2 items-center">
+            <span> {{ rinfo.name }} </span>
+            <NButton text @click="openRename">
+              <template #icon>
+                <NIcon>
+                  <Edit24Regular></Edit24Regular>
+                </NIcon>
+              </template>
+            </NButton>
+          </div>
           <span> 路径 </span>
           <span> {{ rinfo.path }} </span>
           <span> 类型 </span>
