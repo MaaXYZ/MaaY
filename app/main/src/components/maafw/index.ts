@@ -37,7 +37,7 @@ export class MaaFrameworkModule extends Module {
 
   get cfg(): Required<MaaFrameworkChannelConfig> {
     return {
-      host: '0.0.0.0',
+      host: 'localhost',
       port: 8080,
       path: 'MaaRpcCli',
       ...(this.config ?? {})
