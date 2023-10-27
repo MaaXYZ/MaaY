@@ -9,7 +9,7 @@ function useDebug(window: BrowserWindow): void {
   //     console.error(`An error occurred while install extension: ${err.message}`)
   //   )
 
-  window.webContents.openDevTools({ mode: 'detach' })
+  // window.webContents.openDevTools({ mode: 'detach' })
 
   // Bypass CORS
   const bypass_urls = [

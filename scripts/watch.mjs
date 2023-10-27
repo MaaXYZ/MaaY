@@ -49,7 +49,7 @@ async function watchMain(server) {
               electronProcess.kill('SIGINT')
             }
 
-            electronProcess = spawn(electron, ['.', '--inspect'], {
+            electronProcess = spawn(electron, ['.', '--inspect', '--remote-debugging-port=9223'], {
               stdio: 'inherit',
               env
             })
