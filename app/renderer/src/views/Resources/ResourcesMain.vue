@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { Edit24Regular } from '@vicons/fluent'
 import { NButton, NCard, NIcon, NInput, NModal } from 'naive-ui'
+import { v4 } from 'uuid'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import ViewResource from '@/components/Respack/ViewResource.vue'
 import GridFormLayout from '@/layouts/GridFormLayout.vue'
+import { useConfig } from '@/stores/config'
 import { useInstance } from '@/stores/instance'
 import { useRespack } from '@/stores/respack'
 import { maaactive } from '@/utils/maa'
@@ -15,6 +17,7 @@ import { curResPack } from './state'
 
 const { info } = useRespack
 const { create } = useInstance
+const { global } = useConfig
 
 const router = useRouter()
 
@@ -30,6 +33,24 @@ async function requestCreateInst() {
   if (rinfo.value) {
     const inst = await create(rinfo.value.name, rinfo.value.name)
     curInstanceHandle.value = inst.handle
+    router.push('/instances')
+  }
+}
+
+async function requestCreatePreset() {
+  if (rinfo.value) {
+    const id = v4()
+    global.value.preset_instance = global.value.preset_instance ?? {}
+    global.value.preset_instance[id] = {
+      id,
+      name: rinfo.value.name,
+      resource: {
+        name: rinfo.value.name,
+        config: {},
+        entries: [{ entry: 0, config: {} }]
+      }
+    }
+    curInstanceHandle.value = id
     router.push('/instances')
   }
 }
@@ -104,6 +125,7 @@ async function requestRename() {
       <NCard title="使用">
         <div class="flex gap-2">
           <NButton @click="requestCreateInst" :disabled="!maaactive"> 创建实例 </NButton>
+          <NButton @click="requestCreatePreset"> 创建预设 </NButton>
         </div>
       </NCard>
     </template>
