@@ -13,7 +13,8 @@ export function createWindow() {
     minHeight: 600,
     webPreferences: {
       preload: path.join(__dirname, '../preload/main.js')
-    }
+    },
+    icon: path.join(__dirname, '../renderer/assets/icon.png')
   })
 
   if (app.isPackaged) {

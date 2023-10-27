@@ -1,5 +1,6 @@
 module.exports = {
   packagerConfig: {
+    icon: 'res/icon',
     ignore: filepath => {
       if (filepath.length === 0) {
         return false

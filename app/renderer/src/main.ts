@@ -3,6 +3,8 @@ import { createApp } from 'vue'
 import App from '@/App.vue'
 
 import './assets/base.css'
+// for main use
+import Logo from './assets/icon.png'
 import router from './router'
 import { register_init_logic } from './stores/init'
 
