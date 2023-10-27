@@ -9,9 +9,11 @@ import { registerSend } from '@/sync'
 
 const handles = registerSend('controllers', {}, false)
 
-window.ipcRenderer.invoke('main.reload.fetch_controllers').then(obj => {
-  handles.value = obj
-})
+function reload_init() {
+  window.ipcRenderer.invoke('main.reload.fetch_controllers').then(obj => {
+    handles.value = obj
+  })
+}
 
 async function connect(cfg: DeviceInfo, cb: (msg: string, detail: string) => void) {
   const { name, adb_path: path, adb_serial: serial, adb_type: type, adb_config: config } = cfg
@@ -75,6 +77,7 @@ function init_from(handle: ControllerHandle) {
 export const useController = {
   handles,
 
+  reload_init,
   connect,
   disconnect,
   disconnect_all,

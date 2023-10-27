@@ -4,7 +4,7 @@ import App from '@/App.vue'
 
 import './assets/base.css'
 import router from './router'
-import { setupMaa } from './utils/maa'
+import { register_init_logic } from './stores/init'
 
 const meta = document.createElement('meta')
 meta.name = 'naive-ui-style'
@@ -14,6 +14,6 @@ window.ipcRenderer.on('renderer.core.log', (_, str) => {
   console.log(str)
 })
 
-setupMaa()
+register_init_logic()
 
 createApp(App).use(router).mount('#app')

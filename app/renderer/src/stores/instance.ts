@@ -6,7 +6,6 @@ import type {
   RespackInfo,
   RespackResource
 } from '@maa/type'
-import { configProviderProps } from 'naive-ui'
 import { v4 } from 'uuid'
 import { watch } from 'vue'
 
@@ -26,9 +25,11 @@ const { global } = useConfig
 
 const handles = registerSend('instances', {}, false)
 
-window.ipcRenderer.invoke('main.reload.fetch_instances').then(obj => {
-  handles.value = obj
-})
+function reload_init() {
+  window.ipcRenderer.invoke('main.reload.fetch_instances').then(obj => {
+    handles.value = obj
+  })
+}
 
 function takeInfo(x: InstanceHandleInfo) {
   const y: InstanceSaveInfo = { ...x }
@@ -298,6 +299,7 @@ async function run(
 export const useInstance = {
   handles,
 
+  reload_init,
   create_with,
   create,
   is_created,

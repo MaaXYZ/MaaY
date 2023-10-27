@@ -1,8 +1,8 @@
-import { BrowserWindow, app } from 'electron'
+import { BrowserWindow, app, ipcMain } from 'electron'
 import * as sms from 'source-map-support'
 
 import { loadModuleConfig, modules, setupModuleConfigAutoSaving } from './components'
-import { setupIpc } from './ipc'
+import { ipcMainSend, setupIpc } from './ipc'
 import { loadGlobalConfig, setupGlobalConfigAutoSaving } from './ipc/config'
 import { createWindow } from './window'
 
