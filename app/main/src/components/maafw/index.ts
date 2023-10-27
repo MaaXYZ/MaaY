@@ -118,6 +118,8 @@ export class MaaFrameworkModule extends Module {
       await this.disconnect()
     }
     if (await init(`${this.cfg.host}:${this.cfg.port}`)) {
+      await set_logging(path.join(process.cwd(), 'debug'))
+      console.log('inited')
       const stream = FlatToStream(context, (id, msg, detail) => {
         ipcMainSend('renderer.loader.callback', id, msg, detail)
       })
@@ -131,9 +133,9 @@ export class MaaFrameworkModule extends Module {
         }
       })
       this.active = true
-      await set_logging(path.join(process.cwd(), 'debug'))
       return true
     } else {
+      console.log('init failed')
       return false
     }
   }

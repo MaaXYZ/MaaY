@@ -8,6 +8,7 @@ import ViewResource from '@/components/Respack/ViewResource.vue'
 import GridFormLayout from '@/layouts/GridFormLayout.vue'
 import { useInstance } from '@/stores/instance'
 import { useRespack } from '@/stores/respack'
+import { maaactive } from '@/utils/maa'
 
 import { curInstanceHandle } from '../Instances/state'
 import { curResPack } from './state'
@@ -102,7 +103,7 @@ async function requestRename() {
       </NCard>
       <NCard title="使用">
         <div class="flex gap-2">
-          <NButton @click="requestCreateInst"> 创建实例 </NButton>
+          <NButton @click="requestCreateInst" :disabled="!maaactive"> 创建实例 </NButton>
         </div>
       </NCard>
     </template>

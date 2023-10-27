@@ -10,6 +10,7 @@ import SelectRespackResource from '@/components/Respack/SelectRespackResource.vu
 import GridFormLayout from '@/layouts/GridFormLayout.vue'
 import { useConfig } from '@/stores/config'
 import { RunningState, useInstance } from '@/stores/instance'
+import { maaactive } from '@/utils/maa'
 import { translateCallback } from '@/utils/translog'
 
 import {
@@ -172,7 +173,7 @@ function requestCreate(id: string) {
     <NCard v-else-if="curInstanceHandle">
       <div class="flex flex-col gap-2">
         <div class="flex gap-2">
-          <NButton @click="requestCreate(curInstanceHandle)"> 创建 </NButton>
+          <NButton @click="requestCreate(curInstanceHandle)" :disabled="!maaactive"> 创建 </NButton>
         </div>
       </div>
     </NCard>

@@ -6,6 +6,7 @@ import { ref } from 'vue'
 
 import GridFormLayout from '@/layouts/GridFormLayout.vue'
 import { useInstance } from '@/stores/instance'
+import { maaactive } from '@/utils/maa'
 import { translateCallback } from '@/utils/translog'
 
 const props = defineProps<{
@@ -64,7 +65,9 @@ async function testLoad() {
           </div>
           <span> 测试 </span>
           <div>
-            <NButton @click="testLoad" :loading="testLoading"> 加载 </NButton>
+            <NButton @click="testLoad" :loading="testLoading" :disabled="!maaactive">
+              加载
+            </NButton>
           </div>
           <span> 日志 </span>
           <div class="flex flex-col gap-0.5">

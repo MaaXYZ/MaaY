@@ -36,7 +36,7 @@ async function watchMain(server) {
     entryPoints: ['app/main/src/main.ts'],
     platform: 'node',
     bundle: true,
-    external: ['electron', 'electron'],
+    external: ['electron'],
     outdir: './dist/main',
     sourcemap: true,
     plugins: [
@@ -64,6 +64,8 @@ async function watchMain(server) {
       electronProcess.on('exit', () => {
         process.exit(0)
       })
+    } else {
+      process.exit(0)
     }
   })
   await ctx.watch()

@@ -7,6 +7,7 @@ import { ref } from 'vue'
 import { useConfig } from '@/stores/config'
 import { useController } from '@/stores/controller'
 import { useDevice } from '@/stores/device'
+import { maaactive } from '@/utils/maa'
 
 import { connectDevices, curDevice, foundDevices } from './state'
 
@@ -41,7 +42,7 @@ function dropSaved(serial: string) {
 <template>
   <div class="flex flex-col gap-2">
     <div class="flex justify-center">
-      <NButton @click="doRefresh" :loading="loading"> 刷新 </NButton>
+      <NButton @click="doRefresh" :loading="loading" :disabled="!maaactive"> 刷新 </NButton>
     </div>
     <NCard title="已连接" :theme-overrides="{ color: 'transparent' }">
       <div class="flex flex-col gap-2">

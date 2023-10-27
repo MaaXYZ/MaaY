@@ -5,6 +5,7 @@ import { computed, ref } from 'vue'
 import GridFormLayout from '@/layouts/GridFormLayout.vue'
 import { useController } from '@/stores/controller'
 import { useDevice } from '@/stores/device'
+import { maaactive } from '@/utils/maa'
 import { translateCallback } from '@/utils/translog'
 
 import { curDevice } from './state'
@@ -59,7 +60,9 @@ function processControllerCallback(msg: string, detail: string) {
           <NButton v-if="find(info.adb_serial)" disabled>
             已连接 - {{ find(info.adb_serial) }}
           </NButton>
-          <NButton v-else @click="requestConnect" :loading="loading"> 连接 </NButton>
+          <NButton v-else @click="requestConnect" :loading="loading" :disabled="!maaactive">
+            连接
+          </NButton>
         </div>
         <div class="flex flex-col gap-2">
           <span v-for="(msg, idx) in statusMessage" :key="idx"> {{ msg }} </span>
