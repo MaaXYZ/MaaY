@@ -9,7 +9,7 @@ on:
       - '.vscode'
       - 'assets'
       - 'respack'
-      - 'release.yml'
+      - '.github/workflows/release.yml'
   workflow_dispatch:
 
 defaults:
