@@ -40,7 +40,7 @@ jobs:
           mkdir -p release;
           cd unpkg
           for NAME in ${PKGS}; do
-            zip -r ../release/${NAME}.zip ${NAME}
+            zip -r -y ../release/${NAME}.zip ${NAME}
           done
           cd ..
 
