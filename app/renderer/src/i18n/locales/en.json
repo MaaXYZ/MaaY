@@ -1,0 +1,18 @@
+{
+  "device": {
+    "info": {
+      "title": "information",
+      "name": "name",
+      "adb_path": "ADB path",
+      "target_address": "target address"
+    },
+    "connect": {
+      "connect": "connect",
+      "connected": "connected",
+      "title": "connect"
+    },
+    "hint": {
+      "choose": "choose a device"
+    }
+  }
+}

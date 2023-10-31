@@ -11,7 +11,7 @@ export abstract class Module implements ModuleInfo {
   update_version?: string
 
   abstract load(): Promise<boolean>
-  abstract unload(): Promise<void>
+  abstract unload(): Promise<boolean>
   abstract update(channel: string): Promise<boolean>
   abstract upgrade(): Promise<boolean>
 }

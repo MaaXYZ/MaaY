@@ -1,3 +1,4 @@
+import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import path from 'path'
@@ -25,8 +26,15 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': path.join(__dirname, 'src')
+      '@': path.join(__dirname, 'src'),
+      'vue-i18n': 'vue-i18n/dist/vue-i18n.runtime.esm-bundler.js'
     }
   },
-  plugins: [vue(), vueJsx()]
+  plugins: [
+    vue(),
+    vueJsx(),
+    VueI18nPlugin({
+      include: [path.resolve(__dirname, './src/i18n/locales/*.json')]
+    })
+  ]
 })

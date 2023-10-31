@@ -6,7 +6,11 @@ import { NConfigProvider, NMessageProvider, NNotificationProvider } from 'naive-
 import Command from '@/Command.vue'
 import MainSideLayout from '@/layouts/MainSideLayout.vue'
 
+import { setupLocale } from './i18n'
+
 hljs.registerLanguage('json', json)
+
+setupLocale()
 </script>
 
 <template>

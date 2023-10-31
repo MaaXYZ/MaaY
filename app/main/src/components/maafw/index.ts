@@ -97,6 +97,7 @@ export class MaaFrameworkModule extends Module {
       this.proc = null
     }
     this.loaded = false
+    return true
   }
 
   async update(channel: string): Promise<boolean> {

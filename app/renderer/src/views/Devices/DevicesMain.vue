@@ -2,6 +2,7 @@
 import { NButton, NCard } from 'naive-ui'
 import { computed, ref } from 'vue'
 
+import { useTr } from '@/i18n'
 import GridFormLayout from '@/layouts/GridFormLayout.vue'
 import { useController } from '@/stores/controller'
 import { useDevice } from '@/stores/device'
@@ -9,6 +10,8 @@ import { maaactive } from '@/utils/maa'
 import { translateCallback } from '@/utils/translog'
 
 import { curDevice } from './state'
+
+const { t } = useTr()
 
 const statusMessage = ref<string[]>([])
 
@@ -44,24 +47,24 @@ function processControllerCallback(msg: string, detail: string) {
 
 <template>
   <div v-if="info" class="flex flex-col gap-2">
-    <NCard title="信息">
+    <NCard :title="t('device.info.title')">
       <GridFormLayout>
-        <span> 名称 </span>
+        <span> {{ t('device.info.name') }} </span>
         <span> {{ info.name }} </span>
-        <span> ADB路径 </span>
+        <span> {{ t('device.info.adb_path') }} </span>
         <span> {{ info.adb_path }} </span>
-        <span> 目标地址 </span>
+        <span> {{ t('device.info.target_address') }} </span>
         <span> {{ info.adb_serial }} </span>
       </GridFormLayout>
     </NCard>
-    <NCard title="连接">
+    <NCard :title="t('device.connect.title')">
       <div class="flex flex-col gap-2">
         <div class="flex gap-2">
           <NButton v-if="find(info.adb_serial)" disabled>
-            已连接 - {{ find(info.adb_serial) }}
+            {{ t('device.connect.connected') }} - {{ find(info.adb_serial) }}
           </NButton>
           <NButton v-else @click="requestConnect" :loading="loading" :disabled="!maaactive">
-            连接
+            {{ t('device.connect.connect') }}
           </NButton>
         </div>
         <div class="flex flex-col gap-2">
@@ -71,6 +74,6 @@ function processControllerCallback(msg: string, detail: string) {
     </NCard>
   </div>
   <div v-else class="flex items-center justify-center">
-    <span> 选择一个设备 </span>
+    <span> {{ t('device.hint.choose') }} </span>
   </div>
 </template>

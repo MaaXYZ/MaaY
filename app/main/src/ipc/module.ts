@@ -27,7 +27,7 @@ export function setupModules() {
     return (await moduleIndexs[name as keyof typeof moduleIndexs]?.load()) ?? false
   })
   ipcMainHandle('main.module.unload', async (_, name) => {
-    await moduleIndexs[name as keyof typeof moduleIndexs]?.unload()
+    return await moduleIndexs[name as keyof typeof moduleIndexs]?.unload()
   })
   ipcMainHandle('main.module.set_channel', async (_, name, ch) => {
     if (name in moduleIndexs) {

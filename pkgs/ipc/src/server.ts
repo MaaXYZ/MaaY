@@ -8,7 +8,7 @@ export type ServerSideInterface = {
   '$main.core.log': (c: keyof TLogger, ...d: any[]) => void
 
   'main.module.load': (name: string) => boolean
-  'main.module.unload': (name: string) => void
+  'main.module.unload': (name: string) => boolean
   'main.module.set_channel': (name: string, ch: string) => boolean
   'main.module.set_config': (name: string, cfg: unknown) => boolean
 

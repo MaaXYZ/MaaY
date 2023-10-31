@@ -5,19 +5,23 @@ import { type Component, ref } from 'vue'
 import { useModule } from '@/stores/module'
 
 import MaaFramework from './MaaFramework'
+import MaaY from './MaaY'
 
 const { info } = useModule
 
-const moduleInfoProvider: Record<string, { Config: Component; beforeUnload: () => Promise<void> }> =
-  {
-    MaaFramework
-  }
+const moduleInfoProvider: Record<
+  string,
+  { Config: Component; beforeUnload?: () => Promise<void> }
+> = {
+  MaaY,
+  MaaFramework
+}
 
 const loading = ref(false)
 
 async function unload(m: string) {
   loading.value = true
-  await moduleInfoProvider[m]!.beforeUnload()
+  await moduleInfoProvider[m]!.beforeUnload?.()
   await window.ipcRenderer.invoke('main.module.unload', m)
   loading.value = false
 }

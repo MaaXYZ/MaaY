@@ -1,0 +1,18 @@
+{
+  "device": {
+    "info": {
+      "title": "信息",
+      "name": "名称",
+      "adb_path": "ADB路径",
+      "target_address": "目标地址"
+    },
+    "connect": {
+      "connect": "连接",
+      "connected": "已连接",
+      "title": "连接"
+    },
+    "hint": {
+      "choose": "选择一个设备"
+    }
+  }
+}
