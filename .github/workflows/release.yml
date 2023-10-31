@@ -28,17 +28,19 @@ jobs:
         run: |
           TARS=`ls assets`;
           mkdir -p unpkg;
+          cd unpkg
           for NAME in ${TARS}; do
-            mkdir -p unpkg/${NAME};
-            tar jxvf assets/${NAME}/`ls assets/${NAME}` -C unpkg/${NAME};
+            tar jxvf ../assets/${NAME}/`ls assets/${NAME}`;
           done
+          cd ..
 
       - name: Compress zips
         run: |
           PKGS=`ls unpkg`;
           mkdir -p release;
+          cd unpkg
           for NAME in ${PKGS}; do
-            zip release/${NAME}.zip unpkg/${NAME}
+            zip ../release/${NAME}.zip ${NAME}
           done
 
       - uses: softprops/action-gh-release@v1
