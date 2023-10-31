@@ -9,6 +9,7 @@ on:
       - '.vscode'
       - 'assets'
       - 'respack'
+      - 'release.yml'
   workflow_dispatch:
 
 defaults:
