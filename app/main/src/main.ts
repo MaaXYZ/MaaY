@@ -1,6 +1,8 @@
 import { BrowserWindow, app, ipcMain } from 'electron'
+import path from 'path'
 import * as sms from 'source-map-support'
 
+import pkg from '../../../package.json'
 import { loadModuleConfig, modules, setupModuleConfigAutoSaving } from './components'
 import { ipcMainSend, setupIpc } from './ipc'
 import { loadGlobalConfig, setupGlobalConfigAutoSaving } from './ipc/config'
@@ -20,6 +22,12 @@ async function main() {
   setupGlobalConfigAutoSaving()
   setupModuleConfigAutoSaving()
 }
+
+app.setAboutPanelOptions({
+  applicationName: 'MaaY',
+  applicationVersion: pkg.version,
+  iconPath: path.join(__dirname, '../renderer/assets/icon.png')
+})
 
 app.on('ready', async () => {
   createWindow()
