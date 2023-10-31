@@ -21,17 +21,15 @@ jobs:
           workflow_conclusion: success
           path: assets
 
-      # - name: Decompress tars
-      #   run: |
-      #     TARS=`ls assets`;
-      #     mkdir -p release;
-      #     for i in ${TARS}; do
-      #       NAME=`echo ${i} | sed s/.tar.gz//`
-      #       mkdir -p release/${NAME};
-      #       tar jxvf assets/${i} -C release/${NAME}
-      #     done
+      - name: Decompress tars
+        run: |
+          TARS=`ls assets`;
+          mkdir -p release;
+          for NAME in ${TARS}; do
+            mkdir -p release/${NAME};
+            tar jxvf assets/${NAME}/`ls assets/${NAME}` -C release/${NAME}
+          done
 
       - name: Debug content
         run: |
-          find assets
           find release
