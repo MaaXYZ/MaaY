@@ -30,7 +30,7 @@ jobs:
           mkdir -p unpkg;
           cd unpkg
           for NAME in ${TARS}; do
-            tar jxvf ../assets/${NAME}/`ls assets/${NAME}`;
+            tar jxvf ../assets/${NAME}/`ls ../assets/${NAME}`;
           done
           cd ..
 
