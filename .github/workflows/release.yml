@@ -33,7 +33,6 @@ jobs:
             tar jxvf ../assets/${NAME}/`ls ../assets/${NAME}`;
           done
           cd ..
-          find unpkg
 
       - name: Compress zips
         run: |
@@ -41,10 +40,10 @@ jobs:
           mkdir -p release;
           cd unpkg
           for NAME in ${PKGS}; do
-            zip ../release/${NAME}.zip ${NAME}
+            zip -r ../release/${NAME}.zip ${NAME}
           done
-          find release
+          cd ..
 
-      # - uses: softprops/action-gh-release@v1
-      #   with:
-      #     files: release/*.zip
+      - uses: softprops/action-gh-release@v1
+        with:
+          files: release/*.zip
