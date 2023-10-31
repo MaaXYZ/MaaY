@@ -19,17 +19,10 @@ jobs:
         with:
           workflow: build.yml
           workflow_conclusion: success
-          path: zips
+          path: assets
 
       - name: Decompress tars
         run: |
-          ZIPS=`ls zips`
-          mkdir assets
-          cd assets
-          for i in ${ZIPS}; do
-            unzip ../zips/${i}
-          done
-
           TARS=`ls assets`;
           mkdir -p release;
           for i in ${TARS}; do
