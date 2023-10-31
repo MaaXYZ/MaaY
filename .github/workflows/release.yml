@@ -24,12 +24,20 @@ jobs:
       - name: Decompress tars
         run: |
           TARS=`ls assets`;
-          mkdir -p release;
+          mkdir -p unpkg;
           for NAME in ${TARS}; do
-            mkdir -p release/${NAME};
-            tar jxvf assets/${NAME}/`ls assets/${NAME}` -C release/${NAME}
+            mkdir -p unpkg/${NAME};
+            tar jxvf assets/${NAME}/`ls assets/${NAME}` -C unpkg/${NAME};
           done
 
-      - name: Debug content
+      - name: Compress zips
         run: |
-          find release
+          PKGS=`ls unpkg`;
+          mkdir -p release;
+          for NAME in ${PKGS}; do
+            zip release/${NAME}.zip unpkg/${NAME}
+          done
+
+      - uses: softprops/action-gh-release@v1
+        with:
+          files: release/*.zip

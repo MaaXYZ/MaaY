@@ -3,6 +3,7 @@
   "dependencies": {
     "@maa/ipc": "workspace:*",
     "@maa/loader": "workspace:*",
+    "@maa/logger": "workspace:*",
     "@maa/type": "workspace:*",
     "@vue-reactivity/watch": "^0.2.0",
     "@vue/reactivity": "^3.3.4",

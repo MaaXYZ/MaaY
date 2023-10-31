@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { version } from '@maa/loader'
-import { NInput, NInputNumber } from 'naive-ui'
+import { NInput, NInputNumber, NSwitch } from 'naive-ui'
 import { computed, ref, watch } from 'vue'
 
 import GridFormLayout from '@/layouts/GridFormLayout.vue'
@@ -24,12 +24,14 @@ const cc = computed(() => {
         host?: string
         port?: number
         path?: string
+        debug?: boolean
       }
     | undefined
   return {
     host: 'localhost',
     port: 8080,
     path: 'MaaRpcCli',
+    debug: false,
     ...(cc ?? {})
   }
 })
@@ -85,6 +87,20 @@ watch(
     >
       <template #prefix> {{ cc.host }}: </template>
     </NInputNumber>
+    <span> Maa debug </span>
+    <div>
+      <NSwitch
+        :value="cc.debug"
+        @update:value="
+          v =>
+            emits('update:config', {
+              ...cc,
+              debug: v
+            })
+        "
+        :disabled="disabled"
+      ></NSwitch>
+    </div>
     <span> Maa版本 </span>
     <span v-if="info?.loaded"> {{ maaver }} </span>
   </GridFormLayout>

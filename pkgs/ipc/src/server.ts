@@ -1,10 +1,11 @@
-import { ControllerHandle, InstanceHandle } from '@maa/loader'
-import { ControllerHandleInfo, GlobalConfig, InstanceHandleInfo } from '@maa/type'
+import type { ControllerHandle, InstanceHandle } from '@maa/loader'
+import type { TLogger } from '@maa/logger'
+import type { ControllerHandleInfo, GlobalConfig, InstanceHandleInfo } from '@maa/type'
 
-import { SyncVarInterfaceList_R2M, SyncVarPullInterfaceList_M2R } from './sync'
+import type { SyncVarInterfaceList_R2M, SyncVarPullInterfaceList_M2R } from './sync'
 
 export type ServerSideInterface = {
-  'main.core.log': (s: string) => void
+  '$main.core.log': (c: keyof TLogger, ...d: any[]) => void
 
   'main.module.load': (name: string) => boolean
   'main.module.unload': (name: string) => void

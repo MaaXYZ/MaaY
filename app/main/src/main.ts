@@ -4,11 +4,13 @@ import * as sms from 'source-map-support'
 import { loadModuleConfig, modules, setupModuleConfigAutoSaving } from './components'
 import { ipcMainSend, setupIpc } from './ipc'
 import { loadGlobalConfig, setupGlobalConfigAutoSaving } from './ipc/config'
+import { useLogger } from './misc/logger'
 import { createWindow } from './window'
 
 sms.install()
 
 async function main() {
+  await useLogger()
   await loadGlobalConfig()
   await loadModuleConfig()
   for (const m of modules) {

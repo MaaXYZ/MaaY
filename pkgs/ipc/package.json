@@ -3,6 +3,7 @@
   "main": "./src/index.ts",
   "devDependencies": {
     "@maa/loader": "workspace:*",
+    "@maa/logger": "workspace:*",
     "@maa/type": "workspace:*",
     "typescript": "^5.2.2"
   }

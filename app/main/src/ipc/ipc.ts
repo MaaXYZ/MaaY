@@ -1,4 +1,5 @@
 import type { ClientSideInterface, ServerSideInterface } from '@maa/ipc'
+import { logger } from '@maa/logger'
 import { type IpcMainInvokeEvent, ipcMain } from 'electron'
 
 import { mainWindow } from '../window'
@@ -12,18 +13,24 @@ export function ipcMainHandle<Key extends keyof ServerSideInterface>(
     ...args: Parameters<ServerSideInterface[Key]>
   ) => WithPromise<ReturnType<ServerSideInterface[Key]>>
 ): void {
-  console.log('main register: ', eventName)
+  logger.silly('register', eventName)
   ipcMain.removeHandler(eventName)
-  ipcMain.handle(eventName, async (event, ...args) => {
-    console.log('main handle: ', eventName, ...args)
-    const result = await listener(event, ...(args as Parameters<ServerSideInterface[Key]>))
-    console.log('main handle: ', eventName, 'return: ', result)
-    return result
-  })
+  if (eventName.startsWith('$')) {
+    ipcMain.handle(eventName, (event, ...args) => {
+      return listener(event, ...(args as Parameters<ServerSideInterface[Key]>))
+    })
+  } else {
+    ipcMain.handle(eventName, async (event, ...args) => {
+      logger.silly('handle', eventName, ...args)
+      const result = await listener(event, ...(args as Parameters<ServerSideInterface[Key]>))
+      logger.silly('handle', eventName, 'return', result)
+      return result
+    })
+  }
 }
 
 export function ipcMainRemove(eventName: keyof ServerSideInterface): void {
-  console.log('main remove: ', eventName)
+  logger.silly('remove', eventName)
   ipcMain.removeHandler(eventName)
 }
 
@@ -31,6 +38,6 @@ export function ipcMainSend<Key extends keyof ClientSideInterface>(
   eventName: Key,
   ...args: Parameters<ClientSideInterface[Key]>
 ): void {
-  console.log('main send: ', eventName, ...args)
+  logger.silly('send', eventName, ...args)
   mainWindow.webContents.send(eventName, ...args)
 }

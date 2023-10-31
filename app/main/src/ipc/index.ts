@@ -1,5 +1,5 @@
 import { setupGlobalConfig } from './config'
-import { setupCore } from './core'
+import { setupLogger } from './logger'
 import { setupModules } from './module'
 import { setupReload } from './reload'
 import { setupResource } from './resource'
@@ -7,7 +7,7 @@ import { setupResource } from './resource'
 export * from './ipc'
 
 export function setupIpc() {
-  setupCore()
+  setupLogger()
   setupModules()
   setupResource()
   setupReload()

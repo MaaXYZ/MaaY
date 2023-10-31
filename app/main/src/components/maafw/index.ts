@@ -1,4 +1,5 @@
 import { FlatToStream, context, deinit, init, set_debug_mode, set_logging } from '@maa/loader'
+import { logger } from '@maa/logger'
 import { ShallowRef, shallowRef } from '@vue/reactivity'
 import { ChildProcess, spawn } from 'child_process'
 import path from 'path'
@@ -10,10 +11,11 @@ function unpackedShallowRef<T>(t: T) {
   return shallowRef(t) as unknown as T
 }
 
-interface MaaFrameworkChannelConfig {
+interface MaaFrameworkConfig {
   host?: string
   port?: number
   path?: string
+  debug?: boolean
 }
 
 export class MaaFrameworkModule extends Module {
@@ -35,11 +37,12 @@ export class MaaFrameworkModule extends Module {
 
   active = false
 
-  get cfg(): Required<MaaFrameworkChannelConfig> {
+  get cfg(): Required<MaaFrameworkConfig> {
     return {
       host: 'localhost',
       port: 8080,
       path: 'MaaRpcCli',
+      debug: false,
       ...(this.config ?? {})
     }
   }
@@ -75,10 +78,6 @@ export class MaaFrameworkModule extends Module {
             console.log(row)
           })
         })
-        // setTimeout(() => {
-        //   console.log(this.proc, 'try auto stop maarpc')
-        //   this.proc?.kill('SIGINT')
-        // }, 10000)
         if (await this.connect()) {
           this.loaded = true
           return true
@@ -118,8 +117,10 @@ export class MaaFrameworkModule extends Module {
       await this.disconnect()
     }
     if (await init(`${this.cfg.host}:${this.cfg.port}`)) {
+      logger.info('maa inited')
       await set_logging(path.join(process.cwd(), 'debug'))
-      console.log('inited')
+      await set_debug_mode(this.cfg.debug)
+      logger.info('maa configured')
       const stream = FlatToStream(context, (id, msg, detail) => {
         ipcMainSend('renderer.loader.callback', id, msg, detail)
       })
@@ -127,15 +128,15 @@ export class MaaFrameworkModule extends Module {
         try {
           return await stream(cmd, args)
         } catch (err) {
-          console.log('Failed to call', cmd, ...args)
-          console.log(err)
+          logger.error('maa failed to call', cmd, ...args)
+          logger.error('with error', err)
           throw err
         }
       })
       this.active = true
       return true
     } else {
-      console.log('init failed')
+      logger.error('maa init failed')
       return false
     }
   }
