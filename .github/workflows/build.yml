@@ -9,6 +9,7 @@ on:
       - '.vscode'
       - 'assets'
       - 'respack'
+  workflow_dispatch:
 
 defaults:
   run:
@@ -73,5 +74,5 @@ jobs:
         if: always()
         with:
           # name: maa-y-${{ matrix.os }}-${{ matrix.arch }}
-          name: maa-y-${{ matrix.os }}
+          name: maa-y-${{ matrix.os == 'windows-latest' && 'win' || (matrix.os == 'ubuntu-latest' && 'linux' || 'macos') }}
           path: 'pkg'

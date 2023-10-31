@@ -1,0 +1,36 @@
+name: 'Release'
+
+on:
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Download artifact
+        id: download-artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          path: assets
+
+      - name: Decompress tars
+        run: |
+          TARS=`ls assets`;
+          mkdir -p release;
+          for i in ${TARS}; do
+            NAME=`echo ${i} | sed s/.tar.gz//`
+            mkdir -p release/${NAME};
+            tar jxvf assets/${i} -C release/${NAME}
+          done
+
+      - name: Debug content
+        run: |
+          find release
