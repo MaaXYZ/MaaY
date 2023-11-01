@@ -54,6 +54,11 @@ export type TLoggerEnv = {
      * plain log
      */
     mono: string
+
+    /**
+     * object log
+     */
+    objs: any[]
   }
 }
 

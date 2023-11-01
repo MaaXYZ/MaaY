@@ -1,5 +1,7 @@
 import { BrowserWindow } from 'electron'
 
+export const inVSCode = 'DEBUG_IN_VSCODE' in process.env
+
 // import installExtension from 'electron-devtools-installer'
 
 function useDebug(window: BrowserWindow): void {
@@ -9,7 +11,7 @@ function useDebug(window: BrowserWindow): void {
   //     console.error(`An error occurred while install extension: ${err.message}`)
   //   )
 
-  if ('MAAY_NO_DEVTOOL' in process.env) {
+  if (inVSCode) {
     console.log('disabled devtools')
   } else {
     window.webContents.openDevTools({ mode: 'detach' })

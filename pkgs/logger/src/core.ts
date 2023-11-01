@@ -1,8 +1,8 @@
-import { formatWithOptions } from 'util'
-import { format } from 'date-fns'
 import chalk from 'chalk'
+import { format } from 'date-fns'
+import { formatWithOptions } from 'util'
 
-import type { TLogger, TLogLevel, TLoggerEnv, TLoggerController } from './types'
+import type { TLogLevel, TLogger, TLoggerController, TLoggerEnv } from './types'
 
 let pathAlias = (p: string) => p
 
@@ -58,7 +58,8 @@ export function createLogger(name: string, output: (env: TLoggerEnv) => void) {
           },
           '',
           ...args
-        ).slice(1)
+        ).slice(1),
+        objs: args
       }
     }
     output(env)
@@ -74,7 +75,9 @@ export function createLogger(name: string, output: (env: TLoggerEnv) => void) {
   return [logger, ctrl] as const
 }
 
-export function createFormatter(output: (out: { pretty: string; mono: string }) => void) {
+export function createFormatter(
+  output: (out: { pretty: string; mono: string; cons: [prefix: string, objs: any[]] }) => void
+) {
   return (env: TLoggerEnv) => {
     const time = format(env.date, 'yyyy-MM-dd HH:mm:ss:SSS')
 
@@ -85,7 +88,20 @@ export function createFormatter(output: (out: { pretty: string; mono: string }) 
         `[${chalk.bold(env.name)} ${env.source.file} ${env.source.func}]`,
         env.content.pretty
       ].join('\t'),
-      mono: [time, env.level, `[${env.name} ${env.source.file} ${env.source.func}]`, env.content.mono].join('\t')
+      mono: [
+        time,
+        env.level,
+        `[${env.name} ${env.source.file} ${env.source.func}]`,
+        env.content.mono
+      ].join('\t'),
+      cons: [
+        [
+          time,
+          chalk.bold(env.level),
+          `[${chalk.bold(env.name)} ${env.source.file} ${env.source.func}]`
+        ].join('\t'),
+        env.content.objs
+      ]
     })
   }
 }

@@ -32,9 +32,9 @@ async function watchMain(server) {
     VITE_DEV_SERVER_HOST: address.address,
     VITE_DEV_SERVER_PORT: address.port
   })
-  if (process.argv.includes('--nodevtool')) {
+  if (process.argv.includes('--vscode')) {
     Object.assign(env, {
-      MAAY_NO_DEVTOOL: '1'
+      DEBUG_IN_VSCODE: '1'
     })
   }
   const ctx = await esbuild.context({
