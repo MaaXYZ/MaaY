@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import { version } from '@maa/loader'
-import { NInput, NInputNumber, NSelect, NSwitch } from 'naive-ui'
-import { computed, ref, watch } from 'vue'
+import { NSelect } from 'naive-ui'
+import { computed } from 'vue'
 
+import { useTr } from '@/i18n'
 import GridFormLayout from '@/layouts/GridFormLayout.vue'
 import { useModule } from '@/stores/module'
 
 defineProps<{
   disabled: boolean
 }>()
+
+const { t } = useTr()
 
 const emits = defineEmits<{
   'update:config': [unknown]
@@ -30,15 +32,21 @@ const cc = computed(() => {
   }
 })
 
-const localeOptions = ['zh_CN', 'en'].map(x => ({
-  label: x,
-  value: x
-}))
+const localeOptions = [
+  {
+    label: '简体中文',
+    value: 'zh_CN'
+  },
+  {
+    label: 'English',
+    value: 'en'
+  }
+]
 </script>
 
 <template>
   <GridFormLayout>
-    <span> 语言 </span>
+    <span> {{ t('setting.maay.locale') }} </span>
     <NSelect
       :options="localeOptions"
       :value="cc.locale"

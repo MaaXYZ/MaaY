@@ -2,6 +2,10 @@
 import { NButton, NCard, NInput, NModal, NRadio, NRadioGroup } from 'naive-ui'
 import { computed, ref } from 'vue'
 
+import { useTr } from '@/i18n'
+
+const { t } = useTr()
+
 const showImport = ref(false)
 const importLoading = ref(false)
 const importType = ref<'repo' | 'dir'>('repo')
@@ -25,7 +29,7 @@ const inferName = computed(() => {
   if (m) {
     return m[1]!
   } else {
-    return '<资源名称>'
+    return t('resource.import.placeholder.name')
   }
 })
 
@@ -66,12 +70,12 @@ defineExpose({
 
 <template>
   <NModal v-model:show="showImport">
-    <NCard style="width: 80vw" title="导入资源">
+    <NCard style="width: 80vw" :title="t('resource.import.title')">
       <div class="flex flex-col gap-2">
         <NRadioGroup v-model:value="importType">
           <div class="flex gap-2">
-            <NRadio value="repo"> 远程仓库 </NRadio>
-            <NRadio value="dir"> 本地目录 </NRadio>
+            <NRadio value="repo"> {{ t('resource.import.remote_repo') }} </NRadio>
+            <NRadio value="dir"> {{ t('resource.import.local_dir') }} </NRadio>
           </div>
         </NRadioGroup>
         <NInput v-model:value="importName" :placeholder="inferName"></NInput>
@@ -82,7 +86,7 @@ defineExpose({
           ></NInput>
           <div class="flex gap-2">
             <NButton :disabled="!importRepoUrl" @click="doImport" :loading="importLoading">
-              添加
+              {{ t('resource.import.add') }}
             </NButton>
           </div>
         </template>
@@ -90,7 +94,7 @@ defineExpose({
           <NInput v-model:value="importDir" placeholder="/path/to/repo"></NInput>
           <div class="flex gap-2">
             <NButton :disabled="!importDir" @click="doImport" :loading="importLoading">
-              添加
+              {{ t('resource.import.add') }}
             </NButton>
           </div>
         </template>

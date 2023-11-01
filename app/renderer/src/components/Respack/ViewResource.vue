@@ -4,10 +4,13 @@ import type { RespackResource, RespackResourceTarget } from '@maa/type'
 import { NButton, NCard, NModal } from 'naive-ui'
 import { ref } from 'vue'
 
+import { useTr } from '@/i18n'
 import GridFormLayout from '@/layouts/GridFormLayout.vue'
 import { useInstance } from '@/stores/instance'
 import { maaactive } from '@/utils/maa'
 import { translateCallback } from '@/utils/translog'
+
+const { t } = useTr()
 
 const props = defineProps<{
   name: string
@@ -39,9 +42,9 @@ async function testLoad() {
     await res.post_path(p).wait()
   }
   if (await res.loaded) {
-    testLoadMsg.value.push('加载成功')
+    testLoadMsg.value.push(t('resource.respack.test.success'))
   } else {
-    testLoadMsg.value.push('加载失败')
+    testLoadMsg.value.push(t('resource.respack.test.fail'))
   }
   await res.destroy()
   testLoading.value = false
@@ -53,23 +56,23 @@ async function testLoad() {
     <NCard style="width: 80vw" v-if="target" :title="target.name">
       <GridFormLayout :right="6">
         <template v-if="target.description">
-          <span> 详情 </span>
+          <span> {{ t('resource.info.desc') }} </span>
           <span> {{ target.description }} </span>
         </template>
-        <span> 路径 </span>
+        <span> {{ t('resource.info.path') }} </span>
         <span> {{ target.path }} </span>
         <template v-if="resolvedPaths">
-          <span> 完整依赖 </span>
+          <span> {{ t('resource.info.full_dep') }} </span>
           <div class="flex flex-col gap-2">
             <span v-for="(p, i) of resolvedPaths" :key="i"> {{ p }} </span>
           </div>
-          <span> 测试 </span>
+          <span> {{ t('resource.respack.test.test') }} </span>
           <div>
             <NButton @click="testLoad" :loading="testLoading" :disabled="!maaactive">
-              加载
+              {{ t('resource.respack.test.load') }}
             </NButton>
           </div>
-          <span> 日志 </span>
+          <span> {{ t('resource.respack.test.log') }} </span>
           <div class="flex flex-col gap-0.5">
             <span v-for="(msg, idx) of testLoadMsg" :key="idx"> {{ msg }} </span>
           </div>
@@ -79,23 +82,27 @@ async function testLoad() {
   </NModal>
 
   <GridFormLayout>
-    <span> 默认启动活动 </span>
-    <span> {{ pack.app.start ?? '未设置' }} </span>
-    <span> 默认关闭包 </span>
-    <span> {{ pack.app.stop ?? '未设置' }} </span>
-    <span> 方向 </span>
+    <span> {{ t('resource.info.def_start_activity') }} </span>
+    <span> {{ pack.app.start ?? t('global.unset') }} </span>
+    <span> {{ t('resource.info.def_stop_package') }} </span>
+    <span> {{ pack.app.stop ?? t('global.unset') }} </span>
+    <span> {{ t('resource.info.orientation') }} </span>
     <span>
-      {{ pack.app.orientation === 'portrait' ? '竖屏' : '横屏' }}
+      {{
+        pack.app.orientation === 'portrait'
+          ? t('resource.info.portrait')
+          : t('resource.info.landscape')
+      }}
     </span>
-    <span> 大小 </span>
+    <span> {{ t('resource.info.size') }} </span>
     <span>
       {{
         pack.app.size?.short !== undefined
-          ? `短边 ${pack.app.size?.short}`
-          : `长边 ${pack.app.size?.long ?? 1280}`
+          ? `${t('resource.info.short')} ${pack.app.size?.short}`
+          : `${t('resource.info.long')} ${pack.app.size?.long ?? 1280}`
       }}
     </span>
-    <span> 资源包 </span>
+    <span> {{ t('resource.info.respack') }} </span>
     <div class="flex gap-2 flex-wrap">
       <NButton v-for="(cfg, key) in pack.resource" :key="key" @click="showTestFor(key, cfg)">
         {{ cfg.name }}

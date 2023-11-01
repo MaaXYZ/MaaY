@@ -6,6 +6,7 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import ViewResource from '@/components/Respack/ViewResource.vue'
+import { useTr } from '@/i18n'
 import GridFormLayout from '@/layouts/GridFormLayout.vue'
 import { useConfig } from '@/stores/config'
 import { useInstance } from '@/stores/instance'
@@ -14,6 +15,8 @@ import { maaactive } from '@/utils/maa'
 
 import { curInstanceHandle } from '../Instances/state'
 import { curResPack } from './state'
+
+const { t } = useTr()
 
 const { info } = useRespack
 const { create } = useInstance
@@ -81,15 +84,15 @@ async function requestRename() {
 
 <template>
   <NModal v-model:show="showRename">
-    <NCard style="width: 80vw" title="重命名资源">
+    <NCard style="width: 80vw" :title="t('resource.rename.title')">
       <div class="flex gap-2">
-        <NInput v-model:value="renameTo" placeholder="<重命名>"></NInput>
+        <NInput v-model:value="renameTo" :placeholder="t('resource.rename.placeholder')"></NInput>
         <NButton
           @click="requestRename"
           :disabled="!renameTo || rinfo?.name === renameTo"
           :loading="renameLoading"
         >
-          确认
+          {{ t('global.confirm') }}
         </NButton>
       </div>
     </NCard>
@@ -97,9 +100,9 @@ async function requestRename() {
 
   <div class="flex flex-col gap-2">
     <template v-if="rinfo">
-      <NCard title="包信息">
+      <NCard :title="t('resource.info.title')">
         <GridFormLayout>
-          <span> 名称 </span>
+          <span> {{ t('resource.info.name') }} </span>
           <div class="flex gap-2 items-center">
             <span> {{ rinfo.name }} </span>
             <NButton text @click="openRename">
@@ -110,27 +113,31 @@ async function requestRename() {
               </template>
             </NButton>
           </div>
-          <span> 路径 </span>
+          <span> {{ t('resource.info.path') }} </span>
           <span> {{ rinfo.path }} </span>
-          <span> 类型 </span>
+          <span> {{ t('resource.info.type') }} </span>
           <span>
-            {{ rinfo.link === 'redirect' ? '外部' : '内部' }}
-            {{ rinfo.type === 'repo' ? '仓库' : '目录' }}
+            {{
+              rinfo.link === 'redirect' ? t('resource.info.external') : t('resource.info.internal')
+            }}
+            {{ rinfo.type === 'repo' ? t('resource.info.repo') : t('resource.info.dir') }}
           </span>
         </GridFormLayout>
       </NCard>
-      <NCard title="资源信息">
+      <NCard :title="t('resource.respack.title')">
         <ViewResource :name="rinfo.name" :pack="rinfo.config.resource"></ViewResource>
       </NCard>
-      <NCard title="使用">
+      <NCard :title="t('resource.use.title')">
         <div class="flex gap-2">
-          <NButton @click="requestCreateInst" :disabled="!maaactive"> 创建实例 </NButton>
-          <NButton @click="requestCreatePreset"> 创建预设 </NButton>
+          <NButton @click="requestCreateInst" :disabled="!maaactive">
+            {{ t('resource.use.new_inst') }}
+          </NButton>
+          <NButton @click="requestCreatePreset"> {{ t('resource.use.new_preset') }} </NButton>
         </div>
       </NCard>
     </template>
     <div v-else class="flex items-center justify-center">
-      <span> 选择一个资源 </span>
+      <span> {{ t('resource.hint.choose') }} </span>
     </div>
   </div>
 </template>

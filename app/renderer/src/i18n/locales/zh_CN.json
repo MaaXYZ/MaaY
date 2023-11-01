@@ -13,6 +13,89 @@
     },
     "hint": {
       "choose": "选择一个设备"
+    },
+    "side": {
+      "refresh": "刷新",
+      "connected": "已连接",
+      "disconnected": "未连接"
     }
+  },
+  "setting": {
+    "maay": {
+      "locale": "语言"
+    },
+    "maaframework": {
+      "debug": "Maa调试",
+      "version": "Maa版本",
+      "service_address": "服务地址",
+      "cli_path": "MaaRpcCli路径"
+    },
+    "general": {
+      "version": "版本",
+      "load": "加载",
+      "unload": "卸载"
+    }
+  },
+  "resource": {
+    "side": {
+      "refresh": "刷新",
+      "import": "导入"
+    },
+    "import": {
+      "placeholder": {
+        "name": "<资源名称>"
+      },
+      "title": "导入资源",
+      "remote_repo": "远程仓库",
+      "local_dir": "本地目录",
+      "add": "添加"
+    },
+    "rename": {
+      "title": "重命名资源",
+      "placeholder": "<名称>"
+    },
+    "info": {
+      "title": "资源信息",
+      "name": "名称",
+      "path": "路径",
+      "type": "类型",
+      "external": "外部",
+      "internal": "内部",
+      "repo": "仓库",
+      "dir": "目录",
+      "desc": "描述",
+      "full_dep": "完整依赖",
+      "def_start_activity": "默认启动活动",
+      "def_stop_package": "默认关闭包",
+      "orientation": "方向",
+      "portrait": "竖屏",
+      "landscape": "横屏",
+      "size": "大小",
+      "short": "短边",
+      "long": "长边",
+      "respack": "资源包"
+    },
+    "respack": {
+      "title": "资源包信息",
+      "test": {
+        "success": "加载成功",
+        "fail": "加载失败",
+        "test": "测试",
+        "load": "加载",
+        "log": "日志"
+      }
+    },
+    "use": {
+      "title": "使用",
+      "new_inst": "创建实例",
+      "new_preset": "创建预设"
+    },
+    "hint": {
+      "choose": "选择一个资源"
+    }
+  },
+  "global": {
+    "confirm": "确认",
+    "unset": "未设置"
   }
 }

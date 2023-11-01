@@ -4,12 +4,15 @@ import { Star24Filled, Star24Regular } from '@vicons/fluent'
 import { NButton, NCard, NIcon } from 'naive-ui'
 import { ref } from 'vue'
 
+import { useTr } from '@/i18n'
 import { useConfig } from '@/stores/config'
 import { useController } from '@/stores/controller'
 import { useDevice } from '@/stores/device'
 import { maaactive } from '@/utils/maa'
 
 import { connectDevices, curDevice, foundDevices } from './state'
+
+const { t } = useTr()
 
 const { refresh } = useDevice
 const { handles } = useController
@@ -42,9 +45,11 @@ function dropSaved(serial: string) {
 <template>
   <div class="flex flex-col gap-2">
     <div class="flex justify-center">
-      <NButton @click="doRefresh" :loading="loading" :disabled="!maaactive"> 刷新 </NButton>
+      <NButton @click="doRefresh" :loading="loading" :disabled="!maaactive">
+        {{ t('device.side.refresh') }}
+      </NButton>
     </div>
-    <NCard title="已连接" :theme-overrides="{ color: 'transparent' }">
+    <NCard :title="t('device.side.connected')" :theme-overrides="{ color: 'transparent' }">
       <div class="flex flex-col gap-2">
         <div class="flex gap-2" v-for="(item, idx) of connectDevices" :key="idx">
           <NButton
@@ -89,7 +94,7 @@ function dropSaved(serial: string) {
         </div>
       </div>
     </NCard>
-    <NCard title="未连接" :theme-overrides="{ color: 'transparent' }">
+    <NCard :title="t('device.side.disconnected')" :theme-overrides="{ color: 'transparent' }">
       <div class="flex flex-col gap-2">
         <div class="flex gap-2" v-for="(item, idx) of foundDevices" :key="idx">
           <NButton

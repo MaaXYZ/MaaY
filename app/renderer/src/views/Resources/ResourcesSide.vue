@@ -5,9 +5,12 @@ import { NButton, NCard, NIcon } from 'naive-ui'
 import { ref } from 'vue'
 
 import ImportResource from '@/components/Respack/ImportResource.vue'
+import { useTr } from '@/i18n'
 import { useRespack } from '@/stores/respack'
 
 import { curResPack } from './state'
+
+const { t } = useTr()
 
 const { info } = useRespack
 
@@ -36,8 +39,10 @@ async function requestDelete(pack: RespackInfo) {
   <ImportResource ref="importEl"></ImportResource>
   <div class="flex flex-col gap-2">
     <div class="flex gap-2 justify-center">
-      <NButton @click="refresh" :loading="refreshLoading"> 刷新 </NButton>
-      <NButton @click="importEl?.open()"> 导入 </NButton>
+      <NButton @click="refresh" :loading="refreshLoading">
+        {{ t('resource.side.refresh') }}
+      </NButton>
+      <NButton @click="importEl?.open()"> {{ t('resource.side.import') }} </NButton>
     </div>
     <NCard :theme-overrides="{ color: 'transparent' }">
       <div class="flex flex-col gap-2">

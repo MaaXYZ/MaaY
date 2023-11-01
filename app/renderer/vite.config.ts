@@ -34,7 +34,8 @@ export default defineConfig({
     vue(),
     vueJsx(),
     VueI18nPlugin({
-      include: [path.resolve(__dirname, './src/i18n/locales/*.json')]
+      include: [path.resolve(__dirname, './src/i18n/locales/*.json')],
+      strictMessage: false
     })
   ]
 })

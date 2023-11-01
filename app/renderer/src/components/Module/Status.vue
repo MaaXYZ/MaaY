@@ -2,10 +2,13 @@
 import { NButton, NCard, NSelect } from 'naive-ui'
 import { type Component, ref } from 'vue'
 
+import { useTr } from '@/i18n'
 import { useModule } from '@/stores/module'
 
 import MaaFramework from './MaaFramework'
 import MaaY from './MaaY'
+
+const { t } = useTr()
 
 const { info } = useModule
 
@@ -46,9 +49,13 @@ function setConfig(m: string, c: unknown) {
     <NCard v-for="(cfg, name) in info" :key="name" :title="name">
       <div class="flex flex-col gap-2">
         <div class="flex gap-2 items-center">
-          <NButton v-if="cfg.loaded" @click="unload(name)" :loading="loading"> 卸载 </NButton>
-          <NButton v-else @click="load(name)" :loading="loading"> 加载 </NButton>
-          <span> 版本: {{ cfg.version ?? 'N/A' }} </span>
+          <NButton v-if="cfg.loaded" @click="unload(name)" :loading="loading">
+            {{ t('setting.general.unload') }}
+          </NButton>
+          <NButton v-else @click="load(name)" :loading="loading">
+            {{ t('setting.general.load') }}
+          </NButton>
+          <span> {{ t('setting.general.version') }}: {{ cfg.version ?? 'N/A' }} </span>
         </div>
         <NSelect
           :value="cfg.channel"

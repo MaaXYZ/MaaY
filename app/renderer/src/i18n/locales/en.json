@@ -13,6 +13,89 @@
     },
     "hint": {
       "choose": "choose a device"
+    },
+    "side": {
+      "connected": "connected",
+      "refresh": "refresh",
+      "disconnected": "disconnected"
     }
+  },
+  "setting": {
+    "maay": {
+      "locale": "locale"
+    },
+    "maaframework": {
+      "debug": "Maa debug",
+      "version": "Maa version",
+      "service_address": "service address",
+      "cli_path": "path of MaaRpcCli"
+    },
+    "general": {
+      "version": "Maa version",
+      "load": "load",
+      "unload": "unload"
+    }
+  },
+  "resource": {
+    "side": {
+      "refresh": "refresh",
+      "import": "import"
+    },
+    "import": {
+      "placeholder": {
+        "name": "<resource name>"
+      },
+      "title": "import resource",
+      "remote_repo": "remote repository",
+      "local_dir": "local directory",
+      "add": "add"
+    },
+    "rename": {
+      "title": "rename resource",
+      "placeholder": "<name>"
+    },
+    "info": {
+      "title": "resource information",
+      "name": "name",
+      "path": "path",
+      "type": "type",
+      "external": "external",
+      "internal": "internal",
+      "repo": "repository",
+      "dir": "directory",
+      "desc": "description",
+      "full_dep": "full dependencies",
+      "def_start_activity": "default start activity",
+      "def_stop_package": "default stop package",
+      "orientation": "orientation",
+      "portrait": "portrait",
+      "landscape": "landscape",
+      "size": "side",
+      "short": "short side",
+      "long": "long side",
+      "respack": "resource pack"
+    },
+    "respack": {
+      "title": "resource pack information",
+      "test": {
+        "success": "load success",
+        "fail": "load failed",
+        "test": "test",
+        "load": "load",
+        "log": "log"
+      }
+    },
+    "use": {
+      "title": "use",
+      "new_inst": "create instance",
+      "new_preset": "create preset"
+    },
+    "hint": {
+      "choose": "choose a resource"
+    }
+  },
+  "global": {
+    "confirm": "confirm",
+    "unset": ""
   }
 }

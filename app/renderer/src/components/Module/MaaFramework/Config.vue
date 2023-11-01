@@ -3,12 +3,15 @@ import { version } from '@maa/loader'
 import { NInput, NInputNumber, NSwitch } from 'naive-ui'
 import { computed, ref, watch } from 'vue'
 
+import { useTr } from '@/i18n'
 import GridFormLayout from '@/layouts/GridFormLayout.vue'
 import { useModule } from '@/stores/module'
 
 defineProps<{
   disabled: boolean
 }>()
+
+const { t } = useTr()
 
 const emits = defineEmits<{
   'update:config': [unknown]
@@ -58,7 +61,7 @@ watch(
 <template>
   <GridFormLayout>
     <template v-if="info?.channel === 'external'">
-      <span class="whitespace-nowrap"> MaaRpcCli路径 </span>
+      <span class="whitespace-nowrap"> {{ t('setting.maaframework.cli_path') }} </span>
       <NInput
         :value="cc.path"
         @update:value="
@@ -71,7 +74,7 @@ watch(
         :disabled="disabled"
       ></NInput>
     </template>
-    <span> 服务地址 </span>
+    <span> {{ t('setting.maaframework.service_address') }} </span>
     <NInputNumber
       :min="1"
       :max="65535"
@@ -87,7 +90,7 @@ watch(
     >
       <template #prefix> {{ cc.host }}: </template>
     </NInputNumber>
-    <span> Maa debug </span>
+    <span> {{ t('setting.maaframework.debug') }} </span>
     <div>
       <NSwitch
         :value="cc.debug"
@@ -101,7 +104,7 @@ watch(
         :disabled="disabled"
       ></NSwitch>
     </div>
-    <span> Maa版本 </span>
+    <span> {{ t('setting.maaframework.version') }} </span>
     <span v-if="info?.loaded"> {{ maaver }} </span>
   </GridFormLayout>
 </template>
