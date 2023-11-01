@@ -236,6 +236,7 @@ async function run(
   output: {
     state: RunningState
     current: number | null
+    log: (x: string) => void
   }
 ) {
   output.state = RunningState.Loading
@@ -269,6 +270,13 @@ async function run(
   const hinst = await init_from(handle)
   await hinst.bind_resource(hres)
   await hinst.bind_controller(hctrl)
+
+  hinst.register_custom_action('maay.yield', {
+    run(_1, task, param, box, detail) {
+      output.log(`task ${task} yield ${param}`)
+      return true
+    }
+  })
 
   output.state = RunningState.Running
 

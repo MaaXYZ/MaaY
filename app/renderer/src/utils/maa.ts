@@ -18,7 +18,7 @@ export function setupMaa() {
     }
   })
   setContext(ctx)
-  window.ipcRenderer.on('renderer.loader.callback', (_, id, msg, detail) => {
-    recv(id, msg, detail)
+  window.ipcRenderer.on('renderer.loader.callback', (_, msg, id, ...args) => {
+    recv(msg, id, ...args)
   })
 }

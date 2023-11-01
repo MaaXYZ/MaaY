@@ -1,4 +1,12 @@
-import { FlatToStream, context, deinit, init, set_log_dir, set_save_draw } from '@maa/loader'
+import {
+  FlatToStream,
+  context,
+  deinit,
+  init,
+  serverContext,
+  set_log_dir,
+  set_save_draw
+} from '@maa/loader'
 import { logger } from '@maa/logger'
 import { shallowRef } from '@vue/reactivity'
 import { ChildProcess, spawn } from 'child_process'
@@ -122,8 +130,8 @@ export class MaaFrameworkModule extends Module {
       await set_log_dir(path.join(process.cwd(), 'debug'))
       await set_save_draw(this.cfg.debug)
       logger.info('maa configured')
-      const stream = FlatToStream(context, (id, msg, detail) => {
-        ipcMainSend('renderer.loader.callback', id, msg, detail)
+      const stream = FlatToStream(serverContext, (msg, id, ...args) => {
+        ipcMainSend('renderer.loader.callback', msg, id, ...args)
       })
       ipcMainHandle('main.loader.stream', async (_, cmd, args) => {
         try {

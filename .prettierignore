@@ -1,7 +1,6 @@
 node_modules
 dist
 assets
-pkgs/loader
 
 pnpm-lock.yaml
 

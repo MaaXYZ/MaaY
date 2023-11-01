@@ -50,7 +50,10 @@ async function run() {
     curInstanceHandle.value,
     reactive({
       state: running,
-      current: null
+      current: null,
+      log: (x: string) => {
+        statusMessage.value.push(x)
+      }
     })
   )
 }

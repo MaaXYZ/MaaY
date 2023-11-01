@@ -3,6 +3,6 @@ import type { SyncVarInterfaceList_M2R, SyncVarPullInterfaceList_R2M } from './s
 export type ClientSideInterface = {
   'renderer.core.log': (s: string) => void
 
-  'renderer.loader.callback': (id: string, msg: string, detail: string) => void
+  'renderer.loader.callback': (msg: string, id: string, ...args: any[]) => void
 } & SyncVarInterfaceList_M2R &
   SyncVarPullInterfaceList_R2M
