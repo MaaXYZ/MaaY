@@ -5,7 +5,7 @@
       "type": "node",
       "request": "launch",
       "name": "Electron: Main",
-      "runtimeArgs": ["scripts/watch.mjs"]
+      "runtimeArgs": ["scripts/watch.mjs", "--nodevtool"]
     },
     {
       "name": "Electron: Renderer",

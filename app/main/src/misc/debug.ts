@@ -9,7 +9,11 @@ function useDebug(window: BrowserWindow): void {
   //     console.error(`An error occurred while install extension: ${err.message}`)
   //   )
 
-  // window.webContents.openDevTools({ mode: 'detach' })
+  if ('MAAY_NO_DEVTOOL' in process.env) {
+    console.log('disabled devtools')
+  } else {
+    window.webContents.openDevTools({ mode: 'detach' })
+  }
 
   // Bypass CORS
   const bypass_urls = [

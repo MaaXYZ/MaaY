@@ -32,6 +32,11 @@ async function watchMain(server) {
     VITE_DEV_SERVER_HOST: address.address,
     VITE_DEV_SERVER_PORT: address.port
   })
+  if (process.argv.includes('--nodevtool')) {
+    Object.assign(env, {
+      MAAY_NO_DEVTOOL: '1'
+    })
+  }
   const ctx = await esbuild.context({
     entryPoints: ['app/main/src/main.ts'],
     platform: 'node',
