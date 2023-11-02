@@ -51,7 +51,7 @@ function dropSaved(serial: string) {
     </div>
     <NCard :title="t('device.side.connected')" :theme-overrides="{ color: 'transparent' }">
       <div class="flex flex-col gap-2">
-        <div class="flex gap-2" v-for="(item, idx) of connectDevices" :key="idx">
+        <div class="flex gap-2 items-center" v-for="(item, idx) of connectDevices" :key="idx">
           <NButton
             @click="curDevice = item"
             secondary
@@ -96,7 +96,7 @@ function dropSaved(serial: string) {
     </NCard>
     <NCard :title="t('device.side.disconnected')" :theme-overrides="{ color: 'transparent' }">
       <div class="flex flex-col gap-2">
-        <div class="flex gap-2" v-for="(item, idx) of foundDevices" :key="idx">
+        <div class="flex gap-2 items-center" v-for="(item, idx) of foundDevices" :key="idx">
           <NButton
             @click="curDevice = idx"
             secondary

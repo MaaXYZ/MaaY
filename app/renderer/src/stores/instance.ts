@@ -54,6 +54,7 @@ watch(
 async function create_with(cfg: InstanceSaveInfo) {
   const inst = await Instance.init()
   const res = await Resource.init()
+  const ctrl = useController.only_one()
   handles.value[inst.handle] = {
     ...cfg,
     runtime: {
@@ -64,7 +65,8 @@ async function create_with(cfg: InstanceSaveInfo) {
       resource: {
         handle: res.handle,
         cb: res.cbId
-      }
+      },
+      controller: ctrl
     }
   }
   return inst
@@ -297,7 +299,11 @@ async function run(
     merge(finalDiff, entry.provide ?? {})
 
     console.log(entry.task, finalDiff)
-    await hinst.post_task(entry.task, finalDiff).wait()
+    await hinst
+      .post_task(entry.task, {
+        diff_task: finalDiff
+      })
+      .wait()
   }
 
   output.state = RunningState.Idle

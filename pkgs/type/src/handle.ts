@@ -26,7 +26,7 @@ export type InstanceSaveInfo = {
 
 export type InstanceHandleInfo = InstanceSaveInfo & {
   runtime: {
-    controller?: ControllerHandle
+    controller?: ControllerHandle | null
     resource: {
       handle: ResourceHandle
       cb: string

@@ -74,6 +74,15 @@ function init_from(handle: ControllerHandle) {
   return Controller.init_from(handle, handles.value[handle]!.cb)
 }
 
+function only_one() {
+  const ks = Object.keys(handles.value)
+  if (ks.length === 1) {
+    return ks[0] as ControllerHandle
+  } else {
+    return null
+  }
+}
+
 export const useController = {
   handles,
 
@@ -83,5 +92,6 @@ export const useController = {
   disconnect_all,
   find,
   info,
-  init_from
+  init_from,
+  only_one
 }
