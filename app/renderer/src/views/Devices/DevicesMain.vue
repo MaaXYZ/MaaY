@@ -3,6 +3,7 @@ import { NButton, NCard } from 'naive-ui'
 import { computed, ref } from 'vue'
 
 import EditAdbIOType from '@/components/Device/EditAdbIOType.vue'
+import LogPanel from '@/components/LogPanel.vue'
 import { useTr } from '@/i18n'
 import GridFormLayout from '@/layouts/GridFormLayout.vue'
 import { useController } from '@/stores/controller'
@@ -14,7 +15,7 @@ import { curDevice } from './state'
 
 const { t } = useTr()
 
-const statusMessage = ref<string[]>([])
+const loggerEl = ref<InstanceType<typeof LogPanel> | null>(null)
 
 const { device } = useDevice
 const { connect, disconnect, find, handles } = useController
@@ -53,7 +54,7 @@ async function requestDisconnect() {
 }
 
 function processControllerCallback(msg: string, detail: string) {
-  statusMessage.value.push(translateCallback(msg, detail))
+  loggerEl.value?.add(translateCallback(msg, detail))
 }
 </script>
 
@@ -86,9 +87,7 @@ function processControllerCallback(msg: string, detail: string) {
             {{ t('device.connect.connect') }}
           </NButton>
         </div>
-        <div class="flex flex-col gap-2">
-          <span v-for="(msg, idx) in statusMessage" :key="idx"> {{ msg }} </span>
-        </div>
+        <LogPanel ref="loggerEl"></LogPanel>
       </div>
     </NCard>
   </div>

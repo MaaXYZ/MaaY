@@ -4,6 +4,7 @@ import { NButton, NCard, NIcon, NInput, NSelect } from 'naive-ui'
 import { computed, reactive, ref } from 'vue'
 
 import SelectController from '@/components/Controller/SelectController.vue'
+import LogPanel from '@/components/LogPanel.vue'
 import EditGlobalRespackConfig from '@/components/Respack/EditGlobalRespackConfig.vue'
 import EditRespackConfig from '@/components/Respack/EditRespackConfig.vue'
 import SelectRespackResource from '@/components/Respack/SelectRespackResource.vue'
@@ -25,7 +26,8 @@ const { global } = useConfig
 const { create_with, init_from, init_res_from } = useInstance
 
 const running = ref<RunningState>(RunningState.Idle)
-const statusMessage = ref<string[]>([])
+
+const loggerEl = ref<InstanceType<typeof LogPanel> | null>(null)
 
 const entryOption = computed(() => {
   return curInstanceRespackInfo.value
@@ -37,7 +39,7 @@ const entryOption = computed(() => {
 })
 
 function processCallback(msg: string, detail: string) {
-  statusMessage.value.push(translateCallback(msg, detail))
+  loggerEl.value?.add(translateCallback(msg, detail))
 }
 
 async function run() {
@@ -52,7 +54,7 @@ async function run() {
       state: running,
       current: null,
       log: (x: string) => {
-        statusMessage.value.push(x)
+        loggerEl.value?.add(x)
       }
     })
   )
@@ -168,9 +170,7 @@ function requestCreate(id: string) {
           </NButton>
           <NButton @click="stop" v-if="running === RunningState.Running"> 停止 </NButton>
         </div>
-        <div class="flex flex-col gap-2">
-          <span v-for="(msg, idx) in statusMessage" :key="idx"> {{ msg }} </span>
-        </div>
+        <LogPanel ref="loggerEl"></LogPanel>
       </div>
     </NCard>
     <NCard v-else-if="curInstanceHandle">

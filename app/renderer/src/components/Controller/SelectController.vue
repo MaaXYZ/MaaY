@@ -6,7 +6,7 @@ import { computed } from 'vue'
 import { useController } from '@/stores/controller'
 
 defineProps<{
-  handle?: ControllerHandle
+  handle?: ControllerHandle | null
 }>()
 
 const emits = defineEmits<{
