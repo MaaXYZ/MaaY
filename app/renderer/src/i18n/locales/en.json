@@ -4,12 +4,17 @@
       "title": "information",
       "name": "name",
       "adb_path": "ADB path",
-      "target_address": "target address"
+      "target_address": "target address",
+      "touch": "",
+      "type": "",
+      "key": "",
+      "screencap": ""
     },
     "connect": {
       "connect": "connect",
       "connected": "connected",
-      "title": "connect"
+      "title": "connect",
+      "disconnect": "disconnect"
     },
     "hint": {
       "choose": "choose a device"
@@ -18,6 +23,15 @@
       "connected": "connected",
       "refresh": "refresh",
       "disconnected": "disconnected"
+    },
+    "type": {
+      "fastest_way": "fastest way",
+      "raw_by_netcat": "raw image via netcat",
+      "raw_with_gzip": "gziped raw image via pipe",
+      "encode": "png image via pipe",
+      "encode_to_file": "png image via file",
+      "minicap_direct": "jpg image via pipe by instant minicap",
+      "minicap_stream": "jpg image via pipe by stream minicap"
     }
   },
   "setting": {
@@ -96,6 +110,6 @@
   },
   "global": {
     "confirm": "confirm",
-    "unset": ""
+    "unset": "unset"
   }
 }

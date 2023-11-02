@@ -4,12 +4,17 @@
       "title": "信息",
       "name": "名称",
       "adb_path": "ADB路径",
-      "target_address": "目标地址"
+      "target_address": "目标地址",
+      "touch": "点击",
+      "type": "配置",
+      "key": "按键",
+      "screencap": "截图"
     },
     "connect": {
       "connect": "连接",
       "connected": "已连接",
-      "title": "连接"
+      "title": "连接",
+      "disconnect": "断开"
     },
     "hint": {
       "choose": "选择一个设备"
@@ -18,6 +23,15 @@
       "refresh": "刷新",
       "connected": "已连接",
       "disconnected": "未连接"
+    },
+    "type": {
+      "fastest_way": "最快",
+      "raw_by_netcat": "nc传输原始图像",
+      "raw_with_gzip": "管道传输gzip图像",
+      "encode": "管道传输png图像",
+      "encode_to_file": "文件传输png图像",
+      "minicap_direct": "单次minicap管道传输jpg图像",
+      "minicap_stream": "流式minicap管道传输jpg图像"
     }
   },
   "setting": {
