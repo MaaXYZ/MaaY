@@ -5,10 +5,10 @@
       "name": "name",
       "adb_path": "ADB path",
       "target_address": "target address",
-      "touch": "",
-      "type": "",
-      "key": "",
-      "screencap": ""
+      "touch": "touch",
+      "type": "config",
+      "key": "key",
+      "screencap": "screencap"
     },
     "connect": {
       "connect": "connect",
