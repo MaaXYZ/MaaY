@@ -2,6 +2,8 @@
 
 为[**MaaFramework**](https://github.com/MaaAssistantArknights/MaaFramework)重新设计的通用界面
 
+使用和适配请参考[文档](doc/README.md)
+
 ### 适配指南
 
 #### 编写资源包
@@ -12,5 +14,4 @@
 
 > 导入功能还没开始写
 
-在仓库中将资源包的文件放在`/.maay`目录, 然后从 MaaY 中直接导入
-
+在仓库中将资源包的文件放在 `/.maay`目录, 然后从 MaaY 中直接导入
