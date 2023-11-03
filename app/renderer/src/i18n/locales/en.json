@@ -2,7 +2,6 @@
   "device": {
     "info": {
       "title": "information",
-      "name": "name",
       "adb_path": "ADB path",
       "target_address": "target address",
       "touch": "touch",
@@ -61,8 +60,7 @@
       },
       "title": "import resource",
       "remote_repo": "remote repository",
-      "local_dir": "local directory",
-      "add": "add"
+      "local_dir": "local directory"
     },
     "rename": {
       "title": "rename resource",
@@ -70,7 +68,6 @@
     },
     "info": {
       "title": "resource information",
-      "name": "name",
       "path": "path",
       "type": "type",
       "external": "external",
@@ -86,8 +83,7 @@
       "landscape": "landscape",
       "size": "side",
       "short": "short side",
-      "long": "long side",
-      "respack": "resource pack"
+      "long": "long side"
     },
     "respack": {
       "title": "resource pack information",
@@ -110,6 +106,48 @@
   },
   "global": {
     "confirm": "confirm",
-    "unset": "unset"
+    "unset": "unset",
+    "name": "name",
+    "respack": "resource pack",
+    "device": "device",
+    "add": "add",
+    "start": "start",
+    "stop": "stop",
+    "create": "create"
+  },
+  "instance": {
+    "side": {
+      "instance": "instance",
+      "preset": "preset"
+    },
+    "info": {
+      "title": "info"
+    },
+    "respack": {
+      "title": "resource"
+    },
+    "hint": {
+      "resource_load_failed": "resource load failed",
+      "choose": "create an instance from the resource page"
+    },
+    "device": {
+      "title": "device"
+    },
+    "task": {
+      "title": "task",
+      "global_config": "global config",
+      "list": "task list",
+      "hint": {
+        "entry": "select a startup entry"
+      },
+      "task": "task"
+    },
+    "run": {
+      "title": "run",
+      "entry": "entry"
+    }
+  },
+  "welcome": {
+    "guide_panel": "change the panels via buttons on the right-top corner. panels from left to right are Instance, Resource, Device and Setting."
   }
 }

@@ -2,7 +2,6 @@
   "device": {
     "info": {
       "title": "信息",
-      "name": "名称",
       "adb_path": "ADB路径",
       "target_address": "目标地址",
       "touch": "点击",
@@ -61,8 +60,7 @@
       },
       "title": "导入资源",
       "remote_repo": "远程仓库",
-      "local_dir": "本地目录",
-      "add": "添加"
+      "local_dir": "本地目录"
     },
     "rename": {
       "title": "重命名资源",
@@ -70,7 +68,6 @@
     },
     "info": {
       "title": "资源信息",
-      "name": "名称",
       "path": "路径",
       "type": "类型",
       "external": "外部",
@@ -86,8 +83,7 @@
       "landscape": "横屏",
       "size": "大小",
       "short": "短边",
-      "long": "长边",
-      "respack": "资源包"
+      "long": "长边"
     },
     "respack": {
       "title": "资源包信息",
@@ -110,6 +106,48 @@
   },
   "global": {
     "confirm": "确认",
-    "unset": "未设置"
+    "unset": "未设置",
+    "name": "名称",
+    "respack": "资源包",
+    "device": "设备",
+    "add": "添加",
+    "start": "启动",
+    "stop": "停止",
+    "create": "创建"
+  },
+  "instance": {
+    "side": {
+      "instance": "实例",
+      "preset": "预设"
+    },
+    "info": {
+      "title": "信息"
+    },
+    "respack": {
+      "title": "资源"
+    },
+    "hint": {
+      "resource_load_failed": "资源加载失败",
+      "choose": "从资源页创建一个新实例"
+    },
+    "device": {
+      "title": "设备"
+    },
+    "task": {
+      "title": "任务",
+      "global_config": "全局配置",
+      "list": "任务列表",
+      "hint": {
+        "entry": "选择一个启动入口"
+      },
+      "task": "任务"
+    },
+    "run": {
+      "title": "执行",
+      "entry": "入口"
+    }
+  },
+  "welcome": {
+    "guide_panel": "通过右上角的按钮切换页面，从左到右分别是 实例 资源 设备 设置。"
   }
 }

@@ -102,7 +102,7 @@ async function requestRename() {
     <template v-if="rinfo">
       <NCard :title="t('resource.info.title')">
         <GridFormLayout>
-          <span> {{ t('resource.info.name') }} </span>
+          <span> {{ t('global.name') }} </span>
           <div class="flex gap-2 items-center">
             <span> {{ rinfo.name }} </span>
             <NButton text @click="openRename">

@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import type { InstanceHandle } from '@maa/loader'
-import { Add24Regular, Delete24Regular } from '@vicons/fluent'
+import { Delete24Regular } from '@vicons/fluent'
 import { NButton, NCard, NIcon } from 'naive-ui'
 
+import { useTr } from '@/i18n'
 import { useConfig } from '@/stores/config'
 import { useInstance } from '@/stores/instance'
 
 import { curInstanceHandle, curInstanceSaveInfo, notCreatedInstances } from './state'
 
+const { t } = useTr()
+
 const { global } = useConfig
-const { handles, destroy, create_with } = useInstance
+const { handles, destroy } = useInstance
 
 async function requestDestroy(h: InstanceHandle) {
   if (curInstanceHandle.value === h) {
@@ -27,7 +30,7 @@ function requestDestroySave(id: string) {
 
 <template>
   <div class="flex flex-col gap-2">
-    <NCard title="已创建" :theme-overrides="{ color: 'transparent' }">
+    <NCard :title="t('instance.side.instance')" :theme-overrides="{ color: 'transparent' }">
       <div class="flex flex-col gap-2">
         <div v-for="(item, h) in handles" :key="h" class="flex gap-2">
           <NButton
@@ -48,7 +51,7 @@ function requestDestroySave(id: string) {
         </div>
       </div>
     </NCard>
-    <NCard title="未创建" :theme-overrides="{ color: 'transparent' }">
+    <NCard :title="t('instance.side.preset')" :theme-overrides="{ color: 'transparent' }">
       <div class="flex flex-col gap-2">
         <div v-for="(item, idx) of notCreatedInstances" :key="idx" class="flex gap-2">
           <NButton

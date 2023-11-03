@@ -86,7 +86,7 @@ defineExpose({
           ></NInput>
           <div class="flex gap-2">
             <NButton :disabled="!importRepoUrl" @click="doImport" :loading="importLoading">
-              {{ t('resource.import.add') }}
+              {{ t('global.add') }}
             </NButton>
           </div>
         </template>
@@ -94,7 +94,7 @@ defineExpose({
           <NInput v-model:value="importDir" placeholder="/path/to/repo"></NInput>
           <div class="flex gap-2">
             <NButton :disabled="!importDir" @click="doImport" :loading="importLoading">
-              {{ t('resource.import.add') }}
+              {{ t('global.add') }}
             </NButton>
           </div>
         </template>

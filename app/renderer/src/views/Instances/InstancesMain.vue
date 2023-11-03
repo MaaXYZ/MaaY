@@ -8,6 +8,7 @@ import LogPanel from '@/components/LogPanel.vue'
 import EditGlobalRespackConfig from '@/components/Respack/EditGlobalRespackConfig.vue'
 import EditRespackConfig from '@/components/Respack/EditRespackConfig.vue'
 import SelectRespackResource from '@/components/Respack/SelectRespackResource.vue'
+import { useTr } from '@/i18n'
 import GridFormLayout from '@/layouts/GridFormLayout.vue'
 import { useConfig } from '@/stores/config'
 import { RunningState, useInstance } from '@/stores/instance'
@@ -21,6 +22,8 @@ import {
   curInstanceSaveInfo,
   isInstance
 } from './state'
+
+const { t } = useTr()
 
 const { global } = useConfig
 const { create_with, init_from, init_res_from } = useInstance
@@ -80,17 +83,17 @@ function requestCreate(id: string) {
 
 <template>
   <div v-if="curInstanceSaveInfo" class="flex flex-col gap-2">
-    <NCard title="信息">
+    <NCard :title="t('instance.info.title')">
       <GridFormLayout>
-        <span> 名称 </span>
+        <span> {{ t('global.name') }} </span>
         <NInput v-model:value="curInstanceSaveInfo.name" placeholder="输入实例名称"></NInput>
       </GridFormLayout>
     </NCard>
-    <NCard title="资源">
+    <NCard :title="t('instance.respack.title')">
       <GridFormLayout>
-        <span> 名称 </span>
+        <span> {{ t('global.name') }} </span>
         <NInput :value="curInstanceSaveInfo.resource.name" readonly></NInput>
-        <span> 资源包 </span>
+        <span> {{ t('global.respack') }} </span>
         <template v-if="curInstanceRespackInfo">
           <SelectRespackResource
             v-model:value="curInstanceSaveInfo.resource.target"
@@ -99,21 +102,23 @@ function requestCreate(id: string) {
           </SelectRespackResource>
         </template>
         <template v-else>
-          <span> 资源加载失败 </span>
+          <span> {{ t('instance.hint.resource_load_failed') }} </span>
         </template>
       </GridFormLayout>
     </NCard>
-    <NCard title="设备" v-if="isInstance(curInstanceHandle)">
+    <NCard :title="t('instance.device.title')" v-if="isInstance(curInstanceHandle)">
       <GridFormLayout>
-        <span> 设备 </span>
+        <span> {{ t('global.device') }} </span>
         <SelectController v-model:handle="curInstanceInfo!.runtime.controller"></SelectController>
-        <span> 句柄 </span>
-        <NInput :value="curInstanceInfo!.runtime.controller" readonly placeholder=""></NInput>
+        <template v-if="global.debug_mode">
+          <span> 句柄 </span>
+          <NInput :value="curInstanceInfo!.runtime.controller" readonly placeholder=""></NInput>
+        </template>
       </GridFormLayout>
     </NCard>
-    <NCard title="配置" v-if="curInstanceRespackInfo">
+    <NCard :title="t('instance.task.title')" v-if="curInstanceRespackInfo">
       <div class="flex flex-col gap-2">
-        <NCard>
+        <NCard :title="t('instance.task.global_config')">
           <GridFormLayout>
             <EditGlobalRespackConfig
               :resctrl="curInstanceRespackInfo.config.control"
@@ -121,14 +126,18 @@ function requestCreate(id: string) {
             ></EditGlobalRespackConfig>
           </GridFormLayout>
         </NCard>
-        <NCard v-for="(entry, idx) of curInstanceSaveInfo.resource.entries" :key="idx">
+        <NCard
+          v-for="(entry, idx) of curInstanceSaveInfo.resource.entries"
+          :key="idx"
+          :title="t('instance.task.task')"
+        >
           <GridFormLayout>
-            <span> 入口 </span>
+            <span> {{ t('instance.run.entry') }} </span>
             <div class="flex gap-2">
               <NSelect
                 v-model:value="entry.entry"
                 :options="entryOption"
-                placeholder="选择一个启动入口"
+                :placeholder="t('instance.task.hint.entry')"
               ></NSelect>
               <NButton
                 @click="
@@ -153,12 +162,15 @@ function requestCreate(id: string) {
         </NCard>
         <div class="flex">
           <NButton @click="curInstanceSaveInfo.resource.entries.push({ entry: 0, config: {} })">
-            添加
+            {{ t('global.add') }}
           </NButton>
         </div>
       </div>
     </NCard>
-    <NCard title="执行" v-if="isInstance(curInstanceHandle) && curInstanceRespackInfo">
+    <NCard
+      :title="t('instance.run.title')"
+      v-if="isInstance(curInstanceHandle) && curInstanceRespackInfo"
+    >
       <div class="flex flex-col gap-2">
         <div class="flex gap-2">
           <NButton
@@ -166,9 +178,11 @@ function requestCreate(id: string) {
             v-if="running !== RunningState.Running"
             :loading="running === RunningState.Loading"
           >
-            启动
+            {{ t('global.start') }}
           </NButton>
-          <NButton @click="stop" v-if="running === RunningState.Running"> 停止 </NButton>
+          <NButton @click="stop" v-if="running === RunningState.Running">
+            {{ t('global.stop') }}
+          </NButton>
         </div>
         <LogPanel ref="loggerEl"></LogPanel>
       </div>
@@ -176,12 +190,14 @@ function requestCreate(id: string) {
     <NCard v-else-if="curInstanceHandle">
       <div class="flex flex-col gap-2">
         <div class="flex gap-2">
-          <NButton @click="requestCreate(curInstanceHandle)" :disabled="!maaactive"> 创建 </NButton>
+          <NButton @click="requestCreate(curInstanceHandle)" :disabled="!maaactive">
+            {{ t('global.create') }}
+          </NButton>
         </div>
       </div>
     </NCard>
   </div>
   <div v-else class="flex items-center justify-center">
-    <span> 从资源页创建一个新实例 </span>
+    <span> {{ t('instance.hint.choose') }} </span>
   </div>
 </template>

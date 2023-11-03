@@ -102,7 +102,7 @@ async function testLoad() {
           : `${t('resource.info.long')} ${pack.app.size?.long ?? 1280}`
       }}
     </span>
-    <span> {{ t('resource.info.respack') }} </span>
+    <span> {{ t('global.respack') }} </span>
     <div class="flex gap-2 flex-wrap">
       <NButton v-for="(cfg, key) in pack.resource" :key="key" @click="showTestFor(key, cfg)">
         {{ cfg.name }}

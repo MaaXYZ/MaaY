@@ -62,7 +62,7 @@ function processControllerCallback(msg: string, detail: string) {
   <div v-if="info" class="flex flex-col gap-2">
     <NCard :title="t('device.info.title')">
       <GridFormLayout>
-        <span> {{ t('device.info.name') }} </span>
+        <span> {{ t('global.name') }} </span>
         <span> {{ info.name }} </span>
         <span> {{ t('device.info.adb_path') }} </span>
         <span> {{ info.adb_path }} </span>
