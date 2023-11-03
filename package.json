@@ -1,6 +1,6 @@
 {
   "name": "maa-y",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "dist/main/main.js",
   "scripts": {
     "dev": "node scripts/watch.mjs",
