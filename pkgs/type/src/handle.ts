@@ -2,6 +2,7 @@ import type { ControllerHandle, DeviceInfo, InstanceHandle, ResourceHandle } fro
 
 export type ControllerHandleInfo = {
   cb: string
+  ci: string
 
   name: string
   cfg: DeviceInfo
@@ -30,10 +31,12 @@ export type InstanceHandleInfo = InstanceSaveInfo & {
     resource: {
       handle: ResourceHandle
       cb: string
+      ci: string
     }
     instance: {
       handle: InstanceHandle
       cb: string
+      ci: string
     }
   }
 }

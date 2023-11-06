@@ -17,7 +17,7 @@ function reload_init() {
 
 async function connect(cfg: DeviceInfo, cb: (msg: string, detail: string) => void) {
   const { name, adb_path: path, adb_serial: serial, adb_type: type, adb_config: config } = cfg
-  const ctrl = await Controller.initAdb({
+  const ctrl = await Controller.init_adb({
     path,
     serial,
     type,
@@ -28,6 +28,7 @@ async function connect(cfg: DeviceInfo, cb: (msg: string, detail: string) => voi
   if (await ctrl.connected) {
     handles.value[ctrl.handle] = {
       cb: ctrl.cbId,
+      ci: ctrl.rpcId,
 
       name,
       cfg
@@ -42,7 +43,7 @@ async function connect(cfg: DeviceInfo, cb: (msg: string, detail: string) => voi
 async function disconnect(handle: ControllerHandle) {
   const ci = handles.value[handle]!
   delete handles.value[handle]
-  await (await Controller.init_from(handle, ci.cb)).destroy()
+  await (await Controller.init_from(handle, ci.cb, ci.ci)).destroy()
 }
 
 async function disconnect_all() {
@@ -71,7 +72,8 @@ function info(serial?: string) {
 }
 
 function init_from(handle: ControllerHandle) {
-  return Controller.init_from(handle, handles.value[handle]!.cb)
+  const ci = handles.value[handle]!
+  return Controller.init_from(handle, ci.cb, ci.ci)
 }
 
 function only_one() {

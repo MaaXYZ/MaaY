@@ -60,11 +60,13 @@ async function create_with(cfg: InstanceSaveInfo) {
     runtime: {
       instance: {
         handle: inst.handle,
-        cb: inst.cbId
+        cb: inst.cbId,
+        ci: inst.rpcId
       },
       resource: {
         handle: res.handle,
-        cb: res.cbId
+        cb: res.cbId,
+        ci: res.rpcId
       },
       controller: ctrl
     }
@@ -91,8 +93,8 @@ function is_created(id: string) {
 async function destroy(handle: InstanceHandle) {
   const ii = handles.value[handle]!.runtime
   delete handles.value[handle]
-  await (await Instance.init_from(ii.instance.handle, ii.instance.cb)).destroy()
-  await (await Resource.init_from(ii.resource.handle, ii.resource.cb)).destroy()
+  await (await Instance.init_from(ii.instance.handle, ii.instance.cb, ii.instance.ci)).destroy()
+  await (await Resource.init_from(ii.resource.handle, ii.resource.cb, ii.resource.ci)).destroy()
 }
 
 async function destroy_all() {
@@ -223,14 +225,13 @@ function buildDiffConfig(
 }
 
 function init_res_from(handle: InstanceHandle) {
-  return Resource.init_from(
-    handles.value[handle]!.runtime.resource.handle,
-    handles.value[handle]!.runtime.resource.cb
-  )
+  const ri = handles.value[handle]!.runtime.resource
+  return Resource.init_from(ri.handle, ri.cb, ri.ci)
 }
 
 function init_from(handle: InstanceHandle) {
-  return Instance.init_from(handle, handles.value[handle]!.runtime.instance.cb)
+  const ii = handles.value[handle]!.runtime.instance
+  return Instance.init_from(handle, ii.cb, ii.ci)
 }
 
 async function run(
