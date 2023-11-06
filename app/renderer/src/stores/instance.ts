@@ -1,4 +1,12 @@
-import { Controller, Instance, type InstanceHandle, Resource } from '@maa/loader'
+import {
+  Controller,
+  CustomActionBase,
+  Instance,
+  type InstanceHandle,
+  type Rect,
+  Resource,
+  type SyncCtxHandle
+} from '@maa/loader'
 import type {
   InstanceHandleInfo,
   InstanceSaveInfo,
@@ -234,14 +242,34 @@ function init_from(handle: InstanceHandle) {
   return Instance.init_from(handle, ii.cb, ii.ci)
 }
 
-async function run(
-  handle: InstanceHandle,
-  output: {
-    state: RunningState
-    current: number | null
-    log: (x: string) => void
+type Output = {
+  state: RunningState
+  current: number | null
+  log: (x: string) => void
+}
+
+class MaayYieldAction extends CustomActionBase {
+  out: Output
+
+  constructor(out: Output) {
+    super()
+
+    this.out = out
   }
-) {
+
+  run(
+    ctx: SyncCtxHandle,
+    task: string,
+    param: string,
+    box: Rect,
+    detail: string
+  ): boolean | Promise<boolean> {
+    this.out.log(`task ${task} yield ${param}`)
+    return true
+  }
+}
+
+async function run(handle: InstanceHandle, output: Output) {
   output.state = RunningState.Loading
   output.current = null
 
@@ -274,12 +302,7 @@ async function run(
   await hinst.bind_resource(hres)
   await hinst.bind_controller(hctrl)
 
-  hinst.register_custom_action('maay.yield', {
-    run(_1, task, param, box, detail) {
-      output.log(`task ${task} yield ${param}`)
-      return true
-    }
-  })
+  hinst.register_custom_action('maay.yield', new MaayYieldAction(output))
 
   output.state = RunningState.Running
 

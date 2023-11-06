@@ -41,7 +41,7 @@ const entryOption = computed(() => {
     : []
 })
 
-function processCallback(msg: string, detail: string) {
+async function processCallback(msg: string, detail: string) {
   loggerEl.value?.add(translateCallback(msg, detail))
 }
 

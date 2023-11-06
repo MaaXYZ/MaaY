@@ -1,5 +1,6 @@
 import {
   type AdbControllerConfig,
+  type Callback,
   Controller,
   type ControllerHandle,
   type DeviceInfo
@@ -15,7 +16,7 @@ function reload_init() {
   })
 }
 
-async function connect(cfg: DeviceInfo, cb: (msg: string, detail: string) => void) {
+async function connect(cfg: DeviceInfo, cb: Callback) {
   const { name, adb_path: path, adb_serial: serial, adb_type: type, adb_config: config } = cfg
   const ctrl = await Controller.init_adb({
     path,

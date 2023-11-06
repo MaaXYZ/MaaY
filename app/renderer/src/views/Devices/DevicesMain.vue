@@ -37,7 +37,9 @@ const loading = ref(false)
 async function requestConnect() {
   if (info.value) {
     loading.value = true
-    await connect(info.value, processControllerCallback)
+    await connect(info.value, async (msg, detail) => {
+      loggerEl.value?.add(translateCallback(msg, detail))
+    })
     loading.value = false
   }
 }
@@ -51,10 +53,6 @@ async function requestDisconnect() {
     }
     loading.value = false
   }
-}
-
-function processControllerCallback(msg: string, detail: string) {
-  loggerEl.value?.add(translateCallback(msg, detail))
 }
 </script>
 

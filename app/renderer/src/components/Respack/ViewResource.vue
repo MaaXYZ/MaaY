@@ -35,7 +35,7 @@ async function testLoad() {
   testLoading.value = true
   testLoadMsg.value = []
   const res = await Resource.init()
-  res.onCallback = (msg, detail) => {
+  res.onCallback = async (msg, detail) => {
     testLoadMsg.value.push(translateCallback(msg, detail))
   }
   for (const p of resolvedPaths.value ?? []) {
