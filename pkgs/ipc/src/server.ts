@@ -24,6 +24,6 @@ export type ServerSideInterface = {
 
   'main.config.fetch_global': () => GlobalConfig
 
-  'main.loader.stream': (cmd: string, args: any[]) => Promise<any>
+  'main.loader.stream': (cmd: string, ...args: any[]) => Promise<any>
 } & SyncVarInterfaceList_R2M &
   SyncVarPullInterfaceList_M2R

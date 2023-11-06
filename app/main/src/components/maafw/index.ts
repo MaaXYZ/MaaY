@@ -1,11 +1,15 @@
 import {
-  FlatToStream,
-  context,
-  deinit,
-  init,
-  serverContext,
+  Backend,
+  BackendContext,
+  Frontend,
+  definitions,
+  destroyContext,
+  setFrontend,
   set_log_dir,
-  set_save_draw
+  set_save_draw,
+  setupContext,
+  streamAdapterBackendWithDirect,
+  waitClientReady
 } from '@maa/loader'
 import { logger } from '@maa/logger'
 import { shallowRef } from '@vue/reactivity'
@@ -25,6 +29,10 @@ interface MaaFrameworkConfig {
   path?: string
   debug?: boolean
 }
+
+let context: BackendContext | null = null
+let backend: Backend
+let frontend: Frontend
 
 export class MaaFrameworkModule extends Module {
   name = 'MaaFramework'
@@ -125,26 +133,37 @@ export class MaaFrameworkModule extends Module {
     if (this.active) {
       await this.disconnect()
     }
-    if (await init(`${this.cfg.host}:${this.cfg.port}`)) {
+    context = setupContext(`${this.cfg.host}:${this.cfg.port}`)
+    if (await waitClientReady(context)) {
       logger.info('maa inited')
+      const [invokeHandler, backAdapter, frontAdapter] = streamAdapterBackendWithDirect(
+        (msg, arg, id) => {
+          ipcMainSend('renderer.loader.stream', msg, arg, id)
+        }
+      )
+
+      backend = new Backend(backAdapter)
+      frontend = new Frontend(frontAdapter)
+
+      backend.init()
+      frontend.init()
+
+      backend.add_all(context, definitions)
+      frontend.add_all(definitions)
+
+      setFrontend(frontend)
+      ipcMainHandle('main.loader.stream', (_, msg, arg, id) => {
+        return invokeHandler(msg, arg, id)
+      })
+
       await set_log_dir(path.join(process.cwd(), 'debug'))
       await set_save_draw(this.cfg.debug)
       logger.info('maa configured')
-      const stream = FlatToStream(serverContext, (msg, id, ...args) => {
-        ipcMainSend('renderer.loader.callback', msg, id, ...args)
-      })
-      ipcMainHandle('main.loader.stream', async (_, cmd, args) => {
-        try {
-          return await stream(cmd, args)
-        } catch (err) {
-          logger.error('maa failed to call', cmd, ...args)
-          logger.error('with error', err)
-          throw err
-        }
-      })
       this.active = true
       return true
     } else {
+      destroyContext(context)
+      context = null
       logger.error('maa init failed')
       return false
     }
@@ -153,6 +172,8 @@ export class MaaFrameworkModule extends Module {
   async disconnect() {
     ipcMainRemove('main.loader.stream')
     this.active = false
-    await deinit()
+    if (context) {
+      context = null
+    }
   }
 }

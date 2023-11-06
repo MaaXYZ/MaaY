@@ -1,4 +1,4 @@
-import { StreamToFlat, setContext } from '@maa/loader'
+import { Frontend, definitions, setFrontend, streamAdapterFrontend } from '@maa/loader'
 import { computed } from 'vue'
 
 import { useModule } from '@/stores/module'
@@ -10,15 +10,14 @@ export const maaactive = computed(() => {
 })
 
 export function setupMaa() {
-  const [ctx, recv] = StreamToFlat((cmd, args) => {
-    if (maaactive.value) {
-      return window.ipcRenderer.invoke('main.loader.stream', cmd, args)
-    } else {
-      return Promise.resolve(null)
-    }
+  const [sendHandler, frontAdapter] = streamAdapterFrontend(async (msg, arg, id) => {
+    return window.ipcRenderer.invoke('main.loader.stream', msg, arg, id)
   })
-  setContext(ctx)
-  window.ipcRenderer.on('renderer.loader.callback', (_, msg, id, ...args) => {
-    recv(msg, id, ...args)
+  window.ipcRenderer.on('renderer.loader.stream', (_, msg, arg, id) => {
+    sendHandler(msg, arg, id)
   })
+  const frontend = new Frontend(frontAdapter)
+  setFrontend(frontend)
+  frontend.init()
+  frontend.add_all(definitions)
 }
