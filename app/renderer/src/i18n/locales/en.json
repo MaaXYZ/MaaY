@@ -136,7 +136,6 @@
     "task": {
       "title": "task",
       "global_config": "global config",
-      "list": "task list",
       "hint": {
         "entry": "select a startup entry"
       },

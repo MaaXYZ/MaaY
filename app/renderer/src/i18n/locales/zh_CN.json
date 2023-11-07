@@ -136,7 +136,6 @@
     "task": {
       "title": "任务",
       "global_config": "全局配置",
-      "list": "任务列表",
       "hint": {
         "entry": "选择一个启动入口"
       },
