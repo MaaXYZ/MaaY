@@ -2,6 +2,7 @@
   "name": "@maa/maay-preload",
   "devDependencies": {
     "@maa/ipc": "workspace:*",
+    "@maa/loader": "workspace:*",
     "@vitejs/plugin-vue": "^4.4.0",
     "@vue/tsconfig": "^0.4.0",
     "electron": "^26.3.0",

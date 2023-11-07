@@ -19,9 +19,9 @@ import { build, createServer } from 'vite'
 // }
 
 /**
- * @type {(server: import('vite').ViteDevServer) => Promise<import('rollup').RollupWatcher>}
+ * @type {(server: import('vite').ViteDevServer, preloadOk: Promise<void> | null) => Promise<import('rollup').RollupWatcher>}
  */
-async function watchMain(server) {
+async function watchMain(server, preloadOk) {
   /**
    * @type {import('child_process').ChildProcessWithoutNullStreams | null}
    */
@@ -48,12 +48,16 @@ async function watchMain(server) {
       {
         name: 'electron-main-watcher',
         setup(ctx) {
-          ctx.onEnd(() => {
+          ctx.onEnd(async () => {
             console.log('main rebuilt')
             if (electronProcess) {
               electronProcess.kill('SIGINT')
             }
-
+            if (preloadOk) {
+              console.log('Wait preload finish')
+              await preloadOk
+              preloadOk = null
+            }
             electronProcess = spawn(electron, ['.', '--inspect', '--remote-debugging-port=9223'], {
               stdio: 'inherit',
               env
@@ -80,13 +84,21 @@ async function watchMain(server) {
  * @type {(server: import('vite').ViteDevServer) => Promise<import('rollup').RollupWatcher>}
  */
 function watchPreload(server) {
-  return build({
+  let resolve
+  const preloadOk = new Promise(async res => {
+    resolve = res
+  })
+  build({
     configFile: 'app/preload/vite.config.ts',
     mode: 'development',
     plugins: [
       {
         name: 'electron-preload-watcher',
         writeBundle() {
+          if (resolve) {
+            resolve()
+            resolve = undefined
+          }
           server.ws.send({ type: 'full-reload' })
         }
       }
@@ -95,6 +107,7 @@ function watchPreload(server) {
       watch: true
     }
   })
+  return preloadOk
 }
 
 // bootstrap
@@ -103,5 +116,5 @@ const server = await createServer({
 })
 
 await server.listen()
-await watchPreload(server)
-await watchMain(server)
+const preloadOk = watchPreload(server)
+await watchMain(server, preloadOk)

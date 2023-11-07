@@ -1,4 +1,5 @@
 import type { ClientSideInterface, ServerSideInterface } from '@maa/ipc'
+import { inspectBuffer, inspectBuffers } from '@maa/loader'
 import { logger } from '@maa/logger'
 import { type IpcMainInvokeEvent, ipcMain } from 'electron'
 
@@ -21,9 +22,9 @@ export function ipcMainHandle<Key extends keyof ServerSideInterface>(
     })
   } else {
     ipcMain.handle(eventName, async (event, ...args) => {
-      logger.silly('handle', eventName, ...args)
+      logger.silly('handle', eventName, ...inspectBuffers(...args))
       const result = await listener(event, ...(args as Parameters<ServerSideInterface[Key]>))
-      logger.silly('handle', eventName, 'return', result)
+      logger.silly('handle', eventName, 'return', inspectBuffer(result))
       return result
     })
   }

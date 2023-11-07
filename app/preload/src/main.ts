@@ -1,4 +1,5 @@
 // import { init, version } from '@maa/loader'
+import { inspectBuffer, inspectBuffers } from '@maa/loader/src/helper/buffer'
 import { contextBridge, ipcRenderer } from 'electron'
 
 const ipc = {
@@ -15,9 +16,9 @@ const ipc = {
     ipcRenderer.off(channel, listener)
   },
   invoke: async (channel: string, ...args: any[]): Promise<any> => {
-    console.log('preload invoke: ', channel, ...args)
+    console.log('preload invoke: ', channel, ...inspectBuffers(...args))
     const ret = await ipcRenderer.invoke(channel, ...args)
-    console.log('preload invoke: ', channel, 'return: ', ret)
+    console.log('preload invoke: ', channel, 'return: ', inspectBuffer(ret))
     return ret
   }
 }
