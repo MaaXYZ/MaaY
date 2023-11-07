@@ -44,7 +44,7 @@ export function ipcMainSend<Key extends keyof ClientSideInterface>(
   ...args: Parameters<ClientSideInterface[Key]>
 ): void {
   if (!eventName.startsWith('$')) {
-    logger.silly('send', eventName, ...args)
+    logger.silly('send', eventName, ...inspectBuffers(...args))
   }
   mainWindow?.webContents.send(eventName, ...args)
 }

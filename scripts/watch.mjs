@@ -58,7 +58,7 @@ async function watchMain(server, preloadOk) {
               await preloadOk
               preloadOk = null
             }
-            electronProcess = spawn(electron, ['.', '--inspect', '--remote-debugging-port=9223'], {
+            electronProcess = spawn(electron, ['.', '--inspect', '--remote-debugging-port=9876'], {
               stdio: 'inherit',
               env
             })
