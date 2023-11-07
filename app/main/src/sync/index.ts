@@ -10,26 +10,26 @@ function dup<T>(t: T): T {
 
 function send(name: string, val: unknown) {
   // @ts-ignore
-  ipcMainSend(`renderer.var.${name}`, dup(val))
+  ipcMainSend(`$renderer.var.${name}`, dup(val))
 }
 
 function push(name: string, val: { value: unknown }) {
   // @ts-ignore
-  ipcMainHandle(`main.var.${name}.pull`, () => {
+  ipcMainHandle(`$main.var.${name}.pull`, () => {
     send(name, val.value)
   })
 }
 
 function recv(name: string, val: { value: unknown }) {
   // @ts-ignore
-  ipcMainHandle(`main.var.${name}`, (e, v) => {
+  ipcMainHandle(`$main.var.${name}`, (_, v) => {
     val.value = v
   })
 }
 
 function pull(name: string) {
   // @ts-ignore
-  ipcMainSend(`renderer.var.${name}.pull`)
+  ipcMainSend(`$renderer.var.${name}.pull`)
 }
 
 type SimpleRef<T> = {
@@ -39,7 +39,7 @@ type SimpleRef<T> = {
 export function registerSendFor<Var extends SyncVarName_M2R>(
   name: Var,
   val: SimpleRef<SyncVarMap_M2R[Var]>,
-  initPush = true
+  initPush = false
 ) {
   watch(
     val,
@@ -57,7 +57,7 @@ export function registerSendFor<Var extends SyncVarName_M2R>(
 export function registerSend<Var extends SyncVarName_M2R>(
   name: Var,
   init: SyncVarMap_M2R[Var],
-  initPush = true
+  initPush = false
 ) {
   const value = ref(init)
   registerSendFor(name, value, initPush)

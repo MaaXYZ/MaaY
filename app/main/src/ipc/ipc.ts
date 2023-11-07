@@ -14,7 +14,9 @@ export function ipcMainHandle<Key extends keyof ServerSideInterface>(
     ...args: Parameters<ServerSideInterface[Key]>
   ) => WithPromise<ReturnType<ServerSideInterface[Key]>>
 ): void {
-  logger.silly('register', eventName)
+  if (!eventName.startsWith('$')) {
+    logger.silly('register', eventName)
+  }
   ipcMain.removeHandler(eventName)
   if (eventName.startsWith('$')) {
     ipcMain.handle(eventName, (event, ...args) => {
@@ -31,7 +33,9 @@ export function ipcMainHandle<Key extends keyof ServerSideInterface>(
 }
 
 export function ipcMainRemove(eventName: keyof ServerSideInterface): void {
-  logger.silly('remove', eventName)
+  if (!eventName.startsWith('$')) {
+    logger.silly('remove', eventName)
+  }
   ipcMain.removeHandler(eventName)
 }
 
@@ -39,6 +43,8 @@ export function ipcMainSend<Key extends keyof ClientSideInterface>(
   eventName: Key,
   ...args: Parameters<ClientSideInterface[Key]>
 ): void {
-  logger.silly('send', eventName, ...args)
-  mainWindow.webContents.send(eventName, ...args)
+  if (!eventName.startsWith('$')) {
+    logger.silly('send', eventName, ...args)
+  }
+  mainWindow?.webContents.send(eventName, ...args)
 }

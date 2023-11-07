@@ -8,7 +8,7 @@ import {
 
 import { registerSend } from '@/sync'
 
-const handles = registerSend('controllers', {}, false)
+const handles = registerSend('controllers', {})
 
 function reload_init() {
   window.ipcRenderer.invoke('main.reload.fetch_controllers').then(obj => {

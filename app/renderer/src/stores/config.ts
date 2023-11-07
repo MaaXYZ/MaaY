@@ -1,6 +1,6 @@
 import { registerSend } from '@/sync'
 
-const global = registerSend('global_config', {}, false)
+const global = registerSend('global_config', {})
 
 function reload_init() {
   window.ipcRenderer.invoke('main.config.fetch_global').then(obj => {

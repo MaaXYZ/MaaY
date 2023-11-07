@@ -7,26 +7,26 @@ function dup<T>(t: T): T {
 
 function send(name: string, val: unknown) {
   // @ts-ignore
-  window.ipcRenderer.invoke(`main.var.${name}`, dup(val))
+  window.ipcRenderer.invoke(`$main.var.${name}`, dup(val))
 }
 
 function push(name: string, val: { value: unknown }) {
   // @ts-ignore
-  window.ipcRenderer.on(`renderer.var.${name}.pull`, () => {
+  window.ipcRenderer.on(`$renderer.var.${name}.pull`, () => {
     send(name, val.value)
   })
 }
 
 function recv(name: string, val: { value: unknown }) {
   // @ts-ignore
-  window.ipcRenderer.on(`renderer.var.${name}`, (e, v) => {
+  window.ipcRenderer.on(`$renderer.var.${name}`, (_, v) => {
     val.value = v
   })
 }
 
 function pull(name: string) {
   // @ts-ignore
-  window.ipcRenderer.invoke(`main.var.${name}.pull`)
+  window.ipcRenderer.invoke(`$main.var.${name}.pull`)
 }
 
 type SimpleRef<T> = {

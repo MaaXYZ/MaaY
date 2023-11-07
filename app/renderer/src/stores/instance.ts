@@ -31,7 +31,7 @@ export const enum RunningState {
 
 const { global } = useConfig
 
-const handles = registerSend('instances', {}, false)
+const handles = registerSend('instances', {})
 
 function reload_init() {
   window.ipcRenderer.invoke('main.reload.fetch_instances').then(obj => {

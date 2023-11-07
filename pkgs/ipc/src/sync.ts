@@ -8,11 +8,11 @@ import type {
 } from '@maa/type'
 
 export type SyncVarInterface<Name extends string, Type, Cate extends 'main' | 'renderer'> = {
-  [key in `${Cate}.var.${Name}`]: (nv: Type) => void
+  [key in `$${Cate}.var.${Name}`]: (nv: Type) => void
 }
 
 export type SyncVarPullInterface<Name extends string, Cate extends 'main' | 'renderer'> = {
-  [key in `${Cate}.var.${Name}.pull`]: () => void
+  [key in `$${Cate}.var.${Name}.pull`]: () => void
 }
 
 export type SyncVarInfo_M2R = [

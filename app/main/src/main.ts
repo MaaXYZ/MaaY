@@ -30,9 +30,9 @@ app.setAboutPanelOptions({
 })
 
 app.on('ready', async () => {
-  createWindow()
   await main()
   setupIpc()
+  createWindow()
 })
 
 app.on('window-all-closed', () => {
