@@ -138,7 +138,7 @@ export function setupResource() {
       return false
     }
     const repoPath = path.join(resourcePath, name)
-    const proc = spawn('git', ['clone', url, repoPath], {
+    const proc = spawn('git', ['clone', '--recurse-submodules', url, repoPath], {
       stdio: 'inherit'
     })
     return new Promise<boolean>(resolve => {

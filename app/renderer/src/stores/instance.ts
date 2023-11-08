@@ -323,6 +323,20 @@ async function run(handle: InstanceHandle, output: Output) {
     merge(finalDiff, entry.provide ?? {})
 
     console.log(entry.task, finalDiff)
+    /*
+    const taskList = await hres.task_list
+    for (const task of taskList) {
+      if (finalDiff[task]) {
+        Object.assign(finalDiff[task], {
+          focus: true
+        })
+      } else {
+        finalDiff[task] = {
+          focus: true
+        }
+      }
+    }
+*/
     await hinst
       .post_task(entry.task, {
         diff_task: finalDiff

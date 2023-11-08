@@ -92,7 +92,8 @@
         "fail": "load failed",
         "test": "test",
         "load": "load",
-        "log": "log"
+        "log": "log",
+        "task_list": ""
       }
     },
     "use": {

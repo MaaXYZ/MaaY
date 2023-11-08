@@ -30,6 +30,7 @@ async function showTestFor(t: string, cfg: RespackResourceTarget) {
 
 const testLoading = ref(false)
 const testLoadMsg = ref<string[]>([])
+const testLoadTaskList = ref<string[]>([])
 
 async function testLoad() {
   testLoading.value = true
@@ -43,6 +44,7 @@ async function testLoad() {
   }
   if (await res.loaded) {
     testLoadMsg.value.push(t('resource.respack.test.success'))
+    testLoadTaskList.value = await res.task_list
   } else {
     testLoadMsg.value.push(t('resource.respack.test.fail'))
   }
@@ -75,6 +77,10 @@ async function testLoad() {
           <span> {{ t('resource.respack.test.log') }} </span>
           <div class="flex flex-col gap-0.5">
             <span v-for="(msg, idx) of testLoadMsg" :key="idx"> {{ msg }} </span>
+          </div>
+          <span> {{ t('resource.respack.test.task_list') }} </span>
+          <div class="flex flex-col">
+            <span v-for="(tsk, idx) of testLoadTaskList" :key="idx"> {{ tsk }} </span>
           </div>
         </template>
       </GridFormLayout>
